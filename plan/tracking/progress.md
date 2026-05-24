@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting   |
 | **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
-| **Unit tests**                  | 1467+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
+| **Unit tests**                  | 1467+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
 
 ---
 
@@ -615,6 +615,7 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 - ✅ **Mốc 11 (Sprint 11):** System Design Load Balancer với Round-robin, smoke particles on failover, DB replication lag
 - ✅ **Mốc 12 (Sprint 12):** Gamification XP system với 8 levels, badges, embed widget generator
 - ✅ **Mốc B1 (Backend Security):** BCrypt password hashing, Global Exception Handler, FluentValidation, JWT Refresh Token, Rate Limiting, Serilog Logging, Health Checks
+- ✅ **Mốc B2 (Unit Testing & CI/CD):** 139 xUnit tests (88 Domain + 25 Application + 26 Infrastructure), GitHub Actions CI pipeline
 
 ---
 
@@ -632,3 +633,20 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 | **B1.8** | Serilog Structured Logging | ✅ CODE DONE | `Program.cs` — Serilog Console + File sink (rolling daily, 14-day retention), request logging middleware |
 | **B1.9** | Health Checks | ✅ CODE DONE | `Program.cs` — `AddHealthChecks().AddDbContextCheck()`, `GET /health` |
 | **B1.10** | UsersController Auth Fix | ✅ CODE DONE | `UsersController.cs` — `[Authorize]` + JWT Claims, removed path-based `{id}` → current user only |
+
+## 9. Phase B2: Unit Testing & CI/CD
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B2.1** | xUnit test projects + NuGet | ✅ CODE DONE | `Domain.Tests.csproj`, `Application.Tests.csproj`, `Infrastructure.Tests.csproj` — FluentAssertions 6.12.0, Moq 4.20.70, xUnit 2.6.6 |
+| **B2.2** | Domain entity tests | ✅ CODE DONE | `UserTests.cs` (9 tests: AwardXP level calc, refresh token, module completion), `BadgeTests.cs` (9 tests: entity construction, quiz pass 70% threshold) |
+| **B2.3** | Domain exception tests | ✅ CODE DONE | `DomainExceptionTests.cs` (6 test classes: NotFoundException, DomainValidationException, AuthenticationException, ConflictException, inheritance chain) |
+| **B2.4** | Algorithm strategy tests | ✅ CODE DONE | `SortingStrategyTests.cs` (5 algos: Bubble/Selection/Insertion/Quick/Merge — sorted output verify), `SearchStrategyTests.cs` (Linear/Binary), `DataStructureStrategyTests.cs` (Stack/Queue/BST) |
+| **B2.5** | InputParser & ConstraintResolver tests | ✅ CODE DONE | `InputParserTests.cs` (12 tests: valid/empty/null/whitespace input, ConstraintResolver limits, case-insensitivity) |
+| **B2.6** | AuthService tests with Moq | ✅ CODE DONE | `AuthServiceTests.cs` (9 tests: register, login BCrypt verify, wrong password, refresh token lifecycle, JWT generation via IConfiguration mock) |
+| **B2.7** | GamificationService & QuizService tests | ✅ CODE DONE | `GamificationServiceTests.cs` (7 tests), `QuizServiceTests.cs` (9 tests: submit all-correct/all-wrong, XP award verify, answer count validation) |
+| **B2.8** | FluentValidation tests | ✅ CODE DONE | `AuthValidatorTests.cs` (18 tests: email/username/password rules via TestValidate), `QuizValidatorTests.cs` (7 tests: GUID/answers/XP range) |
+| **B2.9** | GitHub Actions CI/CD | ✅ CODE DONE | `.github/workflows/ci.yml` — frontend (npm ci, lint, typecheck, test) + backend (dotnet restore, build, test) on push/PR to master |
+| **B2.10** | Build fixes | ✅ CODE DONE | `Infrastructure.csproj` +JwtBearer, `WebApi.csproj` +HealthChecks.EntityFrameworkCore — resolve missing package refs |
+
+**Test Results:** 139 tests ALL PASS (88 Domain + 25 Application + 26 Infrastructure) — 0 failures

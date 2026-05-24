@@ -444,3 +444,19 @@ Các ADR sau đây được ghi trong tài liệu đặc tả nhưng **chưa có
 - **Quyết định:** Dùng built-in `Microsoft.AspNetCore.RateLimiting` (ASP.NET Core 8): execute 10 req/s, auth 5 req/min, general 30 req/s. Controller-level `[EnableRateLimiting]`.
 - **Hệ quả:** Chống DDoS cơ bản, HTTP 429 khi vượt quá giới hạn.
 - **File liên quan:** `WebApi/Program.cs`, `WebApi/Controllers/AlgorithmsController.cs`, `WebApi/Controllers/AuthController.cs`
+
+## ADR-B2-TESTING-ARCHITECTURE: xUnit + Moq + FluentAssertions Test Architecture (Phase B2)
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** Backend có 0 unit tests. Cần test pyramid covering Domain entities, Application validators, Infrastructure services.
+- **Quyết định:** 3 test projects mirroring Clean Architecture layers: Domain.Tests (88 tests), Application.Tests (25 tests), Infrastructure.Tests (26 tests). xUnit 2.6.6 for framework, FluentAssertions 6.12.0 for readable assertions, Moq 4.20.70 for dependency isolation. Infrastructure tests mock IUnitOfWork/IRepository to avoid DB dependency.
+- **Hệ quả:** 139 tests total, all passing. Domain logic, validators, and services verified without database.
+- **File liên quan:** `tests/Domain.Tests/`, `tests/Application.Tests/`, `tests/Infrastructure.Tests/`, `VisualizationDSA.sln`
+
+## ADR-B2-GITHUB-ACTIONS: CI/CD Pipeline (Phase B2)
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** No automated testing — code merged without verification.
+- **Quyết định:** GitHub Actions workflow `.github/workflows/ci.yml` with 2 parallel jobs: frontend (Node 20, npm ci, lint, typecheck, test) and backend (.NET 8, restore, build, test). Triggered on push/PR to master.
+- **Hệ quả:** Every PR automatically verified. Test results uploaded as artifacts.
+- **File liên quan:** `.github/workflows/ci.yml`

@@ -6,9 +6,10 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
 *   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới) + Phase 2 System Design Viz (64 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1373/1374 — 1 pre-existing ForceDirectedLayout failure).
-*   **Công cụ chạy kiểm thử:** Vitest Core.
-*   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
+*   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1373/1374 — 1 pre-existing ForceDirectedLayout failure).
+*   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (139/139 — 88 Domain + 25 Application + 26 Infrastructure).
+*   **Công cụ chạy kiểm thử:** Vitest Core (Frontend), xUnit 2.6.6 + FluentAssertions 6.12.0 + Moq 4.20.70 (Backend).
+*   **Thời gian phản hồi test suite:** Frontend ~180ms, Backend ~10s.
 
 ---
 
@@ -1582,3 +1583,83 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1330 | **Store** | isAtStart/isAtEnd at boundaries | correct | 🟢 PASSED |
 | 1331 | **Store** | Dispatch MONACO event on step | event found | 🟢 PASSED |
 | 1332 | **Store** | Dispatch CANVAS event on step | event found | 🟢 PASSED |
+
+---
+
+## Phase B2: Backend C# Unit Tests (xUnit + FluentAssertions + Moq)
+
+### Domain.Tests (88 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1333 | **Entity** | User constructor | email/username/passwordHash init | 🟢 PASSED |
+| 1334 | **Entity** | User AwardXP level calc | XP→Level (50→1, 100→2, 400→3, 900→4) | 🟢 PASSED |
+| 1335 | **Entity** | User refresh token lifecycle | Set/Revoke RefreshToken | 🟢 PASSED |
+| 1336 | **Entity** | User module completion | LearningProgresses.Add | 🟢 PASSED |
+| 1337 | **Entity** | Badge/UserBadge/Quiz construction | Entity property init | 🟢 PASSED |
+| 1338 | **Entity** | QuizAttempt 70% pass threshold | 7/10=pass, 6/10=fail | 🟢 PASSED |
+| 1339 | **Exception** | NotFoundException error type | "NOT_FOUND" + entity/id format | 🟢 PASSED |
+| 1340 | **Exception** | DomainValidationException | "VALIDATION_ERROR" | 🟢 PASSED |
+| 1341 | **Exception** | AuthenticationException | "AUTHENTICATION_ERROR" | 🟢 PASSED |
+| 1342 | **Exception** | ConflictException | "CONFLICT" | 🟢 PASSED |
+| 1343 | **Exception** | Inheritance chain | All inherit DomainException | 🟢 PASSED |
+| 1344 | **Strategy** | BubbleSort ascending output | BeInAscendingOrder | 🟢 PASSED |
+| 1345 | **Strategy** | SelectionSort ascending output | BeInAscendingOrder | 🟢 PASSED |
+| 1346 | **Strategy** | InsertionSort ascending output | BeInAscendingOrder | 🟢 PASSED |
+| 1347 | **Strategy** | QuickSort ascending output | BeInAscendingOrder | 🟢 PASSED |
+| 1348 | **Strategy** | MergeSort ascending output | BeInAscendingOrder | 🟢 PASSED |
+| 1349 | **Strategy** | LinearSearch find target | "Tìm thấy" in frames | 🟢 PASSED |
+| 1350 | **Strategy** | BinarySearch sorted array | "Tìm thấy" in frames | 🟢 PASSED |
+| 1351 | **Strategy** | BinarySearch unsorted throws | ArgumentException | 🟢 PASSED |
+| 1352 | **Strategy** | Stack LIFO push/pop all | EndEmpty + "rỗng" | 🟢 PASSED |
+| 1353 | **Strategy** | Queue FIFO enqueue/dequeue all | EndEmpty + "rỗng" | 🟢 PASSED |
+| 1354 | **Strategy** | BST inorder traversal | "LNR" in explanation | 🟢 PASSED |
+| 1355 | **Strategy** | Algorithm metadata complexity | O(N²)/O(N log N)/O(1) | 🟢 PASSED |
+| 1356 | **Input** | InputParser valid array | "1,2,3" → [1,2,3] | 🟢 PASSED |
+| 1357 | **Input** | InputParser empty/null | ArgumentException | 🟢 PASSED |
+| 1358 | **Input** | InputParser invalid format | FormatException | 🟢 PASSED |
+| 1359 | **Input** | ConstraintResolver limits | Max elements/value per algo | 🟢 PASSED |
+
+### Application.Tests (25 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1360 | **Validator** | RegisterRequest valid pass | ShouldNotHaveAnyValidationErrors | 🟢 PASSED |
+| 1361 | **Validator** | Email format invalid | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1362 | **Validator** | Password no uppercase | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1363 | **Validator** | Password no lowercase | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1364 | **Validator** | Password no digit | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1365 | **Validator** | Password too short (<8) | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1366 | **Validator** | Username too short (<3) | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1367 | **Validator** | Username special chars | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1368 | **Validator** | LoginRequest valid | ShouldNotHaveAnyValidationErrors | 🟢 PASSED |
+| 1369 | **Validator** | RefreshTokenRequest empty | ShouldHaveValidationErrorFor | 🟢 PASSED |
+| 1370 | **Validator** | QuizAttemptRequest valid | ShouldNotHaveAnyValidationErrors | 🟢 PASSED |
+| 1371 | **Validator** | XPAwardRequest range 1-200 | ShouldHaveValidationErrorFor | 🟢 PASSED |
+
+### Infrastructure.Tests (26 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1372 | **AuthService** | Register new user | Moq IUnitOfWork + BCrypt hash | 🟢 PASSED |
+| 1373 | **AuthService** | Register duplicate email | ThrowAsync ConflictException | 🟢 PASSED |
+| 1374 | **AuthService** | Login valid credentials | BCrypt.Verify + JWT token | 🟢 PASSED |
+| 1375 | **AuthService** | Login wrong password | ThrowAsync AuthenticationException | 🟢 PASSED |
+| 1376 | **AuthService** | Login nonexistent user | ThrowAsync AuthenticationException | 🟢 PASSED |
+| 1377 | **AuthService** | RefreshToken valid | New tokens issued | 🟢 PASSED |
+| 1378 | **AuthService** | RefreshToken expired | ThrowAsync AuthenticationException | 🟢 PASSED |
+| 1379 | **AuthService** | GetCurrentUser | MapToUserDto | 🟢 PASSED |
+| 1380 | **GamificationService** | AwardXP valid user | TotalXP increased + CommitAsync | 🟢 PASSED |
+| 1381 | **GamificationService** | AwardXP nonexistent | ThrowAsync NotFoundException | 🟢 PASSED |
+| 1382 | **GamificationService** | CompleteModule | LearningProgresses.Add | 🟢 PASSED |
+| 1383 | **GamificationService** | GetUserProgress | Stats mapping | 🟢 PASSED |
+| 1384 | **GamificationService** | CheckAndAwardBadges | Empty when not eligible | 🟢 PASSED |
+| 1385 | **QuizService** | GetAllQuizzes | Mapped to QuizDto | 🟢 PASSED |
+| 1386 | **QuizService** | GetQuizById existing | Title/Difficulty correct | 🟢 PASSED |
+| 1387 | **QuizService** | GetQuizById nonexistent | ThrowAsync NotFoundException | 🟢 PASSED |
+| 1388 | **QuizService** | GetQuizzesByTopic | Filter by topic | 🟢 PASSED |
+| 1389 | **QuizService** | Submit all correct | Passed=true, XP=50 awarded | 🟢 PASSED |
+| 1390 | **QuizService** | Submit all wrong | Passed=false, XP=0 | 🟢 PASSED |
+| 1391 | **QuizService** | Submit wrong answer count | ThrowAsync DomainValidationException | 🟢 PASSED |
+| 1392 | **QuizService** | Submit nonexistent quiz | ThrowAsync NotFoundException | 🟢 PASSED |
+| 1393 | **QuizService** | GetUserQuizHistory | Return attempts | 🟢 PASSED |
