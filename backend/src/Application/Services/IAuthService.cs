@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using VisualizationDSA.Application.DTOs;
 
@@ -7,6 +8,7 @@ namespace VisualizationDSA.Application.Services
     {
         Task<AuthResponse> RegisterAsync(RegisterRequest request);
         Task<AuthResponse> LoginAsync(LoginRequest request);
-        Task<UserDto> GetCurrentUserAsync(string userId);
+        Task<UserDto> GetCurrentUserAsync(Guid userId);
+        Task<AuthResponse> RefreshTokenAsync(string refreshToken);
     }
 }

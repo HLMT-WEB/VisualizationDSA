@@ -14,8 +14,8 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Tài liệu thiết kế**           | 12/12 Sprints (100% — chỉ là spec, chưa phải code)                 |
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
-| **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
-| **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
+| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting   |
+| **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
 | **Unit tests**                  | 1467+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
@@ -614,3 +614,21 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 - ✅ **Mốc 10 (Sprint 10):** 3D Stack-Heap visualization với DSL compiler, Stack-to-Heap pointers, memory state inspection
 - ✅ **Mốc 11 (Sprint 11):** System Design Load Balancer với Round-robin, smoke particles on failover, DB replication lag
 - ✅ **Mốc 12 (Sprint 12):** Gamification XP system với 8 levels, badges, embed widget generator
+- ✅ **Mốc B1 (Backend Security):** BCrypt password hashing, Global Exception Handler, FluentValidation, JWT Refresh Token, Rate Limiting, Serilog Logging, Health Checks
+
+---
+
+## 8. Phase B1: Backend Security & Code Quality Foundation
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B1.1** | SHA256 → BCrypt password hashing | ✅ CODE DONE | `AuthService.cs` — `BCrypt.Net.BCrypt.HashPassword(workFactor: 12)`, `BCrypt.Net.BCrypt.Verify()` |
+| **B1.2** | Global Exception Handler Middleware | ✅ CODE DONE | `WebApi/Middleware/ExceptionHandlingMiddleware.cs` — RFC 7807 ProblemDetails, domain→HTTP status mapping |
+| **B1.3** | Custom Domain Exceptions | ✅ CODE DONE | `Domain/Exceptions/DomainException.cs` — NotFoundException, DomainValidationException, AuthenticationException, ConflictException |
+| **B1.4** | FluentValidation cho DTOs | ✅ CODE DONE | `Application/Validators/AuthValidators.cs` — email format, password min 8 + uppercase + lowercase + digit; `QuizValidators.cs` — XP 1-200 |
+| **B1.5** | Fix Auth/me endpoint | ✅ CODE DONE | `AuthController.cs` — `[Authorize]` + `User.FindFirst(ClaimTypes.NameIdentifier)` thay vì `[FromHeader] string userId` |
+| **B1.6** | Refresh Token | ✅ CODE DONE | `User.cs` — RefreshToken/RefreshTokenExpiry properties; `AuthService.cs` — `RefreshTokenAsync()`; `AuthController.cs` — `POST /api/auth/refresh` |
+| **B1.7** | Rate Limiting | ✅ CODE DONE | `Program.cs` — FixedWindow: execute 10/s, auth 5/min, general 30/s; `[EnableRateLimiting]` on controllers |
+| **B1.8** | Serilog Structured Logging | ✅ CODE DONE | `Program.cs` — Serilog Console + File sink (rolling daily, 14-day retention), request logging middleware |
+| **B1.9** | Health Checks | ✅ CODE DONE | `Program.cs` — `AddHealthChecks().AddDbContextCheck()`, `GET /health` |
+| **B1.10** | UsersController Auth Fix | ✅ CODE DONE | `UsersController.cs` — `[Authorize]` + JWT Claims, removed path-based `{id}` → current user only |

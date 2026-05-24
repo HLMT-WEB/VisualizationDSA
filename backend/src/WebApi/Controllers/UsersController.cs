@@ -1,13 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using VisualizationDSA.Application.DTOs;
+using VisualizationDSA.Domain.Exceptions;
 using VisualizationDSA.Domain.Interfaces;
 
 namespace VisualizationDSA.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -17,11 +21,12 @@ namespace VisualizationDSA.WebApi.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("{id}/progress")]
-        public async Task<ActionResult> GetUserProgress(Guid id)
+        [HttpGet("progress")]
+        public async Task<ActionResult> GetUserProgress()
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
-            if (user == null) return NotFound();
+            var userId = GetCurrentUserId();
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
             return Ok(new
             {
@@ -33,16 +38,23 @@ namespace VisualizationDSA.WebApi.Controllers
             });
         }
 
-        [HttpPost("{id}/xp")]
-        public async Task<ActionResult> AwardXP(Guid id, [FromBody] XPAwardRequest request)
+        [HttpPost("xp")]
+        public async Task<ActionResult> AwardXP([FromBody] XPAwardRequest request)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
-            if (user == null) return NotFound();
+            var userId = GetCurrentUserId();
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
             user.AwardXP(request.Amount);
             await _unitOfWork.CommitAsync();
 
-            return Ok(new { Message = $"Awarded {request.Amount} XP", TotalXP = user.TotalXP });
+            return Ok(new { Message = $"Đã trao {request.Amount} XP", TotalXP = user.TotalXP });
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Guid.Parse(userIdClaim!);
         }
     }
 }

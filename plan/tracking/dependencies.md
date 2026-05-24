@@ -37,6 +37,18 @@ Tài liệu này đặc tả chi tiết danh mục thư viện công nghệ, cá
 
 ---
 
+## 3.5 Gói Phụ Thuộc Backend (Backend Dependencies — Phase B1)
+
+| Tên Thư Viện | Phiên bản | Phân hệ sử dụng | Vai trò cốt lõi |
+| :--- | :--- | :--- | :--- |
+| **BCrypt.Net-Next** | `4.0.3` | Infrastructure/AuthService | Hash password an toàn với adaptive work factor (12 rounds). |
+| **FluentValidation** | `11.9.0` | Application/Validators | Validate DTOs: email format, password strength, XP bounds. |
+| **FluentValidation.AspNetCore** | `11.3.0` | WebApi | Auto-validation pipeline tích hợp ASP.NET Core MVC. |
+| **Serilog.AspNetCore** | `8.0.0` | WebApi | Structured logging cho Console + File sink. |
+| **Serilog.Sinks.File** | `5.0.0` | WebApi | Rolling daily log files, 14-day retention. |
+
+---
+
 ## 4. Ràng Buộc Kiến Trúc Phụ Thuộc (Dependency Constraints)
 *   **Không dùng thư viện ngoài cho hoạt ảnh DSA:** Toàn bộ thuật toán sắp xếp mảng Lerp Parabol, quay AVL nút cây, hạt HTTP request bay dọc cạnh và khói sập nguồn Canvas đều phải viết bằng mã nguồn TypeScript thuần túy kết hợp Canvas 2D/SVG để tối ưu hiệu năng 60 FPS bám sát rAF.
 *   **Monaco Sandbox Security:** Phải cô lập Monaco Editor trong chế độ chặn nhấp chuột select văn bản (read-only pointer blockers) khi chạy VCR playback để bảo toàn dòng code.

@@ -32,6 +32,7 @@ namespace VisualizationDSA.Infrastructure.Data
                 entity.Property(e => e.TotalXP).HasDefaultValue(0);
                 entity.Property(e => e.CurrentLevel).HasDefaultValue(1);
                 entity.Property(e => e.StreakDays).HasDefaultValue(0);
+                entity.Property(e => e.RefreshToken).HasMaxLength(256);
             });
 
             // Badge configuration

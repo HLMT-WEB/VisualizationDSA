@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
+using VisualizationDSA.Domain.Exceptions;
 using VisualizationDSA.Domain.Interfaces;
 
 namespace VisualizationDSA.Infrastructure.Services
@@ -19,8 +20,8 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task AwardXPAsync(Guid userId, int amount, string reason)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null) throw new Exception("User not found");
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
             user.AwardXP(amount);
             await _unitOfWork.CommitAsync();
@@ -28,8 +29,8 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task CompleteModuleAsync(Guid userId, string moduleId)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null) throw new Exception("User not found");
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
             user.CompleteModule(moduleId);
             await _unitOfWork.CommitAsync();
@@ -37,23 +38,21 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task<IEnumerable<Badge>> CheckAndAwardBadgesAsync(Guid userId)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null) throw new Exception("User not found");
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
             var newBadges = new List<Badge>();
             var allBadges = await _unitOfWork.Badges.GetAllAsync();
 
             foreach (var badge in allBadges)
             {
-                // Check if user already has this badge
                 if (user.UserBadges.Any(ub => ub.BadgeId == badge.Id))
                     continue;
 
-                // Check criteria
                 if (ShouldAwardBadge(user, badge))
                 {
                     var userBadge = new UserBadge(userId, badge.Id);
-                    await _unitOfWork.Users.AddAsync(user); // Re-attach user
+                    await _unitOfWork.Users.AddAsync(user);
                     user.UserBadges.Add(userBadge);
                     newBadges.Add(badge);
                 }
@@ -69,10 +68,9 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task<UserProgressStats> GetUserProgressAsync(Guid userId)
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(userId);
-            if (user == null) throw new Exception("User not found");
+            var user = await _unitOfWork.Users.GetByIdAsync(userId)
+                ?? throw new NotFoundException("User", userId);
 
-            // Calculate level progress
             var nextLevelXp = CalculateXpForLevel(user.CurrentLevel + 1);
             var currentLevelXp = CalculateXpForLevel(user.CurrentLevel);
             var xpInCurrentLevel = user.TotalXP - currentLevelXp;
@@ -91,9 +89,8 @@ namespace VisualizationDSA.Infrastructure.Services
             };
         }
 
-        private bool ShouldAwardBadge(User user, Badge badge)
+        private static bool ShouldAwardBadge(User user, Badge badge)
         {
-            // Simple criteria checking based on badge name
             return badge.Name switch
             {
                 "First Steps" => user.QuizAttempts.Count >= 1,
@@ -108,9 +105,8 @@ namespace VisualizationDSA.Infrastructure.Services
             };
         }
 
-        private int CalculateXpForLevel(int level)
+        private static int CalculateXpForLevel(int level)
         {
-            // Level formula: XP = (level-1)^2 * 100
             return (level - 1) * (level - 1) * 100;
         }
     }

@@ -12,6 +12,10 @@ namespace VisualizationDSA.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime? LastLoginAt { get; private set; }
         
+        // Refresh Token
+        public string? RefreshToken { get; private set; }
+        public DateTime? RefreshTokenExpiry { get; private set; }
+        
         // Gamification
         public int TotalXP { get; private set; }
         public int CurrentLevel { get; private set; }
@@ -54,6 +58,18 @@ namespace VisualizationDSA.Domain.Entities
         public void RecordLogin()
         {
             LastLoginAt = DateTime.UtcNow;
+        }
+
+        public void SetRefreshToken(string token, DateTime expiry)
+        {
+            RefreshToken = token;
+            RefreshTokenExpiry = expiry;
+        }
+
+        public void RevokeRefreshToken()
+        {
+            RefreshToken = null;
+            RefreshTokenExpiry = null;
         }
 
         private void CheckLevelUp()

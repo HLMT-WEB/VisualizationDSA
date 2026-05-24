@@ -414,3 +414,33 @@ Các ADR sau đây được ghi trong tài liệu đặc tả nhưng **chưa có
   - Integration: App.vue ("Embed" tab)
   - Infrastructure: vite.config.ts (manualChunks for Monaco isolation)
   - Tests: EmbedCommunicationBridge.spec.ts (17), SecureOriginChecker.spec.ts (14), AutoHeightResizer.spec.ts (10), useEmbedConfiguratorStore.spec.ts (35) — 76 tests total
+
+---
+
+## ADR-B1-BCRYPT: BCrypt Password Hashing thay SHA256 (Phase B1 Security)
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** AuthService dùng SHA256 hash password — dễ bị rainbow table attack, không có salt, không có work factor.
+- **Quyết định:** Chuyển sang BCrypt.Net-Next (work factor 12). BCrypt tự tạo random salt mỗi lần hash, chống rainbow table và brute-force.
+- **Hệ quả:** Password hash an toàn theo OWASP standards. JWT Access Token giảm từ 7 ngày → 2 giờ, bổ sung Refresh Token 30 ngày.
+- **File liên quan:** `Infrastructure/Services/AuthService.cs`, `Infrastructure/Infrastructure.csproj`
+
+---
+
+## ADR-B1-EXCEPTION-MIDDLEWARE: Global Exception Handler Middleware (Phase B1 Security)
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** Controllers throw `new Exception()` trực tiếp — crash handler trả về HTML error page thay vì JSON chuẩn.
+- **Quyết định:** Tạo `ExceptionHandlingMiddleware` chặn tất cả exceptions, map `DomainException` subclass → HTTP status code + ProblemDetails (RFC 7807). Unhandled exceptions trả 500 không lộ stack trace.
+- **Hệ quả:** API response error format nhất quán, logging structured, production-safe.
+- **File liên quan:** `WebApi/Middleware/ExceptionHandlingMiddleware.cs`, `Domain/Exceptions/DomainException.cs`
+
+---
+
+## ADR-B1-RATE-LIMITING: Fixed Window Rate Limiting (Phase B1 Security)
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** API endpoint `POST /api/v1/algorithms/execute` có thể bị DDoS vì không giới hạn request rate.
+- **Quyết định:** Dùng built-in `Microsoft.AspNetCore.RateLimiting` (ASP.NET Core 8): execute 10 req/s, auth 5 req/min, general 30 req/s. Controller-level `[EnableRateLimiting]`.
+- **Hệ quả:** Chống DDoS cơ bản, HTTP 429 khi vượt quá giới hạn.
+- **File liên quan:** `WebApi/Program.cs`, `WebApi/Controllers/AlgorithmsController.cs`, `WebApi/Controllers/AuthController.cs`

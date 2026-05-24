@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using VisualizationDSA.Application.DTOs;
 using VisualizationDSA.Domain.Engine;
 using VisualizationDSA.Domain.Input;
@@ -66,6 +67,7 @@ public class AlgorithmsController : ControllerBase
     /// POST /api/v1/algorithms/execute
     /// </summary>
     [HttpPost("execute")]
+    [EnableRateLimiting("execute")]
     public ActionResult<AlgorithmResult> Execute([FromBody] AlgorithmRequestDto request)
     {
         if (request.InputData.Length == 0)
@@ -121,6 +123,7 @@ public class AlgorithmsController : ControllerBase
     /// POST /api/v1/algorithms/custom-execute
     /// </summary>
     [HttpPost("custom-execute")]
+    [EnableRateLimiting("execute")]
     public async Task<ActionResult<AlgorithmResult>> CustomExecute(
         [FromBody] CustomInputRequestDto request,
         CancellationToken clientCancelToken)
