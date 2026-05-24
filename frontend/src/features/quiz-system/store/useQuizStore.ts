@@ -5,6 +5,9 @@ import { useAnimationStore } from '../../animation-engine/store/useAnimationStor
 import { QuizVerificationEngine } from '../engine/QuizVerificationEngine';
 import { QuizStatsManager } from '../engine/QuizStatsManager';
 import type { QuizQuestion, QuizCheckpoint, CanvasNodeDTO } from '../types/quiz.types';
+import { quizApi } from '../../../services/quizApi';
+import type { QuizDto, QuizHistoryEntry } from '../../../services/quizApi';
+import { getStoredToken } from '../../../services/apiClient';
 
 /**
  * useQuizStore — Pinia Store điều khiển trạng thái trắc nghiệm tương tác.
@@ -157,6 +160,63 @@ export const useQuizStore = defineStore('quizSystem', () => {
     sessionTotal.value = 0;
   }
 
+  // ==========================================
+  // SERVER-SYNC ACTIONS (B3 Integration)
+  // ==========================================
+  const serverQuizzes = ref<QuizDto[]>([]);
+  const quizHistory = ref<QuizHistoryEntry[]>([]);
+  const isLoadingQuizzes = ref(false);
+  const quizSyncError = ref<string | null>(null);
+
+  const isOnlineMode = computed(() => !!getStoredToken());
+
+  async function fetchQuizzesFromServer(): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      isLoadingQuizzes.value = true;
+      quizSyncError.value = null;
+      serverQuizzes.value = await quizApi.getAll();
+    } catch {
+      quizSyncError.value = 'Không thể tải danh sách quiz';
+    } finally {
+      isLoadingQuizzes.value = false;
+    }
+  }
+
+  async function fetchQuizzesByTopic(topic: string): Promise<QuizDto[]> {
+    if (!isOnlineMode.value) return [];
+
+    try {
+      return await quizApi.getByTopic(topic);
+    } catch {
+      quizSyncError.value = 'Không thể tải quiz theo chủ đề';
+      return [];
+    }
+  }
+
+  async function submitAttemptToServer(quizId: string, answers: number[]): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      quizSyncError.value = null;
+      await quizApi.submitAttempt({ quizId, answers });
+    } catch {
+      quizSyncError.value = 'Không thể gửi kết quả quiz';
+    }
+  }
+
+  async function fetchQuizHistory(): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      quizSyncError.value = null;
+      quizHistory.value = await quizApi.getHistory();
+    } catch {
+      quizSyncError.value = 'Không thể tải lịch sử quiz';
+    }
+  }
+
   return {
     activeQuestion,
     selectedAnswerIndex,
@@ -169,11 +229,16 @@ export const useQuizStore = defineStore('quizSystem', () => {
     completedCheckpointIndexes,
     sessionCorrect,
     sessionTotal,
+    serverQuizzes,
+    quizHistory,
+    isLoadingQuizzes,
+    quizSyncError,
 
     isLectureLockedByQuiz,
     isQuizActive,
     sessionAccuracy,
     allCheckpointsCompleted,
+    isOnlineMode,
 
     loadCheckpoints,
     checkFrameForQuiz,
@@ -182,5 +247,10 @@ export const useQuizStore = defineStore('quizSystem', () => {
     handleCanvasClickAnswer,
     dismissQuestionAndContinue,
     resetQuizStore,
+    // Server-sync
+    fetchQuizzesFromServer,
+    fetchQuizzesByTopic,
+    submitAttemptToServer,
+    fetchQuizHistory,
   };
 });

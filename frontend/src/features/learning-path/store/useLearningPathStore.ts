@@ -5,6 +5,8 @@ import { PrerequisiteDAGEngine } from '../engine/PrerequisiteDAGEngine';
 import { PersonalizedPathEvaluator } from '../engine/PersonalizedPathEvaluator';
 import { OfflineProgressSynchronizer } from '../engine/OfflineProgressSynchronizer';
 import { LaserBatchRenderer } from '../engine/LaserBatchRenderer';
+import { learningProgressApi } from '../../../services/learningProgressApi';
+import { getStoredToken } from '../../../services/apiClient';
 
 /** Grid layout constants for RPG map positioning */
 const MAP_GRID_SPACING_X = 220;
@@ -90,6 +92,10 @@ export const useLearningPathStore = defineStore('learningPath', () => {
   // ACTIONS
   // ==========================================
 
+  const isSyncing = ref(false);
+  const syncError = ref<string | null>(null);
+  const isOnlineMode = computed(() => !!getStoredToken());
+
   async function completeNodeMilestone(nodeId: string, finalScore: number, timeSpent: number) {
     completedNodeIds.value.add(nodeId);
 
@@ -104,17 +110,12 @@ export const useLearningPathStore = defineStore('learningPath', () => {
       userScoresHistory.value
     );
 
-    try {
-      await fetch('/api/v1/learning-path/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          completedNodes: Array.from(completedNodeIds.value),
-          scores: userScoresHistory.value,
-        }),
-      });
-    } catch {
-      console.warn('Server sync failed. Progress saved offline.');
+    if (isOnlineMode.value) {
+      try {
+        await learningProgressApi.completeModule(nodeId);
+      } catch {
+        console.warn('Server sync failed. Progress saved offline.');
+      }
     }
   }
 
@@ -137,6 +138,27 @@ export const useLearningPathStore = defineStore('learningPath', () => {
     OfflineProgressSynchronizer.clearLocalStorage();
   }
 
+  async function syncProgressFromServer(): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      isSyncing.value = true;
+      syncError.value = null;
+      const progresses = await learningProgressApi.getMyProgress();
+      for (const p of progresses) {
+        completedNodeIds.value.add(p.moduleId);
+      }
+      OfflineProgressSynchronizer.saveToLocalStorage(
+        Array.from(completedNodeIds.value),
+        userScoresHistory.value
+      );
+    } catch {
+      syncError.value = 'Không thể tải tiến trình từ server';
+    } finally {
+      isSyncing.value = false;
+    }
+  }
+
   return {
     rawNodes,
     completedNodeIds,
@@ -152,5 +174,10 @@ export const useLearningPathStore = defineStore('learningPath', () => {
     setActiveNode,
     loadProgressFromLocalStorage,
     resetProgress,
+    // Server-sync
+    isSyncing,
+    syncError,
+    isOnlineMode,
+    syncProgressFromServer,
   };
 });

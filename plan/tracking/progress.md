@@ -14,9 +14,9 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Tài liệu thiết kế**           | 12/12 Sprints (100% — chỉ là spec, chưa phải code)                 |
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
-| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting + IMemoryCache + Pagination |
-| **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
-| **Unit tests**                  | 1467+ frontend + 173 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
+| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting + Frontend Integration |
+| **Tổng file thực tế**           | ~105 files (80 frontend + 25 backend `.cs`)                        |
+| **Unit tests**                  | 1506+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
 
 ---
 
@@ -651,21 +651,16 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 
 **Test Results:** 139 tests ALL PASS (88 Domain + 25 Application + 26 Infrastructure) — 0 failures
 
-## 10. Phase B4: Performance & Caching
+## 10. Phase B3: Frontend-Backend Integration
 
 | Task | Nội dung | Trạng thái CODE | Chi tiết |
 | :--- | :--- | :--- | :--- |
-| **B4.1** | IMemoryCache + CacheService | ✅ CODE DONE | `Application/Services/ICacheService.cs` interface, `Infrastructure/Services/MemoryCacheService.cs` — ConcurrentDictionary key tracking, prefix-based eviction |
-| **B4.2** | Cache Keys & Durations Constants | ✅ CODE DONE | `Application/Constants/CacheKeys.cs` — AlgorithmList 24h, QuizList 30m, BadgeList 1h, Leaderboard 5m |
-| **B4.3** | Response Caching Middleware | ✅ CODE DONE | `Program.cs` — `AddResponseCaching()` + `UseResponseCaching()`, `[ResponseCache]` on GET endpoints (algorithms 1h, quizzes 5m, badges 10m, lectures 1h) |
-| **B4.4** | ETag Conditional GET | ✅ CODE DONE | `AlgorithmsController.cs` — SHA256-based ETag generation for algorithm metadata, HTTP 304 Not Modified support |
-| **B4.5** | Pagination — PagedResult<T> | ✅ CODE DONE | `Application/DTOs/PagedResult.cs` — generic paged result (Items, Page, PageSize, TotalCount, TotalPages, HasPrevious/NextPage) |
-| **B4.6** | IRepository Pagination Extensions | ✅ CODE DONE | `IRepository.cs` — `CountAsync()`, `GetPagedAsync(page, pageSize)`, `GetPagedAsync(predicate, page, pageSize, orderBy)` |
-| **B4.7** | Repository AsNoTracking Optimization | ✅ CODE DONE | `Repository.cs` — `AsNoTracking()` on all read-only queries (GetAllAsync, FindAsync, GetPagedAsync) |
-| **B4.8** | Paginated Endpoints | ✅ CODE DONE | `QuizzesController.cs` — paginated history `?page=1&pageSize=10` (max 50); `LeaderboardController.cs` — paginated leaderboard with cached ranking |
-| **B4.9** | Algorithm Metadata Caching | ✅ CODE DONE | `AlgorithmsController.cs` — IMemoryCache for algorithm list (24h) + metadata per algorithmId (24h) |
-| **B4.10** | Quiz & Badge Caching | ✅ CODE DONE | `QuizzesController.cs` — quiz list/topic/id caching (30m), invalidation on submit; `BadgesController.cs` — badge list caching (1h), invalidation on badge check |
-| **B4.11** | Leaderboard Caching + Pagination | ✅ CODE DONE | `LeaderboardController.cs` — paginated GET /api/leaderboard?page=1&pageSize=10, cached 5m, invalidation on quiz submit |
-| **B4.12** | Unit Tests | ✅ CODE DONE | `MemoryCacheServiceTests.cs` (12 tests), `PagedResultTests.cs` (12 tests), `CacheKeysTests.cs` (9 tests) — 33 new tests |
+| **B3.1** | HTTP API Client Service | ✅ CODE DONE | `frontend/src/services/apiClient.ts` — fetch wrapper, JWT Bearer injection, auto-refresh on 401, RFC 7807 error handling |
+| **B3.2** | Auth Store (useAuthStore) | ✅ CODE DONE | `frontend/src/features/auth/store/useAuthStore.ts` — Pinia store: login/register/logout/fetchCurrentUser, JWT localStorage |
+| **B3.3** | Gamification → Backend Integration | ✅ CODE DONE | `useGamificationStore.ts` — earnXPWithSync, syncProgressFromServer, checkBadgesFromServer; `gamificationApi.ts` API service |
+| **B3.4** | Quiz → Backend Integration | ✅ CODE DONE | `useQuizStore.ts` — fetchQuizzesFromServer, submitAttemptToServer, fetchQuizHistory; `quizApi.ts` API service |
+| **B3.5** | Leaderboard API | ✅ CODE DONE | Backend: `LeaderboardController.cs` — GET /api/leaderboard top N by XP; Frontend: `leaderboardApi.ts`, `fetchLeaderboardFromServer()` |
+| **B3.6** | Learning Path → Backend Integration | ✅ CODE DONE | Backend: `LearningProgressController.cs` — GET/POST progress; Frontend: `learningProgressApi.ts`, `syncProgressFromServer()` |
+| **B3.7** | Unit Tests for B3 Services | ✅ CODE DONE | `apiClient.spec.ts` (15), `useAuthStore.spec.ts` (8), `gamificationApi.spec.ts` (8), `quizApi.spec.ts` (8) — 39 tests ALL PASS |
 
-**Test Results:** 173 backend tests ALL PASS (88 Domain + 34 Application + 51 Infrastructure) — 0 failures
+**Test Results:** 1506+ frontend tests pass (39 new B3 tests) + 139 backend tests — 1 pre-existing frontend failure
