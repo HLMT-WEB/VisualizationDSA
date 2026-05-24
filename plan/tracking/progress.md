@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 1373+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
+| **Unit tests**                  | 1467+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
 
