@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (509/510 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (585/586 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -551,3 +551,79 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 474 | **Scenario Data** | getAllScenarioIds returns 3 | strategy-pattern, observer-pattern, solid-dip | PASSED |
 | 475 | **Scenario Data** | SCENARIO_LABELS correct | All 3 labels defined | PASSED |
 | 476 | **Scenario Data** | getNodeById undefined for non-existent | Returns undefined | PASSED |
+| 477 | **EmbedBridge** | Create bridge with default wildcard origin | listenerCount=0 | PASSED |
+| 478 | **EmbedBridge** | Create bridge with custom allowed origins | listenerCount=0 | PASSED |
+| 479 | **EmbedBridge** | Register listener and return unsubscribe | listenerCount 0→1→0 | PASSED |
+| 480 | **EmbedBridge** | Support multiple listeners simultaneously | listenerCount=3 | PASSED |
+| 481 | **EmbedBridge** | Deliver messages from whitelisted origins | callback called with STEP_FORWARD | PASSED |
+| 482 | **EmbedBridge** | Deliver messages with wildcard origin | callback called for any origin | PASSED |
+| 483 | **EmbedBridge** | Deliver WIDGET source messages | HEIGHT_CHANGED payload received | PASSED |
+| 484 | **EmbedBridge** | Block messages from non-whitelisted origins (XSS) | callback NOT called, console.warn XSS_PREVENTION_BLOCKED | PASSED |
+| 485 | **EmbedBridge** | Block messages from empty origin strict whitelist | callback NOT called | PASSED |
+| 486 | **EmbedBridge** | Ignore messages without valid source field | callback NOT called | PASSED |
+| 487 | **EmbedBridge** | Ignore null message data | callback NOT called | PASSED |
+| 488 | **EmbedBridge** | Ignore messages from unknown sources | callback NOT called | PASSED |
+| 489 | **EmbedBridge** | Call postMessage on target window | postMessage called with correct args | PASSED |
+| 490 | **EmbedBridge** | Default to wildcard target origin | postMessage called with '*' | PASSED |
+| 491 | **EmbedBridge** | Clear all listeners on destroy | listenerCount=0 | PASSED |
+| 492 | **EmbedBridge** | Stop receiving messages after destroy | callback NOT called post-destroy | PASSED |
+| 493 | **EmbedBridge** | Handle double destroy gracefully | No throw | PASSED |
+| 494 | **SecureOrigin** | Accept default whitelisted visualization-dsa.edu.vn | isValidOrigin=true | PASSED |
+| 495 | **SecureOrigin** | Accept default whitelisted moodle.hust.edu.vn | isValidOrigin=true | PASSED |
+| 496 | **SecureOrigin** | Accept default whitelisted canvas.usth.edu.vn | isValidOrigin=true | PASSED |
+| 497 | **SecureOrigin** | Reject domains not in whitelist | isValidOrigin=false | PASSED |
+| 498 | **SecureOrigin** | Reject empty origin string | isValidOrigin=false | PASSED |
+| 499 | **SecureOrigin** | Have 3 default domains | domainCount=3 | PASSED |
+| 500 | **SecureOrigin** | Accept any origin with wildcard | isValidOrigin=true for all | PASSED |
+| 501 | **SecureOrigin** | Dynamically add a trusted domain | domainCount 3→4, isValidOrigin=true | PASSED |
+| 502 | **SecureOrigin** | Not duplicate existing domains | domainCount stays 3 | PASSED |
+| 503 | **SecureOrigin** | Remove domain from whitelist | domainCount 3→2, isValidOrigin=false | PASSED |
+| 504 | **SecureOrigin** | Handle removing non-existent domain | domainCount stays 3 | PASSED |
+| 505 | **SecureOrigin** | Clear all domains from whitelist | domainCount=0 | PASSED |
+| 506 | **SecureOrigin** | Return copy of whitelist as array | 3 domains in array | PASSED |
+| 507 | **SecureOrigin** | Initialize with custom domains | custom domainCount=2 | PASSED |
+| 508 | **SecureOrigin** | Initialize with empty array | domainCount=0 | PASSED |
+| 509 | **AutoHeight** | Return value within default bounds | clampHeight(500)=500 | PASSED |
+| 510 | **AutoHeight** | Clamp to minimum height 300px | clampHeight(100)=300 | PASSED |
+| 511 | **AutoHeight** | Clamp to maximum height 1200px | clampHeight(2000)=1200 | PASSED |
+| 512 | **AutoHeight** | Accept exact boundary values | 300→300, 1200→1200 | PASSED |
+| 513 | **AutoHeight** | Respect custom min/max bounds | custom 400/800 clamping | PASSED |
+| 514 | **AutoHeight** | Start with lastReportedHeight of 0 | getLastReportedHeight()=0 | PASSED |
+| 515 | **AutoHeight** | Reset lastReportedHeight on destroy | 0 after destroy | PASSED |
+| 516 | **AutoHeight** | Handle double destroy gracefully | No throw | PASSED |
+| 517 | **AutoHeight** | Not throw when starting observation | start() no throw | PASSED |
+| 518 | **AutoHeight** | Be idempotent when called multiple times | double start() no throw | PASSED |
+| 519 | **EmbedStore** | Default theme glass | selectedTheme='glass' | PASSED |
+| 520 | **EmbedStore** | VCR controls enabled by default | showVcrControls=true | PASSED |
+| 521 | **EmbedStore** | Watch variables enabled by default | showWatchVariables=true | PASSED |
+| 522 | **EmbedStore** | Interactive mode enabled by default | isInteractive=true | PASSED |
+| 523 | **EmbedStore** | Default dimensions 800x500 | widgetWidth=800, widgetHeight=500 | PASSED |
+| 524 | **EmbedStore** | Default algorithm quicksort-recursion | selectedAlgorithm correct | PASSED |
+| 525 | **EmbedStore** | isCopied false initially | isCopied=false | PASSED |
+| 526 | **EmbedStore** | Generated code contains iframe tag | <iframe...></iframe> present | PASSED |
+| 527 | **EmbedStore** | Sandbox attribute with secure flags | sandbox="allow-scripts allow-same-origin" | PASSED |
+| 528 | **EmbedStore** | Include default dimensions | width="800" height="500" | PASSED |
+| 529 | **EmbedStore** | Include selected algorithm | algo=quicksort-recursion | PASSED |
+| 530 | **EmbedStore** | Include selected theme | theme=glass | PASSED |
+| 531 | **EmbedStore** | Include base URL | visualization-dsa.edu.vn/embed | PASSED |
+| 532 | **EmbedStore** | Include border-radius styling | border-radius: 16px | PASSED |
+| 533 | **EmbedStore** | Update dynamically when theme changes | theme=dark after setTheme | PASSED |
+| 534 | **EmbedStore** | Update dynamically when algorithm changes | algo=heap-sort | PASSED |
+| 535 | **EmbedStore** | Update dynamically when dimensions change | width="1000" height="700" | PASSED |
+| 536 | **EmbedStore** | Reflect VCR controls toggle | vcr=false | PASSED |
+| 537 | **EmbedStore** | iframeSrcUrl properly formatted | URL with params | PASSED |
+| 538 | **EmbedStore** | setTheme dark | selectedTheme='dark' | PASSED |
+| 539 | **EmbedStore** | setTheme light | selectedTheme='light' | PASSED |
+| 540 | **EmbedStore** | setAlgorithm | selectedAlgorithm='merge-sort' | PASSED |
+| 541 | **EmbedStore** | setDimensions valid | 600x400 set correctly | PASSED |
+| 542 | **EmbedStore** | Clamp width minimum 300 | widgetWidth=300 from 100 | PASSED |
+| 543 | **EmbedStore** | Clamp width maximum 1400 | widgetWidth=1400 from 2000 | PASSED |
+| 544 | **EmbedStore** | Clamp height minimum 200 | widgetHeight=200 from 50 | PASSED |
+| 545 | **EmbedStore** | Clamp height maximum 900 | widgetHeight=900 from 1500 | PASSED |
+| 546 | **EmbedStore** | Toggle VCR controls | true→false→true | PASSED |
+| 547 | **EmbedStore** | Toggle watch variables | true→false | PASSED |
+| 548 | **EmbedStore** | Toggle interactive mode | true→false | PASSED |
+| 549 | **EmbedStore** | Reset all values to defaults | all fields reset | PASSED |
+| 550 | **EmbedStore** | isCopied true on successful copy | Clipboard writeText mock | PASSED |
+| 551 | **EmbedStore** | Return false on clipboard error | error handled gracefully | PASSED |
+| 552 | **EmbedStore** | Reset isCopied after 2 seconds | fake timer advance 2000ms | PASSED |

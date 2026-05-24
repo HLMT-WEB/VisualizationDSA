@@ -101,6 +101,13 @@
         </section>
       </template>
 
+      <!-- Embed Widget Tab -->
+      <template v-else-if="activeTab === 'embed'">
+        <section class="flex-1 min-h-0">
+          <EmbedWidgetWorkspace />
+        </section>
+      </template>
+
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -246,6 +253,7 @@ import { CodeWorkspace } from "./features/code-to-visualization";
 import { CompareWorkspace } from "./features/compare-algorithms";
 import { ConcurrencyWorkspace } from "./features/concurrency-viz";
 import { DebugWorkspace } from "./features/debug-mode";
+import { EmbedWidgetWorkspace } from "./features/embed-widget";
 
 const activeTab = ref("sorting");
 
@@ -267,6 +275,7 @@ const tabs = [
   { id: "system", name: "System" },
   { id: "quiz", name: "Quiz" },
   { id: "gamification", name: "Gamification" },
+  { id: "embed", name: "Embed" },
 ];
 
 const currentTabLabel = computed(

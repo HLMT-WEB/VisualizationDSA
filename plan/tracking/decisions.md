@@ -381,3 +381,36 @@ Các ADR sau đây được ghi trong tài liệu đặc tả nhưng **chưa có
   - Module: design-patterns/index.ts (barrel export)
   - Integration: App.vue ("Patterns" tab — replaced PatternSandbox)
   - Tests: DesignPatternVisualizerEngine.spec.ts (18), useDesignPatternsStore.spec.ts (22), scenarioData.spec.ts (10) — 50 tests total
+
+---
+
+## ADR-18: Interactive Embed Widget — postMessage Bridge with Origin Whitelist XSS Prevention
+
+- **Trạng thái:** ✅ IMPLEMENTED
+- **Ngữ cảnh:** Giáo viên/blogger cần nhúng sơ đồ trực quan DSA vào các nền tảng bên ngoài (Moodle, Canvas, WordPress, Medium) qua iframe nhẹ. Cần đảm bảo giao tiếp an toàn giữa Host website và iframe embed, chống XSS qua postMessage.
+- **Quyết định:** Triển khai hệ thống Embed Widget 100% client-side:
+  1. **EmbedCommunicationBridge:** Bidirectional postMessage bridge với origin whitelist filtering. Messages phải có `source: 'VISUALIZATION_DSA_WIDGET' | 'VISUALIZATION_DSA_HOST'` và `action` hợp lệ. Origin không nằm trong whitelist bị chặn với log `XSS_PREVENTION_BLOCKED`.
+  2. **SecureOriginChecker:** Configurable whitelist domain validator với wildcard mode (`'*'`), add/remove/clear API. Default whitelist: visualization-dsa.edu.vn, moodle.hust.edu.vn, canvas.usth.edu.vn.
+  3. **AutoHeightResizer:** ResizeObserver gửi `HEIGHT_CHANGED` message về Host khi content thay đổi kích thước. Debounce 100ms, height clamping 300-1200px, GC-safe destroy.
+  4. **Pinia Setup Store:** `useEmbedConfiguratorStore` quản lý theme/algo/dimensions/VCR toggles, live iframe code generation via computed, Clipboard API copy với 2s Emerald animation feedback.
+  5. **Glassmorphism UI:** Sidebar cấu hình backdrop-blur(16px), Live Preview scaled rendering 3 themes, Neon Cyan code snippet box với Copy→Copied Emerald transition, host integration script mẫu.
+  6. **Vite manualChunks:** Monaco Editor cô lập khỏi embed bundle via `manualChunks()` function trong rollupOptions.
+- **Kiến trúc:**
+  - `EmbedCommunicationBridge` — window.addEventListener('message'), origin filtering, listener lifecycle (onMessage returns unsubscribe function), sendMessage, destroy
+  - `SecureOriginChecker` — Set-based whitelist, wildcard mode, addTrustedDomain, removeTrustedDomain, clearWhitelist
+  - `AutoHeightResizer` — ResizeObserver, debounce setTimeout, clampHeight min/max, GC-safe destroy
+  - `useEmbedConfiguratorStore` — Pinia setup store: selectedTheme, showVcrControls, showWatchVariables, isInteractive, widgetWidth/Height, selectedAlgorithm, generatedIframeCode computed, iframeSrcUrl computed, copyEmbedCodeToClipboard async, setDimensions clamped
+  - `EmbedConfiguratorSidebar.vue` — Theme buttons, algorithm select dropdown, width/height range sliders, toggle switches with knob animation
+  - `LiveWidgetPreview.vue` — Scaled preview with responsive scaling, 3 theme variants, simulated bars/VCR/watch visualization
+  - `EmbedCodeSnippet.vue` — Neon Cyan bordered code box, Copy button with Cyan→Emerald state transition, host integration script
+  - `EmbedWidgetWorkspace.vue` — Sidebar + Preview + Code orchestrator
+- **Hệ quả:** Giáo viên có thể tùy chỉnh widget (theme, algorithm, dimensions, toggles) qua sidebar trực quan, xem live preview thay đổi tức thì, copy iframe code 1 click, nhúng vào Moodle/Canvas/WordPress. Origin whitelist chặn 100% tin nhắn giả mạo XSS.
+- **File liên quan:**
+  - Types: embed-widget/types/embed-widget.types.ts
+  - Engine: embed-widget/engine/EmbedCommunicationBridge.ts, SecureOriginChecker.ts, AutoHeightResizer.ts
+  - Store: embed-widget/store/useEmbedConfiguratorStore.ts
+  - Components: EmbedConfiguratorSidebar.vue, LiveWidgetPreview.vue, EmbedCodeSnippet.vue, EmbedWidgetWorkspace.vue
+  - Module: embed-widget/index.ts (barrel export)
+  - Integration: App.vue ("Embed" tab)
+  - Infrastructure: vite.config.ts (manualChunks for Monaco isolation)
+  - Tests: EmbedCommunicationBridge.spec.ts (17), SecureOriginChecker.spec.ts (14), AutoHeightResizer.spec.ts (10), useEmbedConfiguratorStore.spec.ts (35) — 76 tests total
