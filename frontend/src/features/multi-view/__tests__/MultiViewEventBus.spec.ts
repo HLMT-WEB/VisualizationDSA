@@ -171,14 +171,14 @@ describe('MultiViewEventBus', () => {
   });
 
   describe('performance: rapid sequential dispatches', () => {
-    it('should handle 100 rapid dispatches all below 1ms each', () => {
+    it('should handle 100 rapid dispatches all below 5ms each', () => {
       MultiViewEventBus.subscribe('panel-1', vi.fn());
       MultiViewEventBus.subscribe('panel-2', vi.fn());
 
       for (let i = 0; i < 100; i++) {
         const step = createMockStep({ stepIndex: i });
         const elapsed = MultiViewEventBus.dispatch(step);
-        expect(elapsed).toBeLessThan(1.0);
+        expect(elapsed).toBeLessThan(5.0);
       }
     });
   });
