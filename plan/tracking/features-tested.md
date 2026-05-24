@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (670/671 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (770/771 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -712,3 +712,96 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 635 | **Constants** | EXPORT_MIN_SCALE = 1 | Hằng số đúng | 🟢 PASSED |
 | 636 | **Constants** | EXPORT_MAX_SCALE = 4 | Hằng số đúng | 🟢 PASSED |
 | 637 | **Constants** | EXPORT_DEFAULT_SCALE = 3 | Hằng số đúng | 🟢 PASSED |
+
+### Phase 2 Gamification Engine — StreakCalculator, GamificationEngine, CanvasConfettiEngine, useGamificationStore (88 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Phương thức kiểm tra (Test Spec) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 638 | **StreakCalculator** | Grace Period 2h adjustment | Nộp bài 3:00 AM → ngày hiện tại | 🟢 PASSED |
+| 639 | **StreakCalculator** | Late-night 1:45 AM keeps streak | Nộp lúc 1:45 AM 18/05 → tính ngày 17/05 | 🟢 PASSED |
+| 640 | **StreakCalculator** | Past Grace Period 2:05 AM breaks | Nộp lúc 2:05 AM → tính ngày mới | 🟢 PASSED |
+| 641 | **StreakCalculator** | Midnight submission (00:00 AM) | 00:00 AM 18/05 → tính ngày 17/05 | 🟢 PASSED |
+| 642 | **StreakCalculator** | Exactly 2:00 AM boundary | 2:00 AM → tính ngày mới (không bù) | 🟢 PASSED |
+| 643 | **StreakCalculator** | Noon no date change | 12:00 PM → giữ nguyên ngày | 🟢 PASSED |
+| 644 | **StreakCalculator** | Year boundary Jan 1 1:00 AM | 01/01/2027 1:00 AM → 31/12/2026 | 🟢 PASSED |
+| 645 | **StreakCalculator** | Month boundary March 1 0:30 AM | 01/03 0:30 AM → 28/02 | 🟢 PASSED |
+| 646 | **StreakCalculator** | YYYY-MM-DD format | Kiểm tra regex format đầu ra | 🟢 PASSED |
+| 647 | **StreakCalculator** | Zero-padding month/day | 01/05 → '2026-01-05' | 🟢 PASSED |
+| 648 | **StreakCalculator** | Same day no update | lastActive = today → shouldUpdate: false | 🟢 PASSED |
+| 649 | **StreakCalculator** | Consecutive day increment | yesterday → nextStreak + 1 | 🟢 PASSED |
+| 650 | **StreakCalculator** | Gap > 1 day reset | 3-day gap → nextStreak: 1 | 🟢 PASSED |
+| 651 | **StreakCalculator** | Exactly 2-day gap reset | 2-day gap → nextStreak: 1 | 🟢 PASSED |
+| 652 | **StreakCalculator** | First ever activity | empty lastActive → nextStreak: 1 | 🟢 PASSED |
+| 653 | **StreakCalculator** | Cross-month streak | May 31 → Jun 1 → streak + 1 | 🟢 PASSED |
+| 654 | **StreakCalculator** | Cross-year streak | Dec 31 → Jan 1 → streak + 1 | 🟢 PASSED |
+| 655 | **StreakCalculator** | Same day maintains value | streak 1, same day → 1, no update | 🟢 PASSED |
+| 656 | **StreakCalculator** | shouldUpdate true on increment | Liên tục → shouldUpdate: true | 🟢 PASSED |
+| 657 | **StreakCalculator** | shouldUpdate true on reset | Gap → shouldUpdate: true | 🟢 PASSED |
+| 658 | **GamificationEngine** | Unlock Recursion Master | 600 XP + 4 streak → recursion-master | 🟢 PASSED |
+| 659 | **GamificationEngine** | Insufficient XP blocks unlock | 100 XP → không mở khóa | 🟢 PASSED |
+| 660 | **GamificationEngine** | Insufficient streak blocks unlock | 1500 XP, 1 streak → không mở khóa | 🟢 PASSED |
+| 661 | **GamificationEngine** | No re-unlock already unlocked | Đã có recursion-master → bỏ qua | 🟢 PASSED |
+| 662 | **GamificationEngine** | Unlock SOLID Architect | 1200 XP + 6 streak → solid-architect | 🟢 PASSED |
+| 663 | **GamificationEngine** | Multiple badges at once | 1200 XP + 8 streak → ≥2 badges | 🟢 PASSED |
+| 664 | **GamificationEngine** | Empty when no badges qualify | 10 XP, 1 streak → [] | 🟢 PASSED |
+| 665 | **GamificationEngine** | Empty when all already unlocked | Tất cả badges đã mở → [] | 🟢 PASSED |
+| 666 | **GamificationEngine** | Unlock Streak Warrior | 250 XP + 7 streak → streak-warrior | 🟢 PASSED |
+| 667 | **GamificationEngine** | getBadgeTemplates returns all | ≥5 badge definitions | 🟢 PASSED |
+| 668 | **GamificationEngine** | Unique badge IDs | Không trùng ID | 🟢 PASSED |
+| 669 | **GamificationEngine** | Positive XP thresholds | Tất cả > 0 | 🟢 PASSED |
+| 670 | **GamificationEngine** | Positive streak thresholds | Tất cả > 0 | 🟢 PASSED |
+| 671 | **GamificationEngine** | Valid XP range (100) | 100 → true | 🟢 PASSED |
+| 672 | **GamificationEngine** | Reject XP > 200 | 201 → false | 🟢 PASSED |
+| 673 | **GamificationEngine** | Reject zero XP | 0 → false | 🟢 PASSED |
+| 674 | **GamificationEngine** | Reject negative XP | -50 → false | 🟢 PASSED |
+| 675 | **GamificationEngine** | Accept exactly MAX (200) | 200 → true | 🟢 PASSED |
+| 676 | **GamificationEngine** | Accept minimum valid (1) | 1 → true | 🟢 PASSED |
+| 677 | **CanvasConfettiEngine** | Construct with valid canvas | engine khởi tạo thành công | 🟢 PASSED |
+| 678 | **CanvasConfettiEngine** | Throw on null 2D context | Ném lỗi khi canvas 2D null | 🟢 PASSED |
+| 679 | **CanvasConfettiEngine** | Default 150 particles | burst() → 150 particles | 🟢 PASSED |
+| 680 | **CanvasConfettiEngine** | Custom particle count | burst(50) → 50 particles | 🟢 PASSED |
+| 681 | **CanvasConfettiEngine** | Start rAF after burst | requestAnimationFrame called | 🟢 PASSED |
+| 682 | **CanvasConfettiEngine** | Accumulate particles | 50 + 30 → 80 particles | 🟢 PASSED |
+| 683 | **CanvasConfettiEngine** | Clear on destroy | destroy → 0 particles | 🟢 PASSED |
+| 684 | **CanvasConfettiEngine** | Cancel rAF on destroy | cancelAnimationFrame called | 🟢 PASSED |
+| 685 | **CanvasConfettiEngine** | Safe destroy without animation | Không crash | 🟢 PASSED |
+| 686 | **CanvasConfettiEngine** | Resize to window dimensions | canvas width/height = window | 🟢 PASSED |
+| 687 | **CanvasConfettiEngine** | Neon color palette | Màu thuộc CONFETTI_COLORS | 🟢 PASSED |
+| 688 | **CanvasConfettiEngine** | Center position on burst | Particles tại canvas center | 🟢 PASSED |
+| 689 | **CanvasConfettiEngine** | clearRect in tick | ctx.clearRect gọi đúng | 🟢 PASSED |
+| 690 | **CanvasConfettiEngine** | Gravity moves particles | Vị trí thay đổi sau tick | 🟢 PASSED |
+| 691 | **CanvasConfettiEngine** | Remove off-screen particles | 500 ticks → 0 particles | 🟢 PASSED |
+| 692 | **CanvasConfettiEngine** | Active status reporting | false → burst → true | 🟢 PASSED |
+| 693 | **CanvasConfettiEngine** | No duplicate animation | Không gọi rAF lần 2 | 🟢 PASSED |
+| 694 | **GamificationStore** | Default XP = 0 | currentXP = 0 | 🟢 PASSED |
+| 695 | **GamificationStore** | Default streak = 0 | activeStreak = 0 | 🟢 PASSED |
+| 696 | **GamificationStore** | Empty unlocked badges | unlockedBadges = [] | 🟢 PASSED |
+| 697 | **GamificationStore** | Confetti disabled initially | showConfetti = false | 🟢 PASSED |
+| 698 | **GamificationStore** | Default leaderboard rank | leaderboardRank = 0 | 🟢 PASSED |
+| 699 | **GamificationStore** | Default streak freezes | streakFreezesCount = 2 | 🟢 PASSED |
+| 700 | **GamificationStore** | Empty leaderboard data | leaderboardData = [] | 🟢 PASSED |
+| 701 | **GamificationStore** | Empty lastActiveDate | lastActiveDate = '' | 🟢 PASSED |
+| 702 | **GamificationStore** | earnXPLocal adds XP | +100 → currentXP = 100 | 🟢 PASSED |
+| 703 | **GamificationStore** | Accumulate XP | +100 +50 → 150 | 🟢 PASSED |
+| 704 | **GamificationStore** | Reject XP > MAX | +300 → currentXP = 0 | 🟢 PASSED |
+| 705 | **GamificationStore** | Reject zero XP | +0 → currentXP = 0 | 🟢 PASSED |
+| 706 | **GamificationStore** | Reject negative XP | -50 → currentXP = 0 | 🟢 PASSED |
+| 707 | **GamificationStore** | Update streak on first activity | +50 → streak ≥ 1 | 🟢 PASSED |
+| 708 | **GamificationStore** | Confetti trigger | triggerConfettiRain → true | 🟢 PASSED |
+| 709 | **GamificationStore** | Confetti auto-clear 4s | 4000ms → false | 🟢 PASSED |
+| 710 | **GamificationStore** | Confetti active before 4s | 3999ms → true | 🟢 PASSED |
+| 711 | **GamificationStore** | Streak freeze decrement | useStreakFreeze → count - 1 | 🟢 PASSED |
+| 712 | **GamificationStore** | Streak freeze floor 0 | 3x calls → 0 | 🟢 PASSED |
+| 713 | **GamificationStore** | Freeze returns true if available | return true | 🟢 PASSED |
+| 714 | **GamificationStore** | Freeze returns false if empty | return false | 🟢 PASSED |
+| 715 | **GamificationStore** | Badge unlock on threshold | 400 XP + 3 streak → unlock | 🟢 PASSED |
+| 716 | **GamificationStore** | Confetti on badge unlock | Unlock → confetti = true | 🟢 PASSED |
+| 717 | **GamificationStore** | No re-unlock | 2x check → same count | 🟢 PASSED |
+| 718 | **GamificationStore** | Set leaderboard data | setLeaderboardData → stored | 🟢 PASSED |
+| 719 | **GamificationStore** | Sort leaderboard by rank | Unsorted → sorted by rank | 🟢 PASSED |
+| 720 | **GamificationStore** | Limit leaderboard to top 10 | 15 entries → 10 stored | 🟢 PASSED |
+| 721 | **GamificationStore** | allBadges computed | ≥5 badge templates | 🟢 PASSED |
+| 722 | **GamificationStore** | xpProgressPercent computed | >0 after earning XP | 🟢 PASSED |
+| 723 | **GamificationStore** | nextBadgeXPThreshold computed | >0 | 🟢 PASSED |
+| 724 | **GamificationStore** | lockedBadges computed | All badges locked initially | 🟢 PASSED |
+| 725 | **GamificationStore** | streakStatus computed | inactive → active after XP | 🟢 PASSED |
