@@ -114,6 +114,13 @@
           <ExportShareWorkspace />
         </section>
       </template>
+
+      <!-- Gamification Engine Tab -->
+      <template v-else-if="activeTab === 'gamification-engine'">
+        <section class="flex-1 min-h-0">
+          <GamificationWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -261,6 +268,7 @@ import { ConcurrencyWorkspace } from "./features/concurrency-viz";
 import { DebugWorkspace } from "./features/debug-mode";
 import { EmbedWidgetWorkspace } from "./features/embed-widget";
 import { ExportShareWorkspace } from "./features/export-share";
+import { GamificationWorkspace } from "./features/gamification-engine";
 
 const activeTab = ref("sorting");
 
@@ -284,6 +292,7 @@ const tabs = [
   { id: "gamification", name: "Gamification" },
   { id: "embed", name: "Embed" },
   { id: "export-share", name: "Export/Share" },
+  { id: "gamification-engine", name: "Gamification+" },
 ];
 
 const currentTabLabel = computed(

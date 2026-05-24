@@ -15,8 +15,8 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
-| **Tổng file thực tế**           | ~80 files (60 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 670+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
+| **Unit tests**                  | 770+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
 
 ---
 
@@ -250,6 +250,23 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Integration** | App.vue "Export/Share" tab + barrel export | ✅ CODE DONE | New "Export/Share" tab in `App.vue`, `index.ts` barrel |
 | **Dependencies** | lz-string, qrcode + @types | ✅ CODE DONE | `lz-string`, `qrcode`, `@types/lz-string`, `@types/qrcode` |
 | **Tests** | 85 Unit Tests | ✅ CODE DONE | `WorkspaceStateCompressor.spec.ts` (19), `SVGToCanvasExporter.spec.ts` (20), `ExternalStylesheetsInjector.spec.ts` (12), `useExportShareStore.spec.ts` (34) — ALL 85 PASS |
+
+### Phase 2 Gamification Engine — Streak Calculator, Badge Unlocking, Canvas Confetti, Leaderboard
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | UserProgressState, BadgeDefinition, LeaderboardEntry, ConfettiParticle, constants | ✅ CODE DONE | `gamification-engine/types/gamification.types.ts` — GRACE_HOURS_OFFSET, MAX_XP_PER_QUIZ, BADGE_TEMPLATES, CONFETTI_COLORS |
+| **Engine** | StreakCalculator (Grace Period 2:00 AM) | ✅ CODE DONE | `engine/StreakCalculator.ts` — getAdjustedDate (subtract 2 hours), calculateUpdatedStreak (same-day/consecutive/gap detection) |
+| **Engine** | GamificationEngine (Badge Unlocking + XP Validation) | ✅ CODE DONE | `engine/GamificationEngine.ts` — checkNewUnlockedBadges (XP + streak threshold), getBadgeTemplates, validateXPAmount (1–200 cap) |
+| **Engine** | CanvasConfettiEngine (HTML5 Canvas Particle 60 FPS) | ✅ CODE DONE | `engine/CanvasConfettiEngine.ts` — burst (150 particles), tick (gravity + air drag + rotation), destroy (GC-safe cleanup) |
+| **Store** | useGamificationStore Pinia Setup Store | ✅ CODE DONE | `store/useGamificationStore.ts` — XP, streak, badges, confetti, leaderboard, earnXPLocal, useStreakFreeze, checkAndUnlockBadges |
+| **Component** | StreakFire.vue (Neon Orange flame animation) | ✅ CODE DONE | `components/StreakFire.vue` — SVG flame icon, streak-fire-burn keyframes, active/inactive state |
+| **Component** | BadgesCabinet.vue (Glassmorphism badge grid) | ✅ CODE DONE | `components/BadgesCabinet.vue` — locked grayscale + unlocked Emerald glow, badge-unlock-pulse animation, hover lift |
+| **Component** | WeeklyLeaderboard.vue (Top 10 podium) | ✅ CODE DONE | `components/WeeklyLeaderboard.vue` — Gold/Silver/Bronze borders, rank badges, XP display |
+| **Component** | CanvasConfettiOverlay.vue (Teleport fullscreen) | ✅ CODE DONE | `components/CanvasConfettiOverlay.vue` — Teleport to body, pointer-events-none, lifecycle management |
+| **Component** | GamificationWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/GamificationWorkspace.vue` — XP bar, streak fire, badges, leaderboard, demo controls |
+| **Integration** | App.vue "Gamification+" tab + barrel export | ✅ CODE DONE | New "Gamification+" tab in `App.vue`, `index.ts` barrel |
+| **Tests** | 88 Unit Tests | ✅ CODE DONE | `StreakCalculator.spec.ts` (20), `GamificationEngine.spec.ts` (20), `CanvasConfettiEngine.spec.ts` (17), `useGamificationStore.spec.ts` (31) — ALL 88 PASS |
 
 ---
 
