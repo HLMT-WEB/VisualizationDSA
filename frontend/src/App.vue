@@ -128,6 +128,13 @@
           <LearningPathWorkspace />
         </section>
       </template>
+
+      <!-- Multi-View Tab -->
+      <template v-else-if="activeTab === 'multi-view'">
+        <section class="flex-1 min-h-0">
+          <MultiViewWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -277,6 +284,7 @@ import { EmbedWidgetWorkspace } from "./features/embed-widget";
 import { ExportShareWorkspace } from "./features/export-share";
 import { GamificationWorkspace } from "./features/gamification-engine";
 import { LearningPathWorkspace } from "./features/learning-path";
+import { MultiViewWorkspace } from "./features/multi-view";
 
 const activeTab = ref("sorting");
 
@@ -302,6 +310,7 @@ const tabs = [
   { id: "export-share", name: "Export/Share" },
   { id: "gamification-engine", name: "Gamification+" },
   { id: "learning-path", name: "Learning Path" },
+  { id: "multi-view", name: "Multi-View" },
 ];
 
 const currentTabLabel = computed(

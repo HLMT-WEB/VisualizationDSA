@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 868+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Unit tests**                  | 970+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
 
 ---
 
@@ -285,6 +285,24 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | LearningPathWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/LearningPathWorkspace.vue` — header badges, map + sidebar, AI card, node details, demo controls |
 | **Integration** | App.vue "Learning Path" tab + barrel export | ✅ CODE DONE | New "Learning Path" tab in App.vue, index.ts barrel |
 | **Tests** | 98 Unit Tests | ✅ CODE DONE | `PrerequisiteDAGEngine.spec.ts` (22), `PersonalizedPathEvaluator.spec.ts` (22), `LaserBatchRenderer.spec.ts` (18), `OfflineProgressSynchronizer.spec.ts` (16), `useLearningPathStore.spec.ts` (20) — ALL 98 PASS |
+
+### Phase 2 Multi-View Synchronization — EventBus, Timeline Manager, Resizable Splitter
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | TimelineStep, StepChangedCallback, PlaybackSpeed, PaneLayout, SeekResult | ✅ CODE DONE | `multi-view/types/multi-view.types.ts` — PANE_MIN/MAX_PERCENT, PLAYBACK_SPEEDS constants |
+| **Engine** | MultiViewEventBus (RAM-based pub/sub <1ms) | ✅ CODE DONE | `engine/MultiViewEventBus.ts` — subscribe, dispatch, unsubscribe, unsubscribeAll, getListenerCount |
+| **Engine** | SynchronizedTimelineManager (bounds-safe seek) | ✅ CODE DONE | `engine/SynchronizedTimelineManager.ts` — seekToStep [0, N-1] bounds, stepNext, stepPrev, isAtStart/End |
+| **Engine** | ThrottledDragCoordinator (rAF 60 FPS) | ✅ CODE DONE | `engine/ThrottledDragCoordinator.ts` — rAF throttle, clamp 15%-85%, GC-safe destroy |
+| **Store** | useMultiViewStore Pinia Setup Store | ✅ CODE DONE | `store/useMultiViewStore.ts` — timeline playback, pane layout, VCR controls, demo Bubble Sort steps |
+| **Component** | ResizableSplitter.vue (Neon Cyan handle) | ✅ CODE DONE | `components/ResizableSplitter.vue` — Glassmorphic drag handle, 3-dot indicator, drag events |
+| **Component** | VCRScrubberBar.vue (Orange Neon slider) | ✅ CODE DONE | `components/VCRScrubberBar.vue` — play/pause/step/speed buttons, range slider, progress display |
+| **Component** | CodeHighlightPanel.vue (Amber line highlight) | ✅ CODE DONE | `components/CodeHighlightPanel.vue` — Bubble Sort pseudocode, amber active line, gutter arrow |
+| **Component** | FlowchartPanel.vue (Cyan node pulsing) | ✅ CODE DONE | `components/FlowchartPanel.vue` — 6 flowchart nodes, active node Cyan pulse animation |
+| **Component** | SVGVisualizerPanel.vue (Bar chart sync) | ✅ CODE DONE | `components/SVGVisualizerPanel.vue` — SVG bars from memoryStateSnapshot, comparing/sorted coloring |
+| **Component** | MultiViewWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/MultiViewWorkspace.vue` — 2/3-panel layout, header, splitter, VCR bar, sync status |
+| **Integration** | App.vue "Multi-View" tab + barrel export | ✅ CODE DONE | New "Multi-View" tab in App.vue, index.ts barrel |
+| **Tests** | 102 Unit Tests | ✅ CODE DONE | `MultiViewEventBus.spec.ts` (20), `SynchronizedTimelineManager.spec.ts` (22), `ThrottledDragCoordinator.spec.ts` (15), `useMultiViewStore.spec.ts` (45) — ALL 102 PASS |
 
 ---
 
