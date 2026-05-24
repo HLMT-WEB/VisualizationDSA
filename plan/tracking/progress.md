@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 1129+ tests — ✅ 100% PASS (1 pre-existing failure)                |
+| **Unit tests**                  | 1219+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
 
@@ -320,6 +320,23 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | OOPConceptsVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/OOPConceptsVisualizerWorkspace.vue` — UML cards grid, sandbox + heap split, laser overlay, demo initialization |
 | **Integration** | App.vue "OOP Viz" tab + barrel export | ✅ CODE DONE | New "OOP Viz" tab in App.vue, index.ts barrel |
 | **Tests** | 54 Unit Tests | ✅ CODE DONE | `OOPReflectionEngine.spec.ts` (27), `SVGLaserBatchRenderer.spec.ts` (7), `useOOPVisualizerStore.spec.ts` (20) — ALL 54 PASS |
+
+### Phase 2 Smart Interactive Quiz Widget — VCR Playback Interceptor, SVG Target Resolver, Quiz Evaluation Engine
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | InteractiveQuizQuestion, QuizEvaluationResult, QuizSubmissionState, QuizOverlayStatus, QuizSessionStats | ✅ CODE DONE | `smart-quiz/types/smart-quiz.types.ts` — QuestionType (SVG_NODE_CLICK/MONACO_LINE_CLICK/MULTIPLE_CHOICE), MultipleChoiceOption, QUIZ_CONSTANTS |
+| **Engine** | VCRPlaybackInterceptor — timeline step interception | ✅ CODE DONE | `engine/VCRPlaybackInterceptor.ts` — Map-based quiz registry, interceptStep auto-pause + callback, registerQuiz, removeQuiz, clearQuizzes |
+| **Engine** | SVGTargetResolver — click event delegation resolver | ✅ CODE DONE | `engine/SVGTargetResolver.ts` — resolveSelectedNodeId (closest data-node-id), evaluateAnswers (Set-based missing/extra diff) |
+| **Engine** | QuizEvaluationEngine — RAM-based scoring engine | ✅ CODE DONE | `engine/QuizEvaluationEngine.ts` — evaluate (matchCount, scorePercentage, isCorrect), validateXPReward (1–200), calculateRetryXP (first-try bonus) |
+| **Store** | useSmartQuizStore Pinia Setup Store | ✅ CODE DONE | `store/useSmartQuizStore.ts` — 3 demo quizzes, triggerQuiz, toggleAnswerSelection (max clamp), submitAnswers (debounce 2s), retryQuiz (0 XP retry), closeQuiz (SLIDE_OUT animation), checkTimelineStep, sessionStats tracking |
+| **Component** | InteractiveQuizOverlay.vue (Slide-in Glassmorphic panel) | ✅ CODE DONE | `components/InteractiveQuizOverlay.vue` — slide-in right 500ms cubic-bezier, question type badges, MC options, SVG/Monaco click hints, shake animation on wrong answer |
+| **Component** | ExplanationHSLCard.vue (Emerald/Crimson feedback) | ✅ CODE DONE | `components/ExplanationHSLCard.vue` — correct Emerald glow + XP reward banner, incorrect Crimson with score percentage |
+| **Component** | SVGQuizCanvas.vue (Interactive SVG bar chart) | ✅ CODE DONE | `components/SVGQuizCanvas.vue` — 8-bar demo array, data-node-id click delegation, Cyan hover glow, Amber selected glow, VCR lock indicator |
+| **Component** | QuizSessionDashboard.vue (Stats + demo triggers) | ✅ CODE DONE | `components/QuizSessionDashboard.vue` — 3-stat grid (questions/correct/XP), accuracy progress bar, 3 demo quiz trigger buttons, reset session |
+| **Component** | SmartQuizWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/SmartQuizWorkspace.vue` — SVG canvas + overlay left panel, session dashboard right panel, timeline lock status badge |
+| **Integration** | App.vue "Smart Quiz" tab + barrel export | ✅ CODE DONE | New "Smart Quiz" tab in App.vue, index.ts barrel |
+| **Tests** | 90 Unit Tests | ✅ CODE DONE | `VCRPlaybackInterceptor.spec.ts` (16), `SVGTargetResolver.spec.ts` (12), `QuizEvaluationEngine.spec.ts` (21), `useSmartQuizStore.spec.ts` (41) — ALL 90 PASS |
 
 ### Phase 2 SOLID Principles Visualizer — Thermal SRP, Laser Fracture LSP, Neon DIP
 

@@ -143,6 +143,13 @@
         </section>
       </template>
 
+      <!-- Smart Quiz Tab -->
+      <template v-else-if="activeTab === 'smart-quiz'">
+        <section class="flex-1 min-h-0">
+          <SmartQuizWorkspace />
+        </section>
+      </template>
+
       <!-- SOLID Visualization Tab -->
       <template v-else-if="activeTab === 'solid-visualization'">
         <section class="flex-1 min-h-0">
@@ -300,6 +307,7 @@ import { GamificationWorkspace } from "./features/gamification-engine";
 import { LearningPathWorkspace } from "./features/learning-path";
 import { MultiViewWorkspace } from "./features/multi-view";
 import { OOPConceptsVisualizerWorkspace } from "./features/oop-visualization";
+import { SmartQuizWorkspace } from "./features/smart-quiz";
 import { SOLIDVisualizerWorkspace } from "./features/solid-visualization";
 
 const activeTab = ref("sorting");
@@ -328,6 +336,7 @@ const tabs = [
   { id: "learning-path", name: "Learning Path" },
   { id: "multi-view", name: "Multi-View" },
   { id: "oop-visualization", name: "OOP Viz" },
+  { id: "smart-quiz", name: "Smart Quiz" },
   { id: "solid-visualization", name: "SOLID Viz" },
 ];
 
