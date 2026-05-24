@@ -119,6 +119,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
 
+// Register IMemoryCache + CacheService
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+
+// Response Caching
+builder.Services.AddResponseCaching();
+
 // Register Algorithm Strategies (Reflection-based auto-scan)
 builder.Services.AddAlgorithmStrategies();
 
@@ -159,6 +166,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 app.UseResponseCompression();
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseRateLimiter();

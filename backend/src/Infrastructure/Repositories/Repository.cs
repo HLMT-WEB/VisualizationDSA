@@ -27,12 +27,12 @@ namespace VisualizationDSA.Infrastructure.Repositories
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public virtual async Task<T> AddAsync(T entity)
@@ -56,6 +56,44 @@ namespace VisualizationDSA.Infrastructure.Repositories
         public virtual async Task<bool> ExistsAsync(Guid id)
         {
             return await _dbSet.FindAsync(id) != null;
+        }
+
+        public virtual async Task<int> CountAsync()
+        {
+            return await _dbSet.CountAsync();
+        }
+
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.CountAsync(predicate);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _dbSet
+                .AsNoTracking()
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public virtual async Task<IEnumerable<T>> GetPagedAsync(
+            Expression<Func<T, bool>> predicate,
+            int page,
+            int pageSize,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
+        {
+            var query = _dbSet.AsNoTracking().Where(predicate);
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

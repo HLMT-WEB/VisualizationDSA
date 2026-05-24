@@ -14,9 +14,9 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Tài liệu thiết kế**           | 12/12 Sprints (100% — chỉ là spec, chưa phải code)                 |
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
-| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting   |
+| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting + IMemoryCache + Pagination |
 | **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
-| **Unit tests**                  | 1467+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
+| **Unit tests**                  | 1467+ frontend + 173 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
 
 ---
 
@@ -650,3 +650,22 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 | **B2.10** | Build fixes | ✅ CODE DONE | `Infrastructure.csproj` +JwtBearer, `WebApi.csproj` +HealthChecks.EntityFrameworkCore — resolve missing package refs |
 
 **Test Results:** 139 tests ALL PASS (88 Domain + 25 Application + 26 Infrastructure) — 0 failures
+
+## 10. Phase B4: Performance & Caching
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B4.1** | IMemoryCache + CacheService | ✅ CODE DONE | `Application/Services/ICacheService.cs` interface, `Infrastructure/Services/MemoryCacheService.cs` — ConcurrentDictionary key tracking, prefix-based eviction |
+| **B4.2** | Cache Keys & Durations Constants | ✅ CODE DONE | `Application/Constants/CacheKeys.cs` — AlgorithmList 24h, QuizList 30m, BadgeList 1h, Leaderboard 5m |
+| **B4.3** | Response Caching Middleware | ✅ CODE DONE | `Program.cs` — `AddResponseCaching()` + `UseResponseCaching()`, `[ResponseCache]` on GET endpoints (algorithms 1h, quizzes 5m, badges 10m, lectures 1h) |
+| **B4.4** | ETag Conditional GET | ✅ CODE DONE | `AlgorithmsController.cs` — SHA256-based ETag generation for algorithm metadata, HTTP 304 Not Modified support |
+| **B4.5** | Pagination — PagedResult<T> | ✅ CODE DONE | `Application/DTOs/PagedResult.cs` — generic paged result (Items, Page, PageSize, TotalCount, TotalPages, HasPrevious/NextPage) |
+| **B4.6** | IRepository Pagination Extensions | ✅ CODE DONE | `IRepository.cs` — `CountAsync()`, `GetPagedAsync(page, pageSize)`, `GetPagedAsync(predicate, page, pageSize, orderBy)` |
+| **B4.7** | Repository AsNoTracking Optimization | ✅ CODE DONE | `Repository.cs` — `AsNoTracking()` on all read-only queries (GetAllAsync, FindAsync, GetPagedAsync) |
+| **B4.8** | Paginated Endpoints | ✅ CODE DONE | `QuizzesController.cs` — paginated history `?page=1&pageSize=10` (max 50); `LeaderboardController.cs` — paginated leaderboard with cached ranking |
+| **B4.9** | Algorithm Metadata Caching | ✅ CODE DONE | `AlgorithmsController.cs` — IMemoryCache for algorithm list (24h) + metadata per algorithmId (24h) |
+| **B4.10** | Quiz & Badge Caching | ✅ CODE DONE | `QuizzesController.cs` — quiz list/topic/id caching (30m), invalidation on submit; `BadgesController.cs` — badge list caching (1h), invalidation on badge check |
+| **B4.11** | Leaderboard Caching + Pagination | ✅ CODE DONE | `LeaderboardController.cs` — paginated GET /api/leaderboard?page=1&pageSize=10, cached 5m, invalidation on quiz submit |
+| **B4.12** | Unit Tests | ✅ CODE DONE | `MemoryCacheServiceTests.cs` (12 tests), `PagedResultTests.cs` (12 tests), `CacheKeysTests.cs` (9 tests) — 33 new tests |
+
+**Test Results:** 173 backend tests ALL PASS (88 Domain + 34 Application + 51 Infrastructure) — 0 failures

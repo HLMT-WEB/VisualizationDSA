@@ -7,7 +7,7 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
 *   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới) + Phase 2 System Design Viz (64 tests mới).
 *   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1373/1374 — 1 pre-existing ForceDirectedLayout failure).
-*   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (139/139 — 88 Domain + 25 Application + 26 Infrastructure).
+*   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (173/173 — 88 Domain + 34 Application + 51 Infrastructure).
 *   **Công cụ chạy kiểm thử:** Vitest Core (Frontend), xUnit 2.6.6 + FluentAssertions 6.12.0 + Moq 4.20.70 (Backend).
 *   **Thời gian phản hồi test suite:** Frontend ~180ms, Backend ~10s.
 
@@ -1663,3 +1663,48 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1391 | **QuizService** | Submit wrong answer count | ThrowAsync DomainValidationException | 🟢 PASSED |
 | 1392 | **QuizService** | Submit nonexistent quiz | ThrowAsync NotFoundException | 🟢 PASSED |
 | 1393 | **QuizService** | GetUserQuizHistory | Return attempts | 🟢 PASSED |
+
+## Phase B4: Performance & Caching Unit Tests
+
+### Application.Tests — PagedResult + CacheKeys (21 tests mới)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1394 | **PagedResult** | Constructor sets properties | Items/Page/PageSize/TotalCount | 🟢 PASSED |
+| 1395 | **PagedResult** | TotalPages calculation | 25 items, 10/page = 3 pages | 🟢 PASSED |
+| 1396 | **PagedResult** | TotalPages exact division | 20 items, 10/page = 2 pages | 🟢 PASSED |
+| 1397 | **PagedResult** | TotalPages single item | 1 item = 1 page | 🟢 PASSED |
+| 1398 | **PagedResult** | TotalPages empty | 0 items = 0 pages | 🟢 PASSED |
+| 1399 | **PagedResult** | HasPreviousPage first page | Page 1 = false | 🟢 PASSED |
+| 1400 | **PagedResult** | HasPreviousPage second page | Page 2 = true | 🟢 PASSED |
+| 1401 | **PagedResult** | HasNextPage last page | Page 5/5 = false | 🟢 PASSED |
+| 1402 | **PagedResult** | HasNextPage not last | Page 3/5 = true | 🟢 PASSED |
+| 1403 | **PagedResult** | HasNextPage only one page | 1 item = false | 🟢 PASSED |
+| 1404 | **PagedResult** | Items readonly | IReadOnlyList<T> | 🟢 PASSED |
+| 1405 | **PagedResult** | PageSize 1 many items | 100 pages | 🟢 PASSED |
+| 1406 | **CacheKeys** | AlgorithmList value | "algorithms:list" | 🟢 PASSED |
+| 1407 | **CacheKeys** | AlgorithmMetadataPrefix | ends with ":" | 🟢 PASSED |
+| 1408 | **CacheKeys** | QuizList value | "quizzes:list" | 🟢 PASSED |
+| 1409 | **CacheKeys** | BadgeList value | "badges:list" | 🟢 PASSED |
+| 1410 | **CacheKeys** | LeaderboardPrefix | ends with ":" | 🟢 PASSED |
+| 1411 | **CacheDurations** | AlgorithmMetadata | 24 hours | 🟢 PASSED |
+| 1412 | **CacheDurations** | QuizList | 30 minutes | 🟢 PASSED |
+| 1413 | **CacheDurations** | BadgeList | 1 hour | 🟢 PASSED |
+| 1414 | **CacheDurations** | Leaderboard | 5 minutes | 🟢 PASSED |
+
+### Infrastructure.Tests — MemoryCacheService (12 tests mới)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1415 | **MemoryCacheService** | Set + Get string | key1 = "value1" | 🟢 PASSED |
+| 1416 | **MemoryCacheService** | Get nonexistent | returns null | 🟢 PASSED |
+| 1417 | **MemoryCacheService** | Set absolute expiration | 30 min TTL | 🟢 PASSED |
+| 1418 | **MemoryCacheService** | Set sliding expiration | 10 min sliding | 🟢 PASSED |
+| 1419 | **MemoryCacheService** | Remove key | delete cached value | 🟢 PASSED |
+| 1420 | **MemoryCacheService** | RemoveByPrefix | quizzes:* removed, badges:* kept | 🟢 PASSED |
+| 1421 | **MemoryCacheService** | TryGet existing | returns true + value | 🟢 PASSED |
+| 1422 | **MemoryCacheService** | TryGet missing | returns false | 🟢 PASSED |
+| 1423 | **MemoryCacheService** | Complex object caching | TestData { Name, Value } | 🟢 PASSED |
+| 1424 | **MemoryCacheService** | Overwrite existing key | original → updated | 🟢 PASSED |
+| 1425 | **MemoryCacheService** | RemoveByPrefix no match | no crash, existing preserved | 🟢 PASSED |
+| 1426 | **MemoryCacheService** | List of objects caching | List<TestData> 2 items | 🟢 PASSED |
