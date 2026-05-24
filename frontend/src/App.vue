@@ -135,6 +135,13 @@
           <MultiViewWorkspace />
         </section>
       </template>
+
+      <!-- OOP Visualization Tab -->
+      <template v-else-if="activeTab === 'oop-visualization'">
+        <section class="flex-1 min-h-0">
+          <OOPConceptsVisualizerWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -285,6 +292,7 @@ import { ExportShareWorkspace } from "./features/export-share";
 import { GamificationWorkspace } from "./features/gamification-engine";
 import { LearningPathWorkspace } from "./features/learning-path";
 import { MultiViewWorkspace } from "./features/multi-view";
+import { OOPConceptsVisualizerWorkspace } from "./features/oop-visualization";
 
 const activeTab = ref("sorting");
 
@@ -311,6 +319,7 @@ const tabs = [
   { id: "gamification-engine", name: "Gamification+" },
   { id: "learning-path", name: "Learning Path" },
   { id: "multi-view", name: "Multi-View" },
+  { id: "oop-visualization", name: "OOP Viz" },
 ];
 
 const currentTabLabel = computed(
