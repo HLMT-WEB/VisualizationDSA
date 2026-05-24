@@ -8,6 +8,9 @@ import {
   LEADERBOARD_TOP_N,
 } from '../types/gamification.types';
 import type { LeaderboardEntry, UserProgressState } from '../types/gamification.types';
+import { gamificationApi } from '../../../services/gamificationApi';
+import { leaderboardApi } from '../../../services/leaderboardApi';
+import { getStoredToken } from '../../../services/apiClient';
 
 export const useGamificationStore = defineStore('gamification-engine', () => {
   // ==========================================
@@ -112,6 +115,87 @@ export const useGamificationStore = defineStore('gamification-engine', () => {
     activeStreak.value = streak;
   }
 
+  // ==========================================
+  // SERVER-SYNC ACTIONS (B3 Integration)
+  // ==========================================
+  const isSyncing = ref(false);
+  const syncError = ref<string | null>(null);
+
+  const isOnlineMode = computed(() => !!getStoredToken());
+
+  async function earnXPWithSync(amount: number, reason: string): Promise<void> {
+    earnXPLocal(amount);
+
+    if (!isOnlineMode.value) return;
+
+    try {
+      isSyncing.value = true;
+      syncError.value = null;
+      const response = await gamificationApi.awardXP(amount, reason);
+      currentXP.value = response.totalXP;
+    } catch {
+      syncError.value = 'Không thể đồng bộ XP với server';
+    } finally {
+      isSyncing.value = false;
+    }
+  }
+
+  async function syncProgressFromServer(): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      isSyncing.value = true;
+      syncError.value = null;
+      const progress = await gamificationApi.getUserProgress();
+      currentXP.value = progress.totalXP;
+      activeStreak.value = progress.streakDays;
+      if (progress.badges) {
+        unlockedBadges.value = progress.badges.map(b => b.badgeId);
+      }
+    } catch {
+      syncError.value = 'Không thể tải dữ liệu tiến trình';
+    } finally {
+      isSyncing.value = false;
+    }
+  }
+
+  async function checkBadgesFromServer(): Promise<void> {
+    if (!isOnlineMode.value) return;
+
+    try {
+      const newBadges = await gamificationApi.checkNewBadges();
+      if (newBadges.length > 0) {
+        for (const badge of newBadges) {
+          if (!unlockedBadges.value.includes(badge.id)) {
+            unlockedBadges.value.push(badge.id);
+          }
+        }
+        triggerConfettiRain();
+      }
+    } catch {
+      syncError.value = 'Không thể kiểm tra huy hiệu mới';
+    }
+  }
+
+  async function fetchLeaderboardFromServer(top: number = LEADERBOARD_TOP_N): Promise<void> {
+    try {
+      isSyncing.value = true;
+      syncError.value = null;
+      const entries = await leaderboardApi.getTopPlayers(top);
+      leaderboardData.value = entries.map(e => ({
+        userId: e.username,
+        displayName: e.username,
+        xp: e.totalXP,
+        rank: e.rank,
+        level: e.currentLevel,
+      }));
+    } catch {
+      syncError.value = 'Không thể tải bảng xếp hạng';
+    } finally {
+      isSyncing.value = false;
+    }
+  }
+
   return {
     // State
     currentXP,
@@ -122,18 +206,26 @@ export const useGamificationStore = defineStore('gamification-engine', () => {
     leaderboardRank,
     streakFreezesCount,
     leaderboardData,
+    isSyncing,
+    syncError,
     // Computed
     allBadges,
     lockedBadges,
     nextBadgeXPThreshold,
     xpProgressPercent,
     streakStatus,
-    // Actions
+    isOnlineMode,
+    // Actions (local)
     earnXPLocal,
     checkAndUnlockBadges,
     triggerConfettiRain,
     useStreakFreeze,
     setLeaderboardData,
     setStreakForTesting,
+    // Actions (server-sync)
+    earnXPWithSync,
+    syncProgressFromServer,
+    checkBadgesFromServer,
+    fetchLeaderboardFromServer,
   };
 });

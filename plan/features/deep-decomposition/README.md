@@ -93,6 +93,12 @@ Dưới đây là tóm tắt kiến trúc thiết kế của 6 phân hệ đã �
 - **ADR-25:** Caching Snapshot mảng dữ liệu `PlaybackFrame` dưới RAM máy khách dưới **5ms** tránh hoàn toàn biên dịch lại bước từ đầu hay gọi Backend.
 - **Giao diện:** Cụm phím kén nhộng VCR kính mờ, đường trượt Scrubber Neon, indicator phồng to scale(1.3) bám tay quét mượt mà.
 
+### 🟣 PHÂN HỆ BACKEND PHASES (BẢO MẬT, TESTING & TÍCH HỢP)
+
+- **Phase B1: Security & Code Quality** `✅ CODE DONE` — BCrypt password hashing, Global Exception Handler, FluentValidation, Serilog, Refresh Token, Rate Limiting, Health Checks
+- **Phase B2: Unit Testing & CI/CD** `✅ CODE DONE` — 139 xUnit tests (Domain + Application + Infrastructure), GitHub Actions CI pipeline
+- **Phase B3: Frontend-Backend Integration** `✅ CODE DONE` — `apiClient.ts` (JWT interceptor, auto-refresh), `useAuthStore.ts` (login/register/logout), Gamification/Quiz/LearningPath server sync, `LeaderboardController.cs`, `LearningProgressController.cs`, 39 new frontend tests
+
 ---
 
 ## 🎨 HƯỚNG DẪN THIẾT KẾ VÀ TIÊU CHUẨN LẬP TRÌNH (CORE RULES)

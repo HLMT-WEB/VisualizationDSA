@@ -6,7 +6,7 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
 *   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới) + Phase 2 System Design Viz (64 tests mới).
-*   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1373/1374 — 1 pre-existing ForceDirectedLayout failure).
+*   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1506/1507 — 1 pre-existing ForceDirectedLayout failure).
 *   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (139/139 — 88 Domain + 25 Application + 26 Infrastructure).
 *   **Công cụ chạy kiểm thử:** Vitest Core (Frontend), xUnit 2.6.6 + FluentAssertions 6.12.0 + Moq 4.20.70 (Backend).
 *   **Thời gian phản hồi test suite:** Frontend ~180ms, Backend ~10s.
@@ -1663,3 +1663,62 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1391 | **QuizService** | Submit wrong answer count | ThrowAsync DomainValidationException | 🟢 PASSED |
 | 1392 | **QuizService** | Submit nonexistent quiz | ThrowAsync NotFoundException | 🟢 PASSED |
 | 1393 | **QuizService** | GetUserQuizHistory | Return attempts | 🟢 PASSED |
+
+## Phase B3: Frontend-Backend Integration Tests (39 tests)
+
+### apiClient.spec.ts (15 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1394 | **Token Storage** | Store and retrieve access token | setStoredTokens/getStoredToken | 🟢 PASSED |
+| 1395 | **Token Storage** | Return null when no token | getStoredToken() initial state | 🟢 PASSED |
+| 1396 | **Token Storage** | Clear tokens | clearStoredTokens() | 🟢 PASSED |
+| 1397 | **apiRequest** | GET request with correct URL | fetch mock verify | 🟢 PASSED |
+| 1398 | **apiRequest** | Attach Authorization header | Bearer token injection | 🟢 PASSED |
+| 1399 | **apiRequest** | No Authorization when no token | Header absence check | 🟢 PASSED |
+| 1400 | **apiRequest** | Throw ApiError on non-ok | RFC 7807 error mapping | 🟢 PASSED |
+| 1401 | **apiRequest** | Return undefined for 204 | No Content handling | 🟢 PASSED |
+| 1402 | **apiRequest** | Token refresh on 401 | Auto-refresh + retry flow | 🟢 PASSED |
+| 1403 | **api helpers** | api.get uses GET method | Method verification | 🟢 PASSED |
+| 1404 | **api helpers** | api.post uses POST with body | Method + body verify | 🟢 PASSED |
+| 1405 | **api helpers** | api.put uses PUT method | Method verification | 🟢 PASSED |
+| 1406 | **api helpers** | api.delete uses DELETE method | Method verification | 🟢 PASSED |
+
+### useAuthStore.spec.ts (8 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1407 | **Auth** | Initial unauthenticated state | Store init check | 🟢 PASSED |
+| 1408 | **Auth** | Successful registration | Token + user stored | 🟢 PASSED |
+| 1409 | **Auth** | Failed registration (conflict) | Error message set | 🟢 PASSED |
+| 1410 | **Auth** | Successful login | JWT + user authenticated | 🟢 PASSED |
+| 1411 | **Auth** | Wrong credentials login | Error state set | 🟢 PASSED |
+| 1412 | **Auth** | Logout clears session | Tokens + user cleared | 🟢 PASSED |
+| 1413 | **Auth** | fetchCurrentUser with token | User loaded from API | 🟢 PASSED |
+| 1414 | **Auth** | fetchCurrentUser no token | Skip fetch | 🟢 PASSED |
+
+### gamificationApi.spec.ts (8 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1415 | **Gamification Sync** | Offline mode detection | No token → isOnlineMode false | 🟢 PASSED |
+| 1416 | **Gamification Sync** | Online mode detection | Token exists → true | 🟢 PASSED |
+| 1417 | **Gamification Sync** | earnXPWithSync offline | Local XP only, no fetch | 🟢 PASSED |
+| 1418 | **Gamification Sync** | earnXPWithSync online | Server totalXP override | 🟢 PASSED |
+| 1419 | **Gamification Sync** | earnXPWithSync error | syncError set | 🟢 PASSED |
+| 1420 | **Gamification Sync** | syncProgressFromServer | XP/streak/badges synced | 🟢 PASSED |
+| 1421 | **Leaderboard** | fetchLeaderboardFromServer | Mapped to LeaderboardEntry | 🟢 PASSED |
+| 1422 | **Leaderboard** | Leaderboard server error | syncError set | 🟢 PASSED |
+
+### quizApi.spec.ts (8 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1423 | **Quiz Sync** | Offline mode detection | No token → false | 🟢 PASSED |
+| 1424 | **Quiz Sync** | Online mode detection | Token exists → true | 🟢 PASSED |
+| 1425 | **Quiz Sync** | fetchQuizzesFromServer offline | Skip, empty array | 🟢 PASSED |
+| 1426 | **Quiz Sync** | fetchQuizzesFromServer online | serverQuizzes populated | 🟢 PASSED |
+| 1427 | **Quiz Sync** | fetchQuizzesFromServer error | quizSyncError set | 🟢 PASSED |
+| 1428 | **Quiz Sync** | fetchQuizHistory online | quizHistory populated | 🟢 PASSED |
+| 1429 | **Quiz Sync** | isLoadingQuizzes tracking | true during fetch, false after | 🟢 PASSED |
+| 1430 | **Quiz Sync** | Loading state management | isLoadingQuizzes lifecycle | 🟢 PASSED |

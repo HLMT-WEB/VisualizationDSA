@@ -14,9 +14,9 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Tài liệu thiết kế**           | 12/12 Sprints (100% — chỉ là spec, chưa phải code)                 |
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
-| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting   |
-| **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
-| **Unit tests**                  | 1467+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
+| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting + Frontend Integration |
+| **Tổng file thực tế**           | ~105 files (80 frontend + 25 backend `.cs`)                        |
+| **Unit tests**                  | 1506+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
 
 ---
 
@@ -650,3 +650,17 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 | **B2.10** | Build fixes | ✅ CODE DONE | `Infrastructure.csproj` +JwtBearer, `WebApi.csproj` +HealthChecks.EntityFrameworkCore — resolve missing package refs |
 
 **Test Results:** 139 tests ALL PASS (88 Domain + 25 Application + 26 Infrastructure) — 0 failures
+
+## 10. Phase B3: Frontend-Backend Integration
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B3.1** | HTTP API Client Service | ✅ CODE DONE | `frontend/src/services/apiClient.ts` — fetch wrapper, JWT Bearer injection, auto-refresh on 401, RFC 7807 error handling |
+| **B3.2** | Auth Store (useAuthStore) | ✅ CODE DONE | `frontend/src/features/auth/store/useAuthStore.ts` — Pinia store: login/register/logout/fetchCurrentUser, JWT localStorage |
+| **B3.3** | Gamification → Backend Integration | ✅ CODE DONE | `useGamificationStore.ts` — earnXPWithSync, syncProgressFromServer, checkBadgesFromServer; `gamificationApi.ts` API service |
+| **B3.4** | Quiz → Backend Integration | ✅ CODE DONE | `useQuizStore.ts` — fetchQuizzesFromServer, submitAttemptToServer, fetchQuizHistory; `quizApi.ts` API service |
+| **B3.5** | Leaderboard API | ✅ CODE DONE | Backend: `LeaderboardController.cs` — GET /api/leaderboard top N by XP; Frontend: `leaderboardApi.ts`, `fetchLeaderboardFromServer()` |
+| **B3.6** | Learning Path → Backend Integration | ✅ CODE DONE | Backend: `LearningProgressController.cs` — GET/POST progress; Frontend: `learningProgressApi.ts`, `syncProgressFromServer()` |
+| **B3.7** | Unit Tests for B3 Services | ✅ CODE DONE | `apiClient.spec.ts` (15), `useAuthStore.spec.ts` (8), `gamificationApi.spec.ts` (8), `quizApi.spec.ts` (8) — 39 tests ALL PASS |
+
+**Test Results:** 1506+ frontend tests pass (39 new B3 tests) + 139 backend tests — 1 pre-existing frontend failure
