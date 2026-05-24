@@ -46,6 +46,19 @@ Tài liệu này đặc tả chi tiết danh mục thư viện công nghệ, cá
 | **FluentValidation.AspNetCore** | `11.3.0` | WebApi | Auto-validation pipeline tích hợp ASP.NET Core MVC. |
 | **Serilog.AspNetCore** | `8.0.0` | WebApi | Structured logging cho Console + File sink. |
 | **Serilog.Sinks.File** | `5.0.0` | WebApi | Rolling daily log files, 14-day retention. |
+| **Microsoft.AspNetCore.Authentication.JwtBearer** | `8.0.0` | Infrastructure | JWT Bearer token auth + IdentityModel.Tokens. |
+| **Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore** | `8.0.0` | WebApi | AddDbContextCheck for health endpoint. |
+
+## 3.6 Gói Phụ Thuộc Testing Backend (Backend Test Dependencies — Phase B2)
+
+| Tên Thư Viện | Phiên bản | Phân hệ sử dụng | Vai trò cốt lõi |
+| :--- | :--- | :--- | :--- |
+| **xunit** | `2.6.6` | All test projects | Test framework: [Fact], [Theory], [InlineData]. |
+| **xunit.runner.visualstudio** | `2.5.6` | All test projects | Test runner cho Visual Studio & dotnet test CLI. |
+| **Microsoft.NET.Test.Sdk** | `17.8.0` | All test projects | MSTest platform host cho xUnit runner. |
+| **FluentAssertions** | `6.12.0` | All test projects | Readable assertions: .Should().Be(), .Should().ThrowAsync(). |
+| **Moq** | `4.20.70` | Infrastructure.Tests | Mock IUnitOfWork/IRepository to isolate services from DB. |
+| **Microsoft.Extensions.Configuration** | `8.0.0` | Infrastructure.Tests | In-memory IConfiguration for AuthService JWT config. |
 
 ---
 

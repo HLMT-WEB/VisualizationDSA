@@ -5,6 +5,7 @@
 *.ntvs*
 *.njsproj
 *.sln
+!backend/VisualizationDSA.sln
 *.suo
 *.user
 *.userosscache
