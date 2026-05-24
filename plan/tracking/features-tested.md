@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1022/1025 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1114/1115 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -1074,3 +1074,98 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 977 | **OOPStore** | VTable empty no matching heap | [] | 🟢 PASSED |
 | 978 | **OOPStore** | resetAll clears everything | 0 classes, 0 objects, null violation | 🟢 PASSED |
 | 979 | **OOPStore** | resetDispatchState keeps data | IDLE, classes=3, heap=1 | 🟢 PASSED |
+
+### Phase 2 Smart Interactive Quiz Widget — VCRPlaybackInterceptor, SVGTargetResolver, QuizEvaluationEngine, useSmartQuizStore (90 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Kết quả kỳ vọng | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 980 | **VCRInterceptor** | Not intercept non-quiz steps | false, callback not called | 🟢 PASSED |
+| 981 | **VCRInterceptor** | Intercept step 8 trigger quiz | true, callback with quiz | 🟢 PASSED |
+| 982 | **VCRInterceptor** | Intercept step 15 trigger quiz | true, callback with quizAtStep15 | 🟢 PASSED |
+| 983 | **VCRInterceptor** | Remove quiz after trigger | false on second intercept | 🟢 PASSED |
+| 984 | **VCRInterceptor** | Other quizzes still work after one consumed | true for step 15 | 🟢 PASSED |
+| 985 | **VCRInterceptor** | Register new quiz at step 20 | true, callback with newQuiz | 🟢 PASSED |
+| 986 | **VCRInterceptor** | Remove specific quiz by step | true, then false on intercept | 🟢 PASSED |
+| 987 | **VCRInterceptor** | Return false removing non-existent | false | 🟢 PASSED |
+| 988 | **VCRInterceptor** | Clear all quizzes | count=0, all intercepts false | 🟢 PASSED |
+| 989 | **VCRInterceptor** | Check quiz exists at step | true for 8,15; false for 999 | 🟢 PASSED |
+| 990 | **VCRInterceptor** | Active quiz count tracks | 2→1→0 | 🟢 PASSED |
+| 991 | **VCRInterceptor** | Sorted registered step indices | [8, 15] | 🟢 PASSED |
+| 992 | **VCRInterceptor** | Empty constructor | count=0, intercept false | 🟢 PASSED |
+| 993 | **VCRInterceptor** | Step index 0 | true, callback called | 🟢 PASSED |
+| 994 | **VCRInterceptor** | Negative step indices | false | 🟢 PASSED |
+| 995 | **VCRInterceptor** | Override quiz at same step | callback with override quiz | 🟢 PASSED |
+| 996 | **SVGResolver** | Resolve data-node-id from element | 'node-bar-3' | 🟢 PASSED |
+| 997 | **SVGResolver** | Walk up DOM tree closest | 'node-bar-5' | 🟢 PASSED |
+| 998 | **SVGResolver** | Return null no interactive parent | null | 🟢 PASSED |
+| 999 | **SVGResolver** | Return null when target null | null | 🟢 PASSED |
+| 1000 | **SVGResolver** | Exact match correct answers | isCorrect=true, missing=[], extra=[] | 🟢 PASSED |
+| 1001 | **SVGResolver** | Correct regardless of order | isCorrect=true | 🟢 PASSED |
+| 1002 | **SVGResolver** | Identify missing answers | missing=['node-bar-5'] | 🟢 PASSED |
+| 1003 | **SVGResolver** | Identify extra wrong answers | extra=['node-bar-8'] | 🟢 PASSED |
+| 1004 | **SVGResolver** | Completely wrong answers | missing=2, extra=2 | 🟢 PASSED |
+| 1005 | **SVGResolver** | Empty selected answers | missing=2 | 🟢 PASSED |
+| 1006 | **SVGResolver** | Empty correct answers | extra=1 | 🟢 PASSED |
+| 1007 | **SVGResolver** | Single answer match | isCorrect=true | 🟢 PASSED |
+| 1008 | **QuizEngine** | 100% all correct | isCorrect=true, score=100, match=2 | 🟢 PASSED |
+| 1009 | **QuizEngine** | 50% half correct | isCorrect=false, score=50, match=1 | 🟢 PASSED |
+| 1010 | **QuizEngine** | 0% no correct | isCorrect=false, score=0, match=0 | 🟢 PASSED |
+| 1011 | **QuizEngine** | 0% empty selected | score=0 | 🟢 PASSED |
+| 1012 | **QuizEngine** | 0% empty correct | score=0 | 🟢 PASSED |
+| 1013 | **QuizEngine** | 0% both empty | score=0 | 🟢 PASSED |
+| 1014 | **QuizEngine** | Single correct answer | isCorrect=true, score=100 | 🟢 PASSED |
+| 1015 | **QuizEngine** | Extra answers not correct | isCorrect=false, score=100, match=2 | 🟢 PASSED |
+| 1016 | **QuizEngine** | Duplicates via Set | match=1 | 🟢 PASSED |
+| 1017 | **QuizEngine** | 1/3 correct → 33% | score=33, match=1 | 🟢 PASSED |
+| 1018 | **QuizEngine** | 2/3 correct → 67% | score=67, match=2 | 🟢 PASSED |
+| 1019 | **QuizEngine** | Validate XP 1-200 | true | 🟢 PASSED |
+| 1020 | **QuizEngine** | Reject XP 0 | false | 🟢 PASSED |
+| 1021 | **QuizEngine** | Reject negative XP | false | 🟢 PASSED |
+| 1022 | **QuizEngine** | Reject XP > 200 | false | 🟢 PASSED |
+| 1023 | **QuizEngine** | Reject non-integer XP | false | 🟢 PASSED |
+| 1024 | **QuizEngine** | Full XP first attempt | 30 | 🟢 PASSED |
+| 1025 | **QuizEngine** | 0 XP second attempt | 0 | 🟢 PASSED |
+| 1026 | **QuizEngine** | 0 XP third attempt | 0 | 🟢 PASSED |
+| 1027 | **QuizEngine** | 0 XP invalid attempt | 0 | 🟢 PASSED |
+| 1028 | **QuizEngine** | 0 XP invalid base | 0 | 🟢 PASSED |
+| 1029 | **QuizStore** | Initial null active quiz | null | 🟢 PASSED |
+| 1030 | **QuizStore** | Initial HIDDEN overlay | 'HIDDEN' | 🟢 PASSED |
+| 1031 | **QuizStore** | Initial empty answers | [] | 🟢 PASSED |
+| 1032 | **QuizStore** | Initial not visible | false | 🟢 PASSED |
+| 1033 | **QuizStore** | Initial zero stats | 0/0/0 | 🟢 PASSED |
+| 1034 | **QuizStore** | Initial VCR not locked | false | 🟢 PASSED |
+| 1035 | **QuizStore** | TriggerQuiz sets active + SLIDE_IN | quiz set, visible=true | 🟢 PASSED |
+| 1036 | **QuizStore** | TriggerQuiz locks VCR | isVCRLocked=true | 🟢 PASSED |
+| 1037 | **QuizStore** | TriggerQuiz resets selections | answers=[], hasSubmitted=false | 🟢 PASSED |
+| 1038 | **QuizStore** | TriggerQuiz increments total | totalQuestions=1 | 🟢 PASSED |
+| 1039 | **QuizStore** | Toggle adds answer | contains 'node-bar-2' | 🟢 PASSED |
+| 1040 | **QuizStore** | Toggle removes selected | not contains | 🟢 PASSED |
+| 1041 | **QuizStore** | Max selection clamp | length=2, no 3rd | 🟢 PASSED |
+| 1042 | **QuizStore** | No toggle after submit | not contains new | 🟢 PASSED |
+| 1043 | **QuizStore** | SelectionCount updates | 0→1→2 | 🟢 PASSED |
+| 1044 | **QuizStore** | Submit false no quiz | false | 🟢 PASSED |
+| 1045 | **QuizStore** | Submit false no answers | false | 🟢 PASSED |
+| 1046 | **QuizStore** | Submit true correct | true | 🟢 PASSED |
+| 1047 | **QuizStore** | Submit false incorrect | false | 🟢 PASSED |
+| 1048 | **QuizStore** | Correct evaluation result | hasSubmitted=true, isCorrect=true, 100% | 🟢 PASSED |
+| 1049 | **QuizStore** | Incorrect evaluation result | hasSubmitted=true, isCorrect=false, 50% | 🟢 PASSED |
+| 1050 | **QuizStore** | XP awarded first try | xpAwarded=30, totalXP=30, firstTry=1 | 🟢 PASSED |
+| 1051 | **QuizStore** | No XP on retry | xpAwarded=0 | 🟢 PASSED |
+| 1052 | **QuizStore** | Submit changes to SUBMITTED | overlayStatus='SUBMITTED' | 🟢 PASSED |
+| 1053 | **QuizStore** | Submit debounce lock | locked=true, after 2s false | 🟢 PASSED |
+| 1054 | **QuizStore** | MC quiz correct | true, xp=20 | 🟢 PASSED |
+| 1055 | **QuizStore** | RetryQuiz resets but keeps active | quiz active, answers=[], not submitted | 🟢 PASSED |
+| 1056 | **QuizStore** | CloseQuiz SLIDE_OUT then HIDDEN | SLIDE_OUT→HIDDEN, unlocks VCR | 🟢 PASSED |
+| 1057 | **QuizStore** | CheckTimelineStep triggers demo | intercepted=true, visible=true | 🟢 PASSED |
+| 1058 | **QuizStore** | Non-quiz step not intercepted | false, not visible | 🟢 PASSED |
+| 1059 | **QuizStore** | ResetSession clears stats | 0/0/0 | 🟢 PASSED |
+| 1060 | **QuizStore** | TriggerDemoQuiz SVG | SVG_NODE_CLICK, visible | 🟢 PASSED |
+| 1061 | **QuizStore** | TriggerDemoQuiz Monaco | MONACO_LINE_CLICK | 🟢 PASSED |
+| 1062 | **QuizStore** | TriggerDemoQuiz MC | MULTIPLE_CHOICE, options defined | 🟢 PASSED |
+| 1063 | **QuizStore** | TriggerDemoQuiz invalid index | null quiz | 🟢 PASSED |
+| 1064 | **QuizStore** | TriggerDemoQuiz negative index | null quiz | 🟢 PASSED |
+| 1065 | **QuizStore** | canSubmit false without selections | false | 🟢 PASSED |
+| 1066 | **QuizStore** | canSubmit true with selections | true | 🟢 PASSED |
+| 1067 | **QuizStore** | canSubmit false after submission | false | 🟢 PASSED |
+| 1068 | **QuizStore** | maxSelections reflects correct answers | 2 for SVG, 1 for MC | 🟢 PASSED |
+| 1069 | **QuizStore** | currentQuestionType reflects active | null → SVG_NODE_CLICK | 🟢 PASSED |
