@@ -15,8 +15,8 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
-| **Tổng file thực tế**           | ~67 files (47 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 585+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Tổng file thực tế**           | ~80 files (60 frontend + 20 backend `.cs`)                         |
+| **Unit tests**                  | 670+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
 
 ---
 
@@ -230,6 +230,26 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | DesignPatternsWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/DesignPatternsWorkspace.vue` — Scenario tab selector (3 tabs), Strategy runtime swap buttons (BubbleSort/QuickSort), Observer Notify button, DIP toggle + Coupling Index widget (85% Rose → 20% Cyan), link type legend, node/link count badges |
 | **Integration** | App.vue "Patterns" tab | ✅ CODE DONE | Replaced PatternSandbox with DesignPatternsWorkspace in `App.vue`, `index.ts` barrel export |
 | **Tests** | 50 Unit Tests | ✅ CODE DONE | `DesignPatternVisualizerEngine.spec.ts` (18), `useDesignPatternsStore.spec.ts` (22), `scenarioData.spec.ts` (10) — ALL 50 PASS |
+
+---
+
+### Phase 2 Export & Share Pipeline — SVG Exporter, lz-string State Compressor, QR Code
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | WorkspaceState, LayoutNode, ExportFormat, constants | ✅ CODE DONE | `export-share/types/export-share.types.ts` |
+| **Engine** | SVGToCanvasExporter (SVG→PNG 3x + SVG Vector) | ✅ CODE DONE | `engine/SVGToCanvasExporter.ts` — extractSVGDataURI, clampScale (1–4), exportToPNG (Canvas 3x), exportToSVGString |
+| **Engine** | WorkspaceStateCompressor (lz-string URL-safe) | ✅ CODE DONE | `engine/WorkspaceStateCompressor.ts` — serializeState, deserializeState, isWithinSizeLimit, serializeStateWithValidation |
+| **Engine** | ExternalStylesheetsInjector (CSS extraction) | ✅ CODE DONE | `engine/ExternalStylesheetsInjector.ts` — extractActiveCSSRules, injectCSSIntoSVG |
+| **Store** | useExportShareStore Pinia Setup Store | ✅ CODE DONE | `store/useExportShareStore.ts` — modal, export progress, share link, QR, clipboard, overflow validation |
+| **Component** | ShareExportModal.vue (Glassmorphism dialog) | ✅ CODE DONE | `components/ShareExportModal.vue` — Teleport, backdrop blur, format selector, progress bar, QR, copy link |
+| **Component** | ExportFormatSelector.vue (PNG/SVG buttons) | ✅ CODE DONE | `components/ExportFormatSelector.vue` — Neon active state |
+| **Component** | QRCodeDisplay.vue (Dynamic QR amber border) | ✅ CODE DONE | `components/QRCodeDisplay.vue` — qrcode canvas render |
+| **Component** | ExportProgressBar.vue (Emerald progress) | ✅ CODE DONE | `components/ExportProgressBar.vue` — Emerald fill + JetBrains Mono % |
+| **Component** | ExportShareWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/ExportShareWorkspace.vue` — Demo SVG + modal integration |
+| **Integration** | App.vue "Export/Share" tab + barrel export | ✅ CODE DONE | New "Export/Share" tab in `App.vue`, `index.ts` barrel |
+| **Dependencies** | lz-string, qrcode + @types | ✅ CODE DONE | `lz-string`, `qrcode`, `@types/lz-string`, `@types/qrcode` |
+| **Tests** | 85 Unit Tests | ✅ CODE DONE | `WorkspaceStateCompressor.spec.ts` (19), `SVGToCanvasExporter.spec.ts` (20), `ExternalStylesheetsInjector.spec.ts` (12), `useExportShareStore.spec.ts` (34) — ALL 85 PASS |
 
 ---
 

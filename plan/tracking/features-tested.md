@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (585/586 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (670/671 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -627,3 +627,88 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 550 | **EmbedStore** | isCopied true on successful copy | Clipboard writeText mock | PASSED |
 | 551 | **EmbedStore** | Return false on clipboard error | error handled gracefully | PASSED |
 | 552 | **EmbedStore** | Reset isCopied after 2 seconds | fake timer advance 2000ms | PASSED |
+| 553 | **State Compressor** | Nén trạng thái thành chuỗi không rỗng | serializeState trả chuỗi non-empty | 🟢 PASSED |
+| 554 | **State Compressor** | Nén hiệu quả với dữ liệu lớn | compressed.length < rawJson.length (30 nodes) | 🟢 PASSED |
+| 555 | **State Compressor** | Chuỗi URL-safe (không +, /) | Không chứa ký tự đặc biệt URL-unsafe | 🟢 PASSED |
+| 556 | **State Compressor** | Đầu ra khác nhau cho state khác nhau | bubble-sort ≠ merge-sort compressed | 🟢 PASSED |
+| 557 | **State Compressor** | Xử lý layoutNodes rỗng | Nén thành công state với mảng rỗng | 🟢 PASSED |
+| 558 | **State Compressor** | Xử lý nhiều nodes (100) | Nén thành công mảng 100 phần tử | 🟢 PASSED |
+| 559 | **State Compressor** | Phục hồi 100% tất cả trường | algorithmId, currentStepIndex, layoutNodes | 🟢 PASSED |
+| 560 | **State Compressor** | Bảo toàn tọa độ chính xác | x=150, y=80 khôi phục hoàn hảo | 🟢 PASSED |
+| 561 | **State Compressor** | Trả null cho chuỗi rỗng | deserializeState('') → null | 🟢 PASSED |
+| 562 | **State Compressor** | Trả null cho dữ liệu bất hợp lệ | deserializeState('invalid') → null | 🟢 PASSED |
+| 563 | **State Compressor** | Round-trip 50 nodes zero data loss | 50 nodes phục hồi chính xác | 🟢 PASSED |
+| 564 | **State Compressor** | Log lỗi cho dữ liệu hỏng | console.error gọi đúng cách | 🟢 PASSED |
+| 565 | **State Compressor** | isWithinSizeLimit true cho ngắn | Chuỗi nén ngắn nằm trong giới hạn | 🟢 PASSED |
+| 566 | **State Compressor** | isWithinSizeLimit true ở đúng giới hạn | 20000 ký tự = true | 🟢 PASSED |
+| 567 | **State Compressor** | isWithinSizeLimit false vượt giới hạn | 20001 ký tự = false | 🟢 PASSED |
+| 568 | **State Compressor** | isWithinSizeLimit true cho rỗng | Chuỗi rỗng = true | 🟢 PASSED |
+| 569 | **State Compressor** | Validation trả chuỗi hợp lệ | serializeStateWithValidation trả non-null | 🟢 PASSED |
+| 570 | **State Compressor** | Validation trả null cho state quá lớn | 5000 nodes → null + console.warn | 🟢 PASSED |
+| 571 | **State Compressor** | Validation round-trip integrity | Kết quả giải nén khớp 100% | 🟢 PASSED |
+| 572 | **SVG Exporter** | clampScale giữ nguyên giá trị hợp lệ | clampScale(2)=2, clampScale(3)=3 | 🟢 PASSED |
+| 573 | **SVG Exporter** | clampScale kẹp dưới MIN_SCALE | clampScale(0)=1, clampScale(-5)=1 | 🟢 PASSED |
+| 574 | **SVG Exporter** | clampScale kẹp trên MAX_SCALE | clampScale(10)=4, clampScale(100)=4 | 🟢 PASSED |
+| 575 | **SVG Exporter** | clampScale biên MIN chính xác | clampScale(1)=1 | 🟢 PASSED |
+| 576 | **SVG Exporter** | clampScale biên MAX chính xác | clampScale(4)=4 | 🟢 PASSED |
+| 577 | **SVG Exporter** | clampScale phân số | clampScale(2.5)=2.5 | 🟢 PASSED |
+| 578 | **SVG Exporter** | clampScale phân số dưới MIN | clampScale(0.5)=1 | 🟢 PASSED |
+| 579 | **SVG Exporter** | extractSVGDataURI trả Base64 hợp lệ | Khớp pattern data:image/svg+xml;base64, | 🟢 PASSED |
+| 580 | **SVG Exporter** | extractSVGDataURI inject <style> | Decoded chứa thẻ <style> | 🟢 PASSED |
+| 581 | **SVG Exporter** | extractSVGDataURI không sửa gốc | childNodes.length giữ nguyên | 🟢 PASSED |
+| 582 | **SVG Exporter** | extractSVGDataURI Base64 giải mã được | atob() không throw | 🟢 PASSED |
+| 583 | **SVG Exporter** | extractSVGDataURI giữ nội dung gốc | Decoded chứa 'Test SVG Content' | 🟢 PASSED |
+| 584 | **SVG Exporter** | extractSVGDataURI SVG rỗng | Xử lý SVG không có children | 🟢 PASSED |
+| 585 | **SVG Exporter** | exportToSVGString XML hợp lệ | Chứa <svg> và </svg> | 🟢 PASSED |
+| 586 | **SVG Exporter** | exportToSVGString inject styles | Chứa thẻ <style> | 🟢 PASSED |
+| 587 | **SVG Exporter** | exportToSVGString giữ nội dung | Chứa 'Test SVG Content' | 🟢 PASSED |
+| 588 | **SVG Exporter** | exportToSVGString không sửa gốc | childNodes.length giữ nguyên | 🟢 PASSED |
+| 589 | **SVG Exporter** | exportToSVGString giữ viewBox | Chứa viewBox="0 0 1024 768" | 🟢 PASSED |
+| 590 | **SVG Exporter** | exportToPNG reject khi Image lỗi | Throw 'Lỗi tải cấu trúc ảnh SVG ảo.' | 🟢 PASSED |
+| 591 | **SVG Exporter** | DEFAULT_SCALE = 3 | Hằng số đúng giá trị | 🟢 PASSED |
+| 592 | **CSS Injector** | extractActiveCSSRules trả string | typeof result === 'string' | 🟢 PASSED |
+| 593 | **CSS Injector** | extractActiveCSSRules không stylesheet | Trả string (có thể rỗng) | 🟢 PASSED |
+| 594 | **CSS Injector** | extractActiveCSSRules trích xuất rules | Chứa 'color' từ injected style | 🟢 PASSED |
+| 595 | **CSS Injector** | extractActiveCSSRules nhiều sheets | Chứa cả 'background' và 'font-size' | 🟢 PASSED |
+| 596 | **CSS Injector** | extractActiveCSSRules CORS an toàn | Không throw exception | 🟢 PASSED |
+| 597 | **CSS Injector** | extractActiveCSSRules newline giữa rules | Chứa ký tự \n | 🟢 PASSED |
+| 598 | **CSS Injector** | injectCSSIntoSVG thêm style đầu tiên | firstChild.nodeName === 'style' | 🟢 PASSED |
+| 599 | **CSS Injector** | injectCSSIntoSVG type=text/css | getAttribute('type') === 'text/css' | 🟢 PASSED |
+| 600 | **CSS Injector** | injectCSSIntoSVG nội dung CSS | textContent chứa 'opacity' | 🟢 PASSED |
+| 601 | **CSS Injector** | injectCSSIntoSVG giữ children cũ | 3 children (style + circle + text) | 🟢 PASSED |
+| 602 | **CSS Injector** | injectCSSIntoSVG chèn trước child đầu | style trước, rect id=original-first sau | 🟢 PASSED |
+| 603 | **CSS Injector** | injectCSSIntoSVG SVG rỗng | Không throw, 1 child | 🟢 PASSED |
+| 604 | **Export Store** | Initial isSharingModalOpen false | Mặc định false | 🟢 PASSED |
+| 605 | **Export Store** | Initial isExporting false | Mặc định false | 🟢 PASSED |
+| 606 | **Export Store** | Initial exportProgress 0 | Mặc định 0 | 🟢 PASSED |
+| 607 | **Export Store** | Initial selectedFormat png-3x | Mặc định 'png-3x' | 🟢 PASSED |
+| 608 | **Export Store** | Initial generatedShareLink rỗng | Mặc định '' | 🟢 PASSED |
+| 609 | **Export Store** | Initial isLinkCopied false | Mặc định false | 🟢 PASSED |
+| 610 | **Export Store** | Initial isGeneratingLink false | Mặc định false | 🟢 PASSED |
+| 611 | **Export Store** | Initial overflowError rỗng | Mặc định '' | 🟢 PASSED |
+| 612 | **Export Store** | hasShareLink false khi chưa có | computed false | 🟢 PASSED |
+| 613 | **Export Store** | hasShareLink true khi có link | computed true | 🟢 PASSED |
+| 614 | **Export Store** | qrCodeValue rỗng khi chưa có | computed '' | 🟢 PASSED |
+| 615 | **Export Store** | qrCodeValue = link khi có | computed khớp link | 🟢 PASSED |
+| 616 | **Export Store** | openModal bật modal | isSharingModalOpen = true | 🟢 PASSED |
+| 617 | **Export Store** | openModal reset isLinkCopied | false sau khi mở | 🟢 PASSED |
+| 618 | **Export Store** | openModal xóa link cũ | generatedShareLink = '' | 🟢 PASSED |
+| 619 | **Export Store** | openModal xóa lỗi | overflowError = '' | 🟢 PASSED |
+| 620 | **Export Store** | openModal reset progress | exportProgress = 0 | 🟢 PASSED |
+| 621 | **Export Store** | openModal reset isExporting | isExporting = false | 🟢 PASSED |
+| 622 | **Export Store** | closeModal tắt modal | isSharingModalOpen = false | 🟢 PASSED |
+| 623 | **Export Store** | setFormat svg-vector | selectedFormat = 'svg-vector' | 🟢 PASSED |
+| 624 | **Export Store** | setFormat png-3x | selectedFormat = 'png-3x' | 🟢 PASSED |
+| 625 | **Export Store** | generateShareLink tạo link | generatedShareLink chứa /s/?state= | 🟢 PASSED |
+| 626 | **Export Store** | generateShareLink hoàn tất | isGeneratingLink = false | 🟢 PASSED |
+| 627 | **Export Store** | generateShareLink xóa lỗi cũ | overflowError = '' | 🟢 PASSED |
+| 628 | **Export Store** | generateShareLink overflow | overflowError chứa WORKSPACE_OVERFLOW | 🟢 PASSED |
+| 629 | **Export Store** | generateShareLink chứa base URL | Chứa visualization-dsa.edu.vn | 🟢 PASSED |
+| 630 | **Export Store** | copyShareLink thành công | isLinkCopied = true, return true | 🟢 PASSED |
+| 631 | **Export Store** | copyShareLink thất bại | return false khi clipboard denied | 🟢 PASSED |
+| 632 | **Export Store** | copyShareLink auto-reset 2s | isLinkCopied false sau 2000ms | 🟢 PASSED |
+| 633 | **Export Store** | resetState mọi giá trị | Tất cả state về defaults | 🟢 PASSED |
+| 634 | **Export Store** | downloadSVG tạo anchor click | createElement + click gọi đúng | 🟢 PASSED |
+| 635 | **Constants** | EXPORT_MIN_SCALE = 1 | Hằng số đúng | 🟢 PASSED |
+| 636 | **Constants** | EXPORT_MAX_SCALE = 4 | Hằng số đúng | 🟢 PASSED |
+| 637 | **Constants** | EXPORT_DEFAULT_SCALE = 3 | Hằng số đúng | 🟢 PASSED |
