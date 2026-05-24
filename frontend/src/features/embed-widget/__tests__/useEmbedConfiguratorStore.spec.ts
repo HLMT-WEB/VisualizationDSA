@@ -226,41 +226,48 @@ describe('useEmbedConfiguratorStore', () => {
     it('should set isCopied to true on successful copy', async () => {
       const store = useEmbedConfiguratorStore();
 
-      Object.assign(navigator, {
+      const mockNavigator = {
         clipboard: {
           writeText: vi.fn().mockResolvedValue(undefined),
         },
-      });
+      };
+      vi.stubGlobal('navigator', mockNavigator);
 
       const result = await store.copyEmbedCodeToClipboard();
       expect(result).toBe(true);
       expect(store.isCopied).toBe(true);
+
+      vi.unstubAllGlobals();
     });
 
     it('should return false on clipboard error', async () => {
       const store = useEmbedConfiguratorStore();
 
-      Object.assign(navigator, {
+      const mockNavigator = {
         clipboard: {
           writeText: vi.fn().mockRejectedValue(new Error('Clipboard blocked')),
         },
-      });
+      };
+      vi.stubGlobal('navigator', mockNavigator);
 
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const result = await store.copyEmbedCodeToClipboard();
       expect(result).toBe(false);
       errorSpy.mockRestore();
+
+      vi.unstubAllGlobals();
     });
 
     it('should reset isCopied after 2 seconds', async () => {
       vi.useFakeTimers();
       const store = useEmbedConfiguratorStore();
 
-      Object.assign(navigator, {
+      const mockNavigator = {
         clipboard: {
           writeText: vi.fn().mockResolvedValue(undefined),
         },
-      });
+      };
+      vi.stubGlobal('navigator', mockNavigator);
 
       await store.copyEmbedCodeToClipboard();
       expect(store.isCopied).toBe(true);
@@ -269,6 +276,7 @@ describe('useEmbedConfiguratorStore', () => {
       expect(store.isCopied).toBe(false);
 
       vi.useRealTimers();
+      vi.unstubAllGlobals();
     });
   });
 });
