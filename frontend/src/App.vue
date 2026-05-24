@@ -121,6 +121,13 @@
           <GamificationWorkspace />
         </section>
       </template>
+
+      <!-- Learning Path Tab -->
+      <template v-else-if="activeTab === 'learning-path'">
+        <section class="flex-1 min-h-0">
+          <LearningPathWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -269,6 +276,7 @@ import { DebugWorkspace } from "./features/debug-mode";
 import { EmbedWidgetWorkspace } from "./features/embed-widget";
 import { ExportShareWorkspace } from "./features/export-share";
 import { GamificationWorkspace } from "./features/gamification-engine";
+import { LearningPathWorkspace } from "./features/learning-path";
 
 const activeTab = ref("sorting");
 
@@ -293,6 +301,7 @@ const tabs = [
   { id: "embed", name: "Embed" },
   { id: "export-share", name: "Export/Share" },
   { id: "gamification-engine", name: "Gamification+" },
+  { id: "learning-path", name: "Learning Path" },
 ];
 
 const currentTabLabel = computed(

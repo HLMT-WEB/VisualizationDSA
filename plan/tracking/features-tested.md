@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (770/771 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (868/869 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -805,3 +805,106 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 723 | **GamificationStore** | nextBadgeXPThreshold computed | >0 | 🟢 PASSED |
 | 724 | **GamificationStore** | lockedBadges computed | All badges locked initially | 🟢 PASSED |
 | 725 | **GamificationStore** | streakStatus computed | inactive → active after XP | 🟢 PASSED |
+
+### Phase 2 Learning Path Skill Tree — PrerequisiteDAGEngine, PersonalizedPathEvaluator, LaserBatchRenderer, OfflineProgressSynchronizer, useLearningPathStore (98 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Phương thức kiểm tra (Test Spec) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 726 | **DAGEngine** | Unlock QuickSort when BubbleSort COMPLETED | Giải DAG → quicksort UNLOCKED | 🟢 PASSED |
+| 727 | **DAGEngine** | Keep nodes LOCKED without prerequisites | Empty completed → all LOCKED | 🟢 PASSED |
+| 728 | **DAGEngine** | Auto-unlock nodes with no prerequisites | No prereqs + LOCKED → UNLOCKED | 🟢 PASSED |
+| 729 | **DAGEngine** | Preserve IN_PROGRESS status | IN_PROGRESS giữ nguyên | 🟢 PASSED |
+| 730 | **DAGEngine** | Mark all COMPLETED | All in Set → all COMPLETED | 🟢 PASSED |
+| 731 | **DAGEngine** | Chain unlock bubble→quick→tree | 2 completed → tree UNLOCKED | 🟢 PASSED |
+| 732 | **DAGEngine** | Multiple prereqs require ALL | Partial → LOCKED, Full → UNLOCKED | 🟢 PASSED |
+| 733 | **DAGEngine** | Empty nodes array | [] → [] | 🟢 PASSED |
+| 734 | **DAGEngine** | Immutability (no mutation) | Original array unchanged | 🟢 PASSED |
+| 735 | **DAGEngine** | Preserve IN_PROGRESS with met prereqs | IN_PROGRESS + prereqs met → IN_PROGRESS | 🟢 PASSED |
+| 736 | **DAGEngine** | No cycle in valid DAG | Linear chain → false | 🟢 PASSED |
+| 737 | **DAGEngine** | Detect cycle A→B→C→A | Circular → true | 🟢 PASSED |
+| 738 | **DAGEngine** | No cycle single node | 1 node → false | 🟢 PASSED |
+| 739 | **DAGEngine** | No cycle empty graph | [] → false | 🟢 PASSED |
+| 740 | **DAGEngine** | No cycle disconnected nodes | 3 isolated → false | 🟢 PASSED |
+| 741 | **DAGEngine** | Topological order linear | bubble < quick < tree < solid | 🟢 PASSED |
+| 742 | **DAGEngine** | Topo roots first | No prereqs before dependents | 🟢 PASSED |
+| 743 | **DAGEngine** | Topo empty input | [] → [] | 🟢 PASSED |
+| 744 | **DAGEngine** | Topo no edges | All nodes present | 🟢 PASSED |
+| 745 | **Evaluator** | Recommend review when <70% | 65% → recommend bubble-sort | 🟢 PASSED |
+| 746 | **Evaluator** | Recommend next UNLOCKED | All pass → recommend quicksort | 🟢 PASSED |
+| 747 | **Evaluator** | Congratulate all completed | No UNLOCKED → Chúc mừng | 🟢 PASSED |
+| 748 | **Evaluator** | Prioritize weak over advance | 50% → review over next | 🟢 PASSED |
+| 749 | **Evaluator** | Handle empty scores | No scores → first UNLOCKED | 🟢 PASSED |
+| 750 | **Evaluator** | Handle empty nodes | [] → empty + Chúc mừng | 🟢 PASSED |
+| 751 | **Evaluator** | 70% is passing | 70% → advance | 🟢 PASSED |
+| 752 | **Evaluator** | 69% is failing | 69% → review | 🟢 PASSED |
+| 753 | **Evaluator** | Find first weak score | Multiple scores → first weak | 🟢 PASSED |
+| 754 | **Evaluator** | Completion % empty | [] → 0% | 🟢 PASSED |
+| 755 | **Evaluator** | Completion % 100% | All COMPLETED → 100% | 🟢 PASSED |
+| 756 | **Evaluator** | Completion % 50% | Half → 50% | 🟢 PASSED |
+| 757 | **Evaluator** | Completion % 25% | 1/4 → 25% | 🟢 PASSED |
+| 758 | **Evaluator** | Average score empty | [] → 0 | 🟢 PASSED |
+| 759 | **Evaluator** | Average score single | 85 → 85 | 🟢 PASSED |
+| 760 | **Evaluator** | Average score multiple | 80+60 → 70 | 🟢 PASSED |
+| 761 | **Evaluator** | isPassingScore true | ≥70 → true | 🟢 PASSED |
+| 762 | **Evaluator** | isPassingScore false | <70 → false | 🟢 PASSED |
+| 763 | **LaserRenderer** | Valid SVG bezier path | (100,200)→(300,400) → correct path | 🟢 PASSED |
+| 764 | **LaserRenderer** | Same start/end point | (50,50) → same coords | 🟢 PASSED |
+| 765 | **LaserRenderer** | Negative coordinates | (-100,-50)→(100,50) → valid | 🟢 PASSED |
+| 766 | **LaserRenderer** | Control point midpoint | (0,0)→(200,100) → controlX=100 | 🟢 PASSED |
+| 767 | **LaserRenderer** | Zero coordinates | (0,0)→(0,0) → valid | 🟢 PASSED |
+| 768 | **LaserRenderer** | rAF callback execution | requestAnimationFrame called | 🟢 PASSED |
+| 769 | **LaserRenderer** | Coalesce multiple requests | 2 calls → 1 rAF | 🟢 PASSED |
+| 770 | **LaserRenderer** | New render after frame | After complete → re-schedule | 🟢 PASSED |
+| 771 | **LaserRenderer** | Element center calculation | rect + scroll → center point | 🟢 PASSED |
+| 772 | **LaserRenderer** | Zero scroll offset center | No scroll → center | 🟢 PASSED |
+| 773 | **LaserRenderer** | Bridge distance threshold | >20px → true | 🟢 PASSED |
+| 774 | **LaserRenderer** | Bridge too close | <20px → false | 🟢 PASSED |
+| 775 | **LaserRenderer** | Bridge exact minimum | =20px → true | 🟢 PASSED |
+| 776 | **LaserRenderer** | Custom min distance | Custom threshold | 🟢 PASSED |
+| 777 | **LaserRenderer** | Same point no render | 0 distance → false | 🟢 PASSED |
+| 778 | **LaserRenderer** | Reset allows re-schedule | Reset → new rAF | 🟢 PASSED |
+| 779 | **OfflineSync** | Save completed to localStorage | setItem called | 🟢 PASSED |
+| 780 | **OfflineSync** | Save scores to localStorage | JSON serialization | 🟢 PASSED |
+| 781 | **OfflineSync** | Save timestamp | Date.now stored | 🟢 PASSED |
+| 782 | **OfflineSync** | Handle quota exceeded | Graceful warn | 🟢 PASSED |
+| 783 | **OfflineSync** | Load saved data | Parse JSON → data | 🟢 PASSED |
+| 784 | **OfflineSync** | Return null when no data | null | 🟢 PASSED |
+| 785 | **OfflineSync** | Null without scores | Partial → null | 🟢 PASSED |
+| 786 | **OfflineSync** | Missing timestamp default 0 | No timestamp → 0 | 🟢 PASSED |
+| 787 | **OfflineSync** | Handle corrupted JSON | Parse error → null | 🟢 PASSED |
+| 788 | **OfflineSync** | Clear all keys | 3 removeItem calls | 🟢 PASSED |
+| 789 | **OfflineSync** | Has saved progress true | Data exists → true | 🟢 PASSED |
+| 790 | **OfflineSync** | Has saved progress false | No data → false | 🟢 PASSED |
+| 791 | **OfflineSync** | Debounced sync success | syncing → synced | 🟢 PASSED |
+| 792 | **OfflineSync** | Debounced sync error | syncing → error | 🟢 PASSED |
+| 793 | **OfflineSync** | Debounce coalescing | Multiple → 1 fetch | 🟢 PASSED |
+| 794 | **OfflineSync** | Cancel pending sync | No fetch after cancel | 🟢 PASSED |
+| 795 | **LearningPathStore** | 4 default nodes | rawNodes.length = 4 | 🟢 PASSED |
+| 796 | **LearningPathStore** | Bubble-sort pre-completed | completedNodeIds has bubble | 🟢 PASSED |
+| 797 | **LearningPathStore** | Active node quicksort | activeNodeId = 'quicksort' | 🟢 PASSED |
+| 798 | **LearningPathStore** | Initial score history | 1 score entry | 🟢 PASSED |
+| 799 | **LearningPathStore** | Resolved bubble = COMPLETED | DAG computed | 🟢 PASSED |
+| 800 | **LearningPathStore** | Resolved quicksort = UNLOCKED | Prereq met | 🟢 PASSED |
+| 801 | **LearningPathStore** | Resolved tree = LOCKED | Prereq not met | 🟢 PASSED |
+| 802 | **LearningPathStore** | Resolved solid = LOCKED | Chain blocked | 🟢 PASSED |
+| 803 | **LearningPathStore** | AI recommends quicksort | Next UNLOCKED | 🟢 PASSED |
+| 804 | **LearningPathStore** | AI review on low score | <70% → review | 🟢 PASSED |
+| 805 | **LearningPathStore** | 25% completion | 1/4 nodes | 🟢 PASSED |
+| 806 | **LearningPathStore** | 50% after 2nd complete | 2/4 nodes | 🟢 PASSED |
+| 807 | **LearningPathStore** | Average score 85 | Initial score | 🟢 PASSED |
+| 808 | **LearningPathStore** | completeNode adds to set | quicksort in set | 🟢 PASSED |
+| 809 | **LearningPathStore** | completeNode adds score | Score entry created | 🟢 PASSED |
+| 810 | **LearningPathStore** | Chain unlock tree | Complete quick → tree UNLOCKED | 🟢 PASSED |
+| 811 | **LearningPathStore** | Save to localStorage | setItem called | 🟢 PASSED |
+| 812 | **LearningPathStore** | Server sync attempt | fetch called | 🟢 PASSED |
+| 813 | **LearningPathStore** | Graceful sync failure | No throw on error | 🟢 PASSED |
+| 814 | **LearningPathStore** | setActiveNode | Update activeNodeId | 🟢 PASSED |
+| 815 | **LearningPathStore** | Load from localStorage | Restore completed + scores | 🟢 PASSED |
+| 816 | **LearningPathStore** | No crash on empty load | No throw | 🟢 PASSED |
+| 817 | **LearningPathStore** | Reset progress | Empty state + clear storage | 🟢 PASSED |
+| 818 | **LearningPathStore** | Reset clears localStorage | removeItem called | 🟢 PASSED |
+| 819 | **LearningPathStore** | Node positions generated | 4 positions | 🟢 PASSED |
+| 820 | **LearningPathStore** | Positions have x/y | Valid coordinates | 🟢 PASSED |
+| 821 | **LearningPathStore** | Laser bridges from prereqs | >0 bridges | 🟢 PASSED |
+| 822 | **LearningPathStore** | Active bridge completed source | bubble→quick isActive | 🟢 PASSED |
+| 823 | **LearningPathStore** | Inactive bridge incomplete | quick→tree !isActive | 🟢 PASSED |

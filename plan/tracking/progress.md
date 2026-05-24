@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 770+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Unit tests**                  | 868+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
 
 ---
 
@@ -267,6 +267,24 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | GamificationWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/GamificationWorkspace.vue` — XP bar, streak fire, badges, leaderboard, demo controls |
 | **Integration** | App.vue "Gamification+" tab + barrel export | ✅ CODE DONE | New "Gamification+" tab in `App.vue`, `index.ts` barrel |
 | **Tests** | 88 Unit Tests | ✅ CODE DONE | `StreakCalculator.spec.ts` (20), `GamificationEngine.spec.ts` (20), `CanvasConfettiEngine.spec.ts` (17), `useGamificationStore.spec.ts` (31) — ALL 88 PASS |
+
+### Phase 2 Learning Path Skill Tree — DAG Engine, AI Evaluator, Laser Bridges, Offline Sync
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | PathNode, UserQuizScore, AIRecommendation, Point, NodePosition, LaserBridge | ✅ CODE DONE | `learning-path/types/learning-path.types.ts` — NodeStatus, SyncStatus, OfflineProgressData |
+| **Engine** | PrerequisiteDAGEngine (Client-side DAG Solver) | ✅ CODE DONE | `engine/PrerequisiteDAGEngine.ts` — resolveNodeStatuses, hasCycle (DFS), getTopologicalOrder (Kahn) |
+| **Engine** | PersonalizedPathEvaluator (AI Recommendation) | ✅ CODE DONE | `engine/PersonalizedPathEvaluator.ts` — evaluateNextRecommendedNode (70% threshold), completionPercentage, averageScore |
+| **Engine** | LaserBatchRenderer (rAF SVG Batch Renderer) | ✅ CODE DONE | `engine/LaserBatchRenderer.ts` — calculateBezierPath, scheduleBatchRender (rAF coalescing), getElementCenter, shouldRenderBridge |
+| **Engine** | OfflineProgressSynchronizer (localStorage + Server) | ✅ CODE DONE | `engine/OfflineProgressSynchronizer.ts` — saveToLocalStorage (0ms), loadFromLocalStorage, scheduleDebouncedSync (2000ms) |
+| **Store** | useLearningPathStore Pinia Setup Store | ✅ CODE DONE | `store/useLearningPathStore.ts` — rawNodes, completedNodeIds, resolvedNodes, aiRecommendedNode, nodePositions, laserBridges |
+| **Component** | PathNodeCircle.vue (3-state Neon circles) | ✅ CODE DONE | `components/PathNodeCircle.vue` — COMPLETED Emerald, UNLOCKED Cyan breath, LOCKED Slate, recommended Amber |
+| **Component** | LaserFlowBridge.vue (SVG laser animation) | ✅ CODE DONE | `components/LaserFlowBridge.vue` — SVG path, active Cyan pulse, inactive Slate, Gaussian blur glow |
+| **Component** | AIEvaluatorCard.vue (AI Advisor card) | ✅ CODE DONE | `components/AIEvaluatorCard.vue` — Glassmorphism Amber border, review/advance modes, completion banner |
+| **Component** | LearningPathMap.vue (RPG Map Grid) | ✅ CODE DONE | `components/LearningPathMap.vue` — radial gradient bg, node circles, laser bridges, progress bar |
+| **Component** | LearningPathWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/LearningPathWorkspace.vue` — header badges, map + sidebar, AI card, node details, demo controls |
+| **Integration** | App.vue "Learning Path" tab + barrel export | ✅ CODE DONE | New "Learning Path" tab in App.vue, index.ts barrel |
+| **Tests** | 98 Unit Tests | ✅ CODE DONE | `PrerequisiteDAGEngine.spec.ts` (22), `PersonalizedPathEvaluator.spec.ts` (22), `LaserBatchRenderer.spec.ts` (18), `OfflineProgressSynchronizer.spec.ts` (16), `useLearningPathStore.spec.ts` (20) — ALL 98 PASS |
 
 ---
 
