@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using VisualizationDSA.Application.DTOs;
 using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
+using VisualizationDSA.Domain.Exceptions;
 using VisualizationDSA.Domain.Interfaces;
 
 namespace VisualizationDSA.Infrastructure.Services
@@ -29,8 +30,8 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task<QuizDto> GetQuizByIdAsync(Guid id)
         {
-            var quiz = await _unitOfWork.Quizzes.GetByIdAsync(id);
-            if (quiz == null) throw new Exception("Quiz not found");
+            var quiz = await _unitOfWork.Quizzes.GetByIdAsync(id)
+                ?? throw new NotFoundException("Quiz", id);
             return MapToQuizDto(quiz);
         }
 
@@ -42,16 +43,16 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task<QuizAttemptResult> SubmitQuizAttemptAsync(Guid userId, QuizAttemptRequest request)
         {
-            var quiz = await _unitOfWork.Quizzes.GetByIdAsync(request.QuizId);
-            if (quiz == null) throw new Exception("Quiz not found");
+            var quiz = await _unitOfWork.Quizzes.GetByIdAsync(request.QuizId)
+                ?? throw new NotFoundException("Quiz", request.QuizId);
 
             var questions = quiz.Questions.ToList();
             if (request.Answers.Length != questions.Count)
             {
-                throw new Exception("Number of answers does not match number of questions");
+                throw new DomainValidationException(
+                    $"Số câu trả lời ({request.Answers.Length}) không khớp với số câu hỏi ({questions.Count}).");
             }
 
-            // Calculate score
             int score = 0;
             var questionResults = new List<QuestionResult>();
 
@@ -71,13 +72,11 @@ namespace VisualizationDSA.Infrastructure.Services
             }
 
             var maxScore = questions.Count;
-            var passed = score >= maxScore * 0.7; // 70% to pass
+            var passed = score >= maxScore * 0.7;
 
-            // Save attempt
-            var attempt = new QuizAttempt(userId, quiz.Id, request.Answers, score, maxScore);
+            var attempt = new Domain.Entities.QuizAttempt(userId, quiz.Id, request.Answers, score, maxScore);
             await _unitOfWork.QuizAttempts.AddAsync(attempt);
 
-            // Award XP if passed
             int xpEarned = 0;
             if (passed)
             {
@@ -98,17 +97,17 @@ namespace VisualizationDSA.Infrastructure.Services
             };
         }
 
-        public async Task<IEnumerable<QuizAttempt>> GetUserQuizHistoryAsync(Guid userId)
+        public async Task<IEnumerable<Application.Services.QuizAttempt>> GetUserQuizHistoryAsync(Guid userId)
         {
             var attempts = await _unitOfWork.QuizAttempts.FindAsync(a => a.UserId == userId);
             
-            var result = new List<QuizAttempt>();
+            var result = new List<Application.Services.QuizAttempt>();
             foreach (var attempt in attempts)
             {
                 var quiz = await _unitOfWork.Quizzes.GetByIdAsync(attempt.QuizId);
                 if (quiz != null)
                 {
-                    result.Add(new QuizAttempt
+                    result.Add(new Application.Services.QuizAttempt
                     {
                         QuizId = attempt.QuizId,
                         QuizTitle = quiz.Title,
@@ -123,7 +122,7 @@ namespace VisualizationDSA.Infrastructure.Services
             return result.OrderByDescending(a => a.AttemptedAt);
         }
 
-        private QuizDto MapToQuizDto(Quiz quiz)
+        private static QuizDto MapToQuizDto(Quiz quiz)
         {
             return new QuizDto
             {

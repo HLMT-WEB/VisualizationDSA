@@ -41,7 +41,13 @@ namespace VisualizationDSA.Application.DTOs
     public class AuthResponse
     {
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
         public UserDto User { get; set; }
+    }
+
+    public class RefreshTokenRequest
+    {
+        public string RefreshToken { get; set; }
     }
 
     public class XPAwardRequest

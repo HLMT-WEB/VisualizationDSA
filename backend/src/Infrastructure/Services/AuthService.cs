@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using VisualizationDSA.Application.DTOs;
 using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
+using VisualizationDSA.Domain.Exceptions;
 using VisualizationDSA.Domain.Interfaces;
 
 namespace VisualizationDSA.Infrastructure.Services
@@ -27,78 +29,102 @@ namespace VisualizationDSA.Infrastructure.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
         {
-            // Check if user exists
             var existingUsers = await _unitOfWork.Users.FindAsync(u => u.Email == request.Email);
-            if (existingUsers != null)
+            if (existingUsers.Any())
             {
-                throw new Exception("User with this email already exists");
+                throw new ConflictException("Email này đã được đăng ký.");
             }
 
-            // Hash password
-            var passwordHash = HashPassword(request.Password);
+            var existingUsernames = await _unitOfWork.Users.FindAsync(u => u.Username == request.Username);
+            if (existingUsernames.Any())
+            {
+                throw new ConflictException("Username này đã được sử dụng.");
+            }
 
-            // Create user
+            var passwordHash = HashPassword(request.Password);
             var user = new User(request.Email, request.Username, passwordHash);
             await _unitOfWork.Users.AddAsync(user);
+
+            var refreshToken = GenerateRefreshToken();
+            user.SetRefreshToken(refreshToken, DateTime.UtcNow.AddDays(30));
+
             await _unitOfWork.CommitAsync();
 
-            // Generate JWT
-            var token = GenerateJwtToken(user);
+            var accessToken = GenerateJwtToken(user);
 
             return new AuthResponse
             {
-                Token = token,
+                Token = accessToken,
+                RefreshToken = refreshToken,
                 User = MapToUserDto(user)
             };
         }
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
-            // Find user by email
             var users = await _unitOfWork.Users.FindAsync(u => u.Email == request.Email);
             var user = users.FirstOrDefault();
 
-            if (user == null)
+            if (user == null || !VerifyPassword(request.Password, user.PasswordHash))
             {
-                throw new Exception("Invalid email or password");
+                throw new AuthenticationException("Email hoặc mật khẩu không đúng.");
             }
 
-            // Verify password
-            if (!VerifyPassword(request.Password, user.PasswordHash))
-            {
-                throw new Exception("Invalid email or password");
-            }
-
-            // Update last login
             user.RecordLogin();
+
+            var refreshToken = GenerateRefreshToken();
+            user.SetRefreshToken(refreshToken, DateTime.UtcNow.AddDays(30));
+
             await _unitOfWork.CommitAsync();
 
-            // Generate JWT
-            var token = GenerateJwtToken(user);
+            var accessToken = GenerateJwtToken(user);
 
             return new AuthResponse
             {
-                Token = token,
+                Token = accessToken,
+                RefreshToken = refreshToken,
                 User = MapToUserDto(user)
             };
         }
 
-        public async Task<UserDto> GetCurrentUserAsync(string userId)
+        public async Task<UserDto> GetCurrentUserAsync(Guid userId)
         {
-            var id = Guid.Parse(userId);
-            var user = await _unitOfWork.Users.GetByIdAsync(id);
-
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
-                throw new Exception("User not found");
+                throw new NotFoundException("User", userId);
             }
 
             return MapToUserDto(user);
         }
 
+        public async Task<AuthResponse> RefreshTokenAsync(string refreshToken)
+        {
+            var users = await _unitOfWork.Users.FindAsync(u => u.RefreshToken == refreshToken);
+            var user = users.FirstOrDefault();
+
+            if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
+            {
+                throw new AuthenticationException("Refresh token không hợp lệ hoặc đã hết hạn.");
+            }
+
+            var newRefreshToken = GenerateRefreshToken();
+            user.SetRefreshToken(newRefreshToken, DateTime.UtcNow.AddDays(30));
+            await _unitOfWork.CommitAsync();
+
+            var accessToken = GenerateJwtToken(user);
+
+            return new AuthResponse
+            {
+                Token = accessToken,
+                RefreshToken = newRefreshToken,
+                User = MapToUserDto(user)
+            };
+        }
+
         private string GenerateJwtToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
@@ -113,29 +139,32 @@ namespace VisualizationDSA.Infrastructure.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(7),
+                expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private string HashPassword(string password)
+        private static string GenerateRefreshToken()
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return Convert.ToBase64String(randomBytes);
         }
 
-        private bool VerifyPassword(string password, string passwordHash)
+        private static string HashPassword(string password)
         {
-            var hashedInput = HashPassword(password);
-            return hashedInput == passwordHash;
+            return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
         }
 
-        private UserDto MapToUserDto(User user)
+        private static bool VerifyPassword(string password, string passwordHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, passwordHash);
+        }
+
+        private static UserDto MapToUserDto(User user)
         {
             return new UserDto
             {
@@ -146,7 +175,7 @@ namespace VisualizationDSA.Infrastructure.Services
                 CurrentLevel = user.CurrentLevel,
                 StreakDays = user.StreakDays,
                 CreatedAt = user.CreatedAt,
-                Badges = new List<BadgeDto>() // Will be populated separately
+                Badges = new List<BadgeDto>()
             };
         }
     }
