@@ -108,6 +108,12 @@
         </section>
       </template>
 
+      <!-- Export & Share Tab -->
+      <template v-else-if="activeTab === 'export-share'">
+        <section class="flex-1 min-h-0">
+          <ExportShareWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -254,6 +260,7 @@ import { CompareWorkspace } from "./features/compare-algorithms";
 import { ConcurrencyWorkspace } from "./features/concurrency-viz";
 import { DebugWorkspace } from "./features/debug-mode";
 import { EmbedWidgetWorkspace } from "./features/embed-widget";
+import { ExportShareWorkspace } from "./features/export-share";
 
 const activeTab = ref("sorting");
 
@@ -276,6 +283,7 @@ const tabs = [
   { id: "quiz", name: "Quiz" },
   { id: "gamification", name: "Gamification" },
   { id: "embed", name: "Embed" },
+  { id: "export-share", name: "Export/Share" },
 ];
 
 const currentTabLabel = computed(
