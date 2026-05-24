@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1022/1025 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1129/1130 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -1074,3 +1074,113 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 977 | **OOPStore** | VTable empty no matching heap | [] | 🟢 PASSED |
 | 978 | **OOPStore** | resetAll clears everything | 0 classes, 0 objects, null violation | 🟢 PASSED |
 | 979 | **OOPStore** | resetDispatchState keeps data | IDLE, classes=3, heap=1 | 🟢 PASSED |
+
+### Phase 2 SOLID Principles Visualizer — LCOMCalculator, SOLIDEvaluatorEngine, ThermalSparkParticleEngine, LaserFractureCalculator, useSOLIDVisualizerStore (105 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Phương thức kiểm tra (Test Spec) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 980 | **LCOMCalculator** | Empty members array returns 0 | calculateLCOM4([]) === 0 | 🟢 PASSED |
+| 981 | **LCOMCalculator** | No methods returns 0 | Only FIELD members, no METHOD → 0 | 🟢 PASSED |
+| 982 | **LCOMCalculator** | Cohesive class LCOM4 = 1 | All methods share dbConn field → 1 | 🟢 PASSED |
+| 983 | **LCOMCalculator** | Two disconnected groups = 2 | db + smtp isolated groups → 2 (SRP violation) | 🟢 PASSED |
+| 984 | **LCOMCalculator** | Three disconnected groups = 3 | God Class db+hash+smtp → 3 | 🟢 PASSED |
+| 985 | **LCOMCalculator** | Single method = 1 | Trivially connected → 1 | 🟢 PASSED |
+| 986 | **LCOMCalculator** | Transitive connection = 1 | Methods connected via shared fields → 1 | 🟢 PASSED |
+| 987 | **LCOMCalculator** | No accessed fields = isolated | 2 methods no fields → 2 | 🟢 PASSED |
+| 988 | **LCOMCalculator** | Large class all connected = 1 | 5 methods sharing sharedField → 1 | 🟢 PASSED |
+| 989 | **LCOMCalculator** | Four disconnected groups = 4 | 4 methods each isolated → 4 | 🟢 PASSED |
+| 990 | **LCOMCalculator** | Multiple shared fields = 1 | 3 methods sharing fa/fb/fc → 1 | 🟢 PASSED |
+| 991 | **LCOMCalculator** | Only FIELDs no METHODs = 0 | Fields only, no graph → 0 | 🟢 PASSED |
+| 992 | **SOLIDEvaluator** | SRP PASS cohesive class | LCOM4=1, isViolating=false | 🟢 PASSED |
+| 993 | **SOLIDEvaluator** | SRP VIOLATION LCOM4=2 | God Class 2 groups, isViolating=true | 🟢 PASSED |
+| 994 | **SOLIDEvaluator** | SRP VIOLATION LCOM4=3 | Mega Class 3 groups | 🟢 PASSED |
+| 995 | **SOLIDEvaluator** | SRP no methods = not violating | Empty class LCOM4=0 | 🟢 PASSED |
+| 996 | **SOLIDEvaluator** | SRP single method = pass | 1 method LCOM4=1 | 🟢 PASSED |
+| 997 | **SOLIDEvaluator** | LSP VIOLATION throws exception | fly() throws NotImplementedException | 🟢 PASSED |
+| 998 | **SOLIDEvaluator** | LSP method name in error | error contains 'fly' | 🟢 PASSED |
+| 999 | **SOLIDEvaluator** | LSP NotImplementedException | error reason text | 🟢 PASSED |
+| 1000 | **SOLIDEvaluator** | LSP PASS no exception | isViolating=false, no errorReason | 🟢 PASSED |
+| 1001 | **SOLIDEvaluator** | LSP different method names | 'swim' violation works | 🟢 PASSED |
+| 1002 | **SOLIDEvaluator** | LSP valid any method | draw() non-violating | 🟢 PASSED |
+| 1003 | **ThermalEngine** | Create without canvas | isRunning=false, particles=[] | 🟢 PASSED |
+| 1004 | **ThermalEngine** | Create with canvas | isRunning=false | 🟢 PASSED |
+| 1005 | **ThermalEngine** | Attach canvas after construction | isRunning=false | 🟢 PASSED |
+| 1006 | **ThermalEngine** | Start animation loop | isRunning=true, RAF queued | 🟢 PASSED |
+| 1007 | **ThermalEngine** | No double start | RAF callback count unchanged | 🟢 PASSED |
+| 1008 | **ThermalEngine** | No start without canvas | isRunning=false | 🟢 PASSED |
+| 1009 | **ThermalEngine** | Stop clears particles | isRunning=false, particles=[], canvas cleared | 🟢 PASSED |
+| 1010 | **ThermalEngine** | Destroy nullifies canvas | isRunning=false, particles=[] | 🟢 PASSED |
+| 1011 | **ThermalEngine** | MAX_PARTICLES = 80 | Constant check | 🟢 PASSED |
+| 1012 | **ThermalEngine** | Generates particles after frame | particles.length > 0 | 🟢 PASSED |
+| 1013 | **ThermalEngine** | Hue range 0-30 red-orange | All particles hue ∈ [0, 30] | 🟢 PASSED |
+| 1014 | **ThermalEngine** | Negative vy (fly upward) | All particles vy < 0 | 🟢 PASSED |
+| 1015 | **ThermalEngine** | Size 1-4 | All particles size ∈ [1, 4] | 🟢 PASSED |
+| 1016 | **ThermalEngine** | Clear canvas per draw cycle | clearRect called | 🟢 PASSED |
+| 1017 | **ThermalEngine** | Lighter composite operation | globalCompositeOperation='lighter' | 🟢 PASSED |
+| 1018 | **LaserFracture** | Segment count min-max range | segments ∈ [10, 15] | 🟢 PASSED |
+| 1019 | **LaserFracture** | Exact segment count | generateFractureSegments(A, B, 12) = 12 | 🟢 PASSED |
+| 1020 | **LaserFracture** | Starts near point A | first segment ≈ pointA | 🟢 PASSED |
+| 1021 | **LaserFracture** | Ends near point B | last segment ≈ pointB | 🟢 PASSED |
+| 1022 | **LaserFracture** | Zigzag within offset range | offsets ≤ FRACTURE_OFFSET_RANGE | 🟢 PASSED |
+| 1023 | **LaserFracture** | Vertical path | 5 segments generated | 🟢 PASSED |
+| 1024 | **LaserFracture** | Diagonal path | 8 segments generated | 🟢 PASSED |
+| 1025 | **LaserFracture** | Connected segments | segment[i].end ≈ segment[i+1].start | 🟢 PASSED |
+| 1026 | **LaserFracture** | Zero-length path | 3 segments for same point | 🟢 PASSED |
+| 1027 | **LaserFracture** | Angle horizontal right = 0 | atan2(0, 100) ≈ 0 | 🟢 PASSED |
+| 1028 | **LaserFracture** | Angle downward = PI/2 | atan2(100, 0) ≈ PI/2 | 🟢 PASSED |
+| 1029 | **LaserFracture** | Angle left = PI | atan2(0, -100) ≈ PI | 🟢 PASSED |
+| 1030 | **LaserFracture** | Angle upward = -PI/2 | atan2(-100, 0) ≈ -PI/2 | 🟢 PASSED |
+| 1031 | **LaserFracture** | Angle 45 degrees | atan2(100, 100) ≈ PI/4 | 🟢 PASSED |
+| 1032 | **LaserFracture** | Distance same point = 0 | sqrt(0) = 0 | 🟢 PASSED |
+| 1033 | **LaserFracture** | Distance horizontal = 300 | 300 | 🟢 PASSED |
+| 1034 | **LaserFracture** | Distance vertical = 400 | 400 | 🟢 PASSED |
+| 1035 | **LaserFracture** | Distance 3-4-5 triangle = 500 | sqrt(300²+400²) = 500 | 🟢 PASSED |
+| 1036 | **LaserFracture** | Constants min=10 max=15 | FRACTURE_SEGMENT_COUNT_MIN/MAX | 🟢 PASSED |
+| 1037 | **LaserFracture** | Offset range = 12 | FRACTURE_OFFSET_RANGE | 🟢 PASSED |
+| 1038 | **SOLIDStore** | Initial activeLesson SRP | 'SRP' | 🟢 PASSED |
+| 1039 | **SOLIDStore** | Initial empty classNodes | [] | 🟢 PASSED |
+| 1040 | **SOLIDStore** | Initial LSP phase IDLE | 'IDLE' | 🟢 PASSED |
+| 1041 | **SOLIDStore** | Initial DIP violating | isViolatingDIP=true, hasInterface=false | 🟢 PASSED |
+| 1042 | **SOLIDStore** | Initial no diagnostic | null | 🟢 PASSED |
+| 1043 | **SOLIDStore** | Initial isSRPSplit false | false | 🟢 PASSED |
+| 1044 | **SOLIDStore** | Demo UserManager God Class | className='UserManager' | 🟢 PASSED |
+| 1045 | **SOLIDStore** | Demo LCOM4 = 3 | cohesionScore=3 | 🟢 PASSED |
+| 1046 | **SOLIDStore** | Demo marks SRP violating | isViolatingSRP=true | 🟢 PASSED |
+| 1047 | **SOLIDStore** | Computed hasOverheatedNodes | true after initDemo | 🟢 PASSED |
+| 1048 | **SOLIDStore** | Computed overheatedNodeIds | contains 'user-manager-node' | 🟢 PASSED |
+| 1049 | **SOLIDStore** | Computed totalNodes | 1 | 🟢 PASSED |
+| 1050 | **SOLIDStore** | Computed srpViolationCount | 1 | 🟢 PASSED |
+| 1051 | **SOLIDStore** | LSP not transmitting initially | false | 🟢 PASSED |
+| 1052 | **SOLIDStore** | DIP not correct initially | false | 🟢 PASSED |
+| 1053 | **SOLIDStore** | Lesson label SRP | 'Single Responsibility' | 🟢 PASSED |
+| 1054 | **SOLIDStore** | Lesson label LSP | 'Liskov Substitution' | 🟢 PASSED |
+| 1055 | **SOLIDStore** | Lesson label DIP | 'Dependency Inversion' | 🟢 PASSED |
+| 1056 | **SOLIDStore** | setLesson switches | activeLesson='LSP' | 🟢 PASSED |
+| 1057 | **SOLIDStore** | setLesson resets state | lspPhase='IDLE' | 🟢 PASSED |
+| 1058 | **SOLIDStore** | setLesson inits demo data | classNodes.length=1, 'UserManager' | 🟢 PASSED |
+| 1059 | **SOLIDStore** | initializeClassNodes evaluates | cohesionScore=1, not violating | 🟢 PASSED |
+| 1060 | **SOLIDStore** | SRP split into 3 classes | classNodes.length=3 | 🟢 PASSED |
+| 1061 | **SOLIDStore** | Split creates UserRepository | className found | 🟢 PASSED |
+| 1062 | **SOLIDStore** | Split creates PasswordHasher | className found | 🟢 PASSED |
+| 1063 | **SOLIDStore** | Split creates EmailNotifier | className found | 🟢 PASSED |
+| 1064 | **SOLIDStore** | Split all cohesionScore=1 | All nodes LCOM4=1, not violating | 🟢 PASSED |
+| 1065 | **SOLIDStore** | isSRPSplit = true | true after split | 🟢 PASSED |
+| 1066 | **SOLIDStore** | Split diagnostic 'SRP ĐẠT' | Contains success message | 🟢 PASSED |
+| 1067 | **SOLIDStore** | Split dispatches confetti | COOL_DOWN_CONFETTI_EVENT | 🟢 PASSED |
+| 1068 | **SOLIDStore** | No overheated after split | hasOverheatedNodes=false | 🟢 PASSED |
+| 1069 | **SOLIDStore** | Split unknown nodeId no-op | classNodes unchanged | 🟢 PASSED |
+| 1070 | **SOLIDStore** | LSP TRANSMITTING immediately | lspPhase='TRANSMITTING' | 🟢 PASSED |
+| 1071 | **SOLIDStore** | LSP shatter after 800ms | isLspShattered=true, phase='SHATTERED' | 🟢 PASSED |
+| 1072 | **SOLIDStore** | LSP error diagnostic | Contains 'LISKOV_VIOLATION' | 🟢 PASSED |
+| 1073 | **SOLIDStore** | LSP dispatches glass break | GLASS_BREAK_SOUND_EVENT | 🟢 PASSED |
+| 1074 | **SOLIDStore** | LSP valid PASSED phase | lspPhase='PASSED', not shattered | 🟢 PASSED |
+| 1075 | **SOLIDStore** | LSP valid diagnostic 'LSP ĐẠT' | Contains success message | 🟢 PASSED |
+| 1076 | **SOLIDStore** | LSP valid not transmitting | false | 🟢 PASSED |
+| 1077 | **SOLIDStore** | DIP insert interface fixes | isViolatingDIP=false, hasInterface=true | 🟢 PASSED |
+| 1078 | **SOLIDStore** | DIP success diagnostic | Contains 'DIP ĐẠT' | 🟢 PASSED |
+| 1079 | **SOLIDStore** | isDIPCorrect after fix | true | 🟢 PASSED |
+| 1080 | **SOLIDStore** | resetDIP to violating | isViolatingDIP=true, diagnostic=null | 🟢 PASSED |
+| 1081 | **SOLIDStore** | resetState clears all | classNodes=[], lspPhase='IDLE' | 🟢 PASSED |
+| 1082 | **SOLIDStore** | resetState clears LSP timer | No shatter after 800ms | 🟢 PASSED |
+| 1083 | **SOLIDStore** | resetAll re-initializes SRP | activeLesson='SRP', UserManager | 🟢 PASSED |
+| 1084 | **SOLIDStore** | destroyStore cleans up | classNodes=[], diagnostic=null | 🟢 PASSED |

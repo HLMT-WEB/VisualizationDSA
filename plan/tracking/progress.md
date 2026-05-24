@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 1020+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
+| **Unit tests**                  | 1129+ tests — ✅ 100% PASS (1 pre-existing failure)                |
 
 ---
 
@@ -320,6 +320,24 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | OOPConceptsVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/OOPConceptsVisualizerWorkspace.vue` — UML cards grid, sandbox + heap split, laser overlay, demo initialization |
 | **Integration** | App.vue "OOP Viz" tab + barrel export | ✅ CODE DONE | New "OOP Viz" tab in App.vue, index.ts barrel |
 | **Tests** | 54 Unit Tests | ✅ CODE DONE | `OOPReflectionEngine.spec.ts` (27), `SVGLaserBatchRenderer.spec.ts` (7), `useOOPVisualizerStore.spec.ts` (20) — ALL 54 PASS |
+
+### Phase 2 SOLID Principles Visualizer — Thermal SRP, Laser Fracture LSP, Neon DIP
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | SOLIDClassNode, FireParticle, FractureSegment, DIPState, CoordinatePoint | ✅ CODE DONE | `solid-visualization/types/solid-visualization.types.ts` — SOLIDPrinciple, MemberType, LSPSubstitutionPhase, MAX_PARTICLES=80, LSP_LASER_DELAY_MS=800, SRP_VIOLATION_THRESHOLD=2 |
+| **Engine** | LCOMCalculator (DFS connected components LCOM4) | ✅ CODE DONE | `engine/LCOMCalculator.ts` — calculateLCOM4 via adjacency graph + DFS, returns disconnected method group count |
+| **Engine** | SOLIDEvaluatorEngine (SRP/LSP evaluation) | ✅ CODE DONE | `engine/SOLIDEvaluatorEngine.ts` — evaluateSRP (LCOM4 >= 2 violation), evaluateLSP (NotImplementedException check) |
+| **Engine** | ThermalSparkParticleEngine (Canvas 2D 60FPS) | ✅ CODE DONE | `engine/ThermalSparkParticleEngine.ts` — rAF loop, max 80 particles, HSL hue 0-30, gravity physics, GC-safe destroy |
+| **Engine** | LaserFractureCalculator (zigzag segments) | ✅ CODE DONE | `engine/LaserFractureCalculator.ts` — generateFractureSegments 10-15 zigzag, calculateAngle, calculateDistance |
+| **Store** | useSOLIDVisualizerStore Pinia Setup Store | ✅ CODE DONE | `store/useSOLIDVisualizerStore.ts` — 5 lessons SRP/OCP/LSP/ISP/DIP, SRP demo UserManager LCOM4=3, triggerSRPSplit 3 classes, LSP 800ms substitution, DIP interface insertion |
+| **Component** | ThermalClassCard.vue (Glassmorphic + Canvas sparks) | ✅ CODE DONE | `components/ThermalClassCard.vue` — LCOM4 badge, thermal-glow animation, embedded Canvas particle overlay, split button |
+| **Component** | LaserFractureOverlay.vue (SVG fracture) | ✅ CODE DONE | `components/LaserFractureOverlay.vue` — laser beam pulse, zigzag fracture lines, shatter error banner |
+| **Component** | NeonFlowingPath.vue (SVG DIP flow) | ✅ CODE DONE | `components/NeonFlowingPath.vue` — violating red/correct green, interface box, flowing dash animation |
+| **Component** | SRPLessonPanel, LSPLessonPanel, DIPLessonPanel | ✅ CODE DONE | Lesson-specific panels with interaction buttons, diagnostic results, phase badges |
+| **Component** | SOLIDVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/SOLIDVisualizerWorkspace.vue` — 5-tab lesson selector, SRP/LSP/DIP panels, footer status, Reset All |
+| **Integration** | App.vue "SOLID Viz" tab + barrel export | ✅ CODE DONE | New "SOLID Viz" tab in App.vue, index.ts barrel export |
+| **Tests** | 105 Unit Tests | ✅ CODE DONE | `LCOMCalculator.spec.ts` (12), `SOLIDEvaluatorEngine.spec.ts` (11), `ThermalSparkParticleEngine.spec.ts` (15), `LaserFractureCalculator.spec.ts` (20), `useSOLIDVisualizerStore.spec.ts` (47) — ALL 105 PASS |
 
 ---
 

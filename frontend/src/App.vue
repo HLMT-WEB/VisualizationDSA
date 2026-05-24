@@ -142,6 +142,13 @@
           <OOPConceptsVisualizerWorkspace />
         </section>
       </template>
+
+      <!-- SOLID Visualization Tab -->
+      <template v-else-if="activeTab === 'solid-visualization'">
+        <section class="flex-1 min-h-0">
+          <SOLIDVisualizerWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -293,6 +300,7 @@ import { GamificationWorkspace } from "./features/gamification-engine";
 import { LearningPathWorkspace } from "./features/learning-path";
 import { MultiViewWorkspace } from "./features/multi-view";
 import { OOPConceptsVisualizerWorkspace } from "./features/oop-visualization";
+import { SOLIDVisualizerWorkspace } from "./features/solid-visualization";
 
 const activeTab = ref("sorting");
 
@@ -320,6 +328,7 @@ const tabs = [
   { id: "learning-path", name: "Learning Path" },
   { id: "multi-view", name: "Multi-View" },
   { id: "oop-visualization", name: "OOP Viz" },
+  { id: "solid-visualization", name: "SOLID Viz" },
 ];
 
 const currentTabLabel = computed(
