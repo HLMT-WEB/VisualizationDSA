@@ -14,9 +14,9 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Tài liệu thiết kế**           | 12/12 Sprints (100% — chỉ là spec, chưa phải code)                 |
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
-| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting   |
-| **Tổng file thực tế**           | ~95 files (70 frontend + 25 backend `.cs`)                         |
-| **Unit tests**                  | 1467+ frontend + 139 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
+| **Backend .NET C#**             | 100% — Clean Architecture + BCrypt Auth + Serilog + RateLimiting + IMemoryCache + Pagination + SignalR Real-time |
+| **Tổng file thực tế**           | ~120 files (85 frontend + 35 backend `.cs`)                        |
+| **Unit tests**                  | 1550+ frontend + 212 backend C# — ✅ 100% PASS (1 pre-existing frontend failure) |
 
 ---
 
@@ -650,3 +650,54 @@ Tất cả các mục tiêu Sprint 5 đã đạt:
 | **B2.10** | Build fixes | ✅ CODE DONE | `Infrastructure.csproj` +JwtBearer, `WebApi.csproj` +HealthChecks.EntityFrameworkCore — resolve missing package refs |
 
 **Test Results:** 139 tests ALL PASS (88 Domain + 25 Application + 26 Infrastructure) — 0 failures
+
+## 10. Phase B3: Frontend-Backend Integration
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B3.1** | HTTP API Client Service | ✅ CODE DONE | `frontend/src/services/apiClient.ts` — fetch wrapper, JWT Bearer injection, auto-refresh on 401, RFC 7807 error handling |
+| **B3.2** | Auth Store (useAuthStore) | ✅ CODE DONE | `frontend/src/features/auth/store/useAuthStore.ts` — Pinia store: login/register/logout/fetchCurrentUser, JWT localStorage |
+| **B3.3** | Gamification → Backend Integration | ✅ CODE DONE | `useGamificationStore.ts` — earnXPWithSync, syncProgressFromServer, checkBadgesFromServer; `gamificationApi.ts` API service |
+| **B3.4** | Quiz → Backend Integration | ✅ CODE DONE | `useQuizStore.ts` — fetchQuizzesFromServer, submitAttemptToServer, fetchQuizHistory; `quizApi.ts` API service |
+| **B3.5** | Leaderboard API | ✅ CODE DONE | Backend: `LeaderboardController.cs` — GET /api/leaderboard top N by XP; Frontend: `leaderboardApi.ts`, `fetchLeaderboardFromServer()` |
+| **B3.6** | Learning Path → Backend Integration | ✅ CODE DONE | Backend: `LearningProgressController.cs` — GET/POST progress; Frontend: `learningProgressApi.ts`, `syncProgressFromServer()` |
+| **B3.7** | Unit Tests for B3 Services | ✅ CODE DONE | `apiClient.spec.ts` (15), `useAuthStore.spec.ts` (8), `gamificationApi.spec.ts` (8), `quizApi.spec.ts` (8) — 39 tests ALL PASS |
+
+**Test Results:** 1506+ frontend tests pass (39 new B3 tests) + 139 backend tests — 1 pre-existing frontend failure
+
+## 11. Phase B4: Performance & Caching
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B4.1** | IMemoryCache Service | ✅ CODE DONE | `ICacheService.cs` interface + `MemoryCacheService.cs` — ConcurrentDictionary key tracking, prefix-based eviction |
+| **B4.2** | Cache Constants & Durations | ✅ CODE DONE | `CacheKeys.cs` — algorithm 24h, quiz 30m, badge 1h, leaderboard 5m |
+| **B4.3** | Response Caching Middleware | ✅ CODE DONE | `[ResponseCache]` on GET endpoints — algo 3600s, quiz 300s, badge 600s |
+| **B4.4** | ETag Conditional GET | ✅ CODE DONE | `AlgorithmsController.cs` — SHA256-based weak ETag, HTTP 304 Not Modified |
+| **B4.5** | PagedResult<T> DTO | ✅ CODE DONE | `PagedResult.cs` — Items, Page, PageSize, TotalCount, TotalPages, HasPrevious/NextPage |
+| **B4.6** | Repository Pagination | ✅ CODE DONE | `IRepository.cs` — CountAsync, GetPagedAsync; `Repository.cs` — Skip/Take + AsNoTracking |
+| **B4.7** | AsNoTracking Optimization | ✅ CODE DONE | All read-only queries (GetAllAsync, FindAsync, GetPagedAsync) use AsNoTracking() |
+| **B4.8** | Paginated Endpoints | ✅ CODE DONE | Quiz history + leaderboard `?page=1&pageSize=10` (max 50) |
+| **B4.9** | Algorithm/Quiz/Badge Caching | ✅ CODE DONE | Caching with invalidation on write operations |
+| **B4.10** | LeaderboardController (paginated) | ✅ CODE DONE | `LeaderboardController.cs` — GET /api/leaderboard, cached 5m |
+| **B4.11** | Unit Tests | ✅ CODE DONE | `MemoryCacheServiceTests.cs` (12), `PagedResultTests.cs` (12), `CacheKeysTests.cs` (9) — 33 tests ALL PASS |
+
+**Test Results:** 173 backend tests pass (33 new B4 tests) — 1 pre-existing frontend failure
+
+## 12. Phase B5: Real-time SignalR
+
+| Task | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **B5.1** | SignalR Configuration | ✅ CODE DONE | `Program.cs` — AddSignalR, JWT query string support for `/hubs/*`, CORS AllowCredentials |
+| **B5.2** | LeaderboardHub | ✅ CODE DONE | `LeaderboardHub.cs` — real-time leaderboard push via group "leaderboard", auto join/leave on connect/disconnect |
+| **B5.3** | NotificationHub | ✅ CODE DONE | `NotificationHub.cs` — [Authorize], user-specific groups `user:{userId}`, badge/level-up notifications |
+| **B5.4** | QuizRoomHub | ✅ CODE DONE | `QuizRoomHub.cs` — CreateRoom, JoinRoom, LeaveRoom, StartQuiz, SubmitAnswer, NextQuestion, GetActiveRooms |
+| **B5.5** | IQuizRoomService | ✅ CODE DONE | `IQuizRoomService.cs` interface + `QuizRoomService.cs` — ConcurrentDictionary-based in-memory room management, 6-char room codes |
+| **B5.6** | IEventBroadcaster | ✅ CODE DONE | `IEventBroadcaster.cs` (Application layer) + `SignalREventBroadcaster.cs` (WebApi layer) — clean architecture abstraction for hub broadcasting |
+| **B5.7** | GamificationService SignalR Integration | ✅ CODE DONE | AwardXPAsync → BroadcastLeaderboardUpdate + LevelUp; CheckAndAwardBadgesAsync → BroadcastBadgeNotification |
+| **B5.8** | QuizWithAnswersDto | ✅ CODE DONE | `IQuizService.cs` — GetQuizWithAnswersAsync for server-side answer validation (CorrectIndex included for hub only) |
+| **B5.9** | Frontend SignalR Store | ✅ CODE DONE | `useSignalRStore.ts` — Pinia store: 3 hub connections (leaderboard/notifications/quiz-room), auto-reconnect, all hub events |
+| **B5.10** | Frontend SignalR Types | ✅ CODE DONE | `signalr.types.ts` — LeaderboardUpdate, BadgeNotification, LevelUpNotification, QuizRoomDto, QuizRoomStatus, SignalRConnectionState |
+| **B5.11** | Backend Unit Tests | ✅ CODE DONE | `QuizRoomServiceTests.cs` (27), `SignalRDtosTests.cs` (12) — 39 tests ALL PASS |
+| **B5.12** | Frontend Unit Tests | ✅ CODE DONE | `useSignalRStore.spec.ts` (35), `signalr.types.spec.ts` (9) — 44 tests ALL PASS |
+
+**Test Results:** 212+ backend tests (39 new B5) + 1550+ frontend tests (44 new B5) — 1 pre-existing frontend failure

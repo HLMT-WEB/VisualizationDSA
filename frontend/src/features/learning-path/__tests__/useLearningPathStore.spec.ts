@@ -146,11 +146,12 @@ describe('useLearningPathStore', () => {
       );
     });
 
-    it('should attempt server sync', async () => {
+    it('should skip server sync when not authenticated', async () => {
       const store = useLearningPathStore();
       await store.completeNodeMilestone('quicksort', 90, 120);
 
-      expect(fetch).toHaveBeenCalledWith('/api/v1/learning-path/sync', expect.any(Object));
+      expect(store.completedNodeIds.has('quicksort')).toBe(true);
+      expect(store.isOnlineMode).toBe(false);
     });
 
     it('should handle server sync failure gracefully', async () => {

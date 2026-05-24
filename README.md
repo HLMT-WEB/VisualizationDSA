@@ -60,6 +60,10 @@ Nếu Phase 1 tập trung tái tạo lại nền tảng vẽ thuật toán cổ 
 ### Backend (The Brain)
 - **Framework:** .NET 8/9, C#, ASP.NET Core Web API.
 - **Architecture:** Clean Architecture, Strategy Pattern cho từng module thuật toán.
+- **Security:** BCrypt password hashing, JWT Bearer + Refresh Token, Rate Limiting, FluentValidation.
+- **Performance:** IMemoryCache (prefix-based eviction), Response Caching, ETag conditional GET, AsNoTracking, Pagination (PagedResult<T>).
+- **Real-time:** SignalR WebSocket — LeaderboardHub (public), NotificationHub (authorized), QuizRoomHub (multiplayer rooms). JWT via query string for WebSocket auth.
+- **Observability:** Serilog (Console + File sink, rolling daily, 14-day retention), Health Checks endpoint.
 - **Responsibility:** Chạy thuật toán trong bộ nhớ, bắt giữ (capture) sự thay đổi trạng thái (State Frames) và sinh mảng JSON tối ưu hóa (GZIP).
 
 ### Frontend (The Canvas)

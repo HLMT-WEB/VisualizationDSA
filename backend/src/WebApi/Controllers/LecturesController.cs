@@ -12,6 +12,7 @@ public class LecturesController : ControllerBase
     /// GET /api/v1/lectures
     /// </summary>
     [HttpGet]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
     public ActionResult<IEnumerable<object>> GetAll()
     {
         var lectures = LectureRepository.GetAll();

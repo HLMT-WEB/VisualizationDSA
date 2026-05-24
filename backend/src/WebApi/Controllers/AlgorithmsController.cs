@@ -1,6 +1,11 @@
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using VisualizationDSA.Application.Constants;
 using VisualizationDSA.Application.DTOs;
+using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Engine;
 using VisualizationDSA.Domain.Input;
 using VisualizationDSA.Domain.Strategies;
@@ -12,10 +17,12 @@ namespace VisualizationDSA.WebApi.Controllers;
 public class AlgorithmsController : ControllerBase
 {
     private readonly IEnumerable<IAlgorithmStrategy> _strategies;
+    private readonly ICacheService _cacheService;
 
-    public AlgorithmsController(IEnumerable<IAlgorithmStrategy> strategies)
+    public AlgorithmsController(IEnumerable<IAlgorithmStrategy> strategies, ICacheService cacheService)
     {
         _strategies = strategies;
+        _cacheService = cacheService;
     }
 
     /// <summary>
@@ -23,9 +30,14 @@ public class AlgorithmsController : ControllerBase
     /// GET /api/v1/algorithms
     /// </summary>
     [HttpGet]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
     public ActionResult<IEnumerable<object>> GetAll()
     {
-        var list = _strategies.Select(s => new
+        var cached = _cacheService.Get<List<object>>(CacheKeys.AlgorithmList);
+        if (cached != null)
+            return Ok(cached);
+
+        var list = _strategies.Select(s => (object)new
         {
             id = s.AlgorithmId,
             name = s.Name,
@@ -33,8 +45,9 @@ public class AlgorithmsController : ControllerBase
             difficulty = GetDifficulty(s.AlgorithmId),
             timeComplexity = s.GetMetadata().TimeComplexity,
             spaceComplexity = s.GetMetadata().SpaceComplexity
-        });
+        }).ToList();
 
+        _cacheService.Set(CacheKeys.AlgorithmList, list, CacheDurations.AlgorithmMetadata);
         return Ok(list);
     }
 
@@ -43,8 +56,22 @@ public class AlgorithmsController : ControllerBase
     /// GET /api/v1/algorithms/{algorithmId}/metadata
     /// </summary>
     [HttpGet("{algorithmId}/metadata")]
+    [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
     public ActionResult<AlgorithmMetadata> GetMetadata(string algorithmId)
     {
+        var cacheKey = $"{CacheKeys.AlgorithmMetadataPrefix}{algorithmId.ToLowerInvariant()}";
+        var cached = _cacheService.Get<AlgorithmMetadata>(cacheKey);
+
+        if (cached != null)
+        {
+            var etag = GenerateETag(cached);
+            if (Request.Headers.IfNoneMatch.ToString() == etag)
+                return StatusCode(StatusCodes.Status304NotModified);
+
+            Response.Headers.ETag = etag;
+            return Ok(cached);
+        }
+
         var strategy = _strategies.FirstOrDefault(s =>
             s.AlgorithmId.Equals(algorithmId, StringComparison.OrdinalIgnoreCase));
 
@@ -59,7 +86,13 @@ public class AlgorithmsController : ControllerBase
             });
         }
 
-        return Ok(strategy.GetMetadata());
+        var metadata = strategy.GetMetadata();
+        _cacheService.Set(cacheKey, metadata, CacheDurations.AlgorithmMetadata);
+
+        var etagValue = GenerateETag(metadata);
+        Response.Headers.ETag = etagValue;
+
+        return Ok(metadata);
     }
 
     /// <summary>
@@ -223,5 +256,12 @@ public class AlgorithmsController : ControllerBase
             "quick-sort" or "merge-sort" or "binary-search" or "bst" => "Medium",
             _ => "Medium"
         };
+    }
+
+    private static string GenerateETag(AlgorithmMetadata metadata)
+    {
+        var json = JsonSerializer.Serialize(metadata);
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(json));
+        return $"\"{Convert.ToBase64String(hash)[..16]}\"";
     }
 }

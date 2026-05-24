@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VisualizationDSA.Application.Constants;
 using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
 using VisualizationDSA.Domain.Interfaces;
@@ -16,19 +17,29 @@ namespace VisualizationDSA.WebApi.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGamificationService _gamificationService;
+        private readonly ICacheService _cacheService;
 
-        public BadgesController(IUnitOfWork unitOfWork, IGamificationService gamificationService)
+        public BadgesController(IUnitOfWork unitOfWork, IGamificationService gamificationService, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _gamificationService = gamificationService;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
         [AllowAnonymous]
+        [ResponseCache(Duration = 600, Location = ResponseCacheLocation.Any)]
         public async Task<ActionResult<IEnumerable<Badge>>> GetAll()
         {
+            var cached = _cacheService.Get<List<Badge>>(CacheKeys.BadgeList);
+            if (cached != null)
+                return Ok(cached);
+
             var badges = await _unitOfWork.Badges.GetAllAsync();
-            return Ok(badges);
+            var badgeList = new List<Badge>(badges);
+            _cacheService.Set(CacheKeys.BadgeList, badgeList, CacheDurations.BadgeList);
+
+            return Ok(badgeList);
         }
 
         [HttpGet("my")]
@@ -57,6 +68,7 @@ namespace VisualizationDSA.WebApi.Controllers
         {
             var userId = GetCurrentUserId();
             var newBadges = await _gamificationService.CheckAndAwardBadgesAsync(userId);
+            _cacheService.Remove(CacheKeys.BadgeList);
             return Ok(newBadges);
         }
 

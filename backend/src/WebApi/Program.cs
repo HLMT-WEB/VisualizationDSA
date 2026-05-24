@@ -17,7 +17,9 @@ using VisualizationDSA.Infrastructure.Data;
 using VisualizationDSA.Infrastructure.Extensions;
 using VisualizationDSA.Infrastructure.Repositories;
 using VisualizationDSA.Infrastructure.Services;
+using VisualizationDSA.WebApi.Hubs;
 using VisualizationDSA.WebApi.Middleware;
+using VisualizationDSA.WebApi.Services;
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -96,14 +98,15 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-// Configure CORS for frontend
+// Configure CORS for frontend (with SignalR credentials support)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -118,6 +121,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IGamificationService, GamificationService>();
+
+// Register IMemoryCache + CacheService
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+
+// Response Caching
+builder.Services.AddResponseCaching();
+
+// SignalR
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IQuizRoomService, QuizRoomService>();
+builder.Services.AddScoped<IEventBroadcaster, SignalREventBroadcaster>();
 
 // Register Algorithm Strategies (Reflection-based auto-scan)
 builder.Services.AddAlgorithmStrategies();
@@ -135,6 +150,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+
+        // SignalR sends JWT via query string ?access_token=...
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -159,6 +189,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 app.UseResponseCompression();
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseRateLimiter();
@@ -166,6 +197,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");
+
+// SignalR Hub endpoints
+app.MapHub<LeaderboardHub>("/hubs/leaderboard");
+app.MapHub<NotificationHub>("/hubs/notifications");
+app.MapHub<QuizRoomHub>("/hubs/quiz-room");
 
 // Ensure database is created and seed data
 using (var scope = app.Services.CreateScope())

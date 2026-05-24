@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -14,5 +15,9 @@ namespace VisualizationDSA.Domain.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         Task<bool> ExistsAsync(Guid id);
+        Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetPagedAsync(int page, int pageSize);
+        Task<IEnumerable<T>> GetPagedAsync(Expression<Func<T, bool>> predicate, int page, int pageSize, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
     }
 }

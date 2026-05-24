@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
 using VisualizationDSA.Domain.Exceptions;
 using VisualizationDSA.Domain.Interfaces;
@@ -12,6 +13,7 @@ public class GamificationServiceTests
     private readonly Mock<IUnitOfWork> _unitOfWork;
     private readonly Mock<IRepository<User>> _userRepo;
     private readonly Mock<IRepository<Badge>> _badgeRepo;
+    private readonly Mock<IEventBroadcaster> _eventBroadcaster;
     private readonly GamificationService _service;
 
     public GamificationServiceTests()
@@ -19,10 +21,11 @@ public class GamificationServiceTests
         _unitOfWork = new Mock<IUnitOfWork>();
         _userRepo = new Mock<IRepository<User>>();
         _badgeRepo = new Mock<IRepository<Badge>>();
+        _eventBroadcaster = new Mock<IEventBroadcaster>();
         _unitOfWork.Setup(u => u.Users).Returns(_userRepo.Object);
         _unitOfWork.Setup(u => u.Badges).Returns(_badgeRepo.Object);
         _unitOfWork.Setup(u => u.CommitAsync()).ReturnsAsync(1);
-        _service = new GamificationService(_unitOfWork.Object);
+        _service = new GamificationService(_unitOfWork.Object, _eventBroadcaster.Object);
     }
 
     [Fact]
