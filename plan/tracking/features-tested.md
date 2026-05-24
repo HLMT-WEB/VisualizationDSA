@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (868/869 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (970/971 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -908,3 +908,110 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 821 | **LearningPathStore** | Laser bridges from prereqs | >0 bridges | 🟢 PASSED |
 | 822 | **LearningPathStore** | Active bridge completed source | bubble→quick isActive | 🟢 PASSED |
 | 823 | **LearningPathStore** | Inactive bridge incomplete | quick→tree !isActive | 🟢 PASSED |
+
+### Phase 2 Multi-View Synchronization — MultiViewEventBus, SynchronizedTimelineManager, ThrottledDragCoordinator, useMultiViewStore (102 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Phương thức kiểm tra (Test Spec) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 824 | **EventBus** | Register listener for viewId | getListenerCount() === 1 | 🟢 PASSED |
+| 825 | **EventBus** | Multiple listeners same viewId | getListenerCount() === 2 | 🟢 PASSED |
+| 826 | **EventBus** | Listeners for different viewIds | getListenerCount() === 3 | 🟢 PASSED |
+| 827 | **EventBus** | Track registered view IDs | getRegisteredViewIds contains IDs | 🟢 PASSED |
+| 828 | **EventBus** | Dispatch to all callbacks | Both callbacks called with step | 🟢 PASSED |
+| 829 | **EventBus** | Dispatch to multiple on same view | Both callbacks invoked once | 🟢 PASSED |
+| 830 | **EventBus** | Dispatch <1ms to 3 panels | elapsed < 1.0, 3 received | 🟢 PASSED |
+| 831 | **EventBus** | Elapsed returns number | typeof elapsed === 'number' | 🟢 PASSED |
+| 832 | **EventBus** | No listeners returns ~0ms | elapsed < 1.0 | 🟢 PASSED |
+| 833 | **EventBus** | Correct memoryStateSnapshot | snapshot matches dispatch | 🟢 PASSED |
+| 834 | **EventBus** | Correct activeFlowchartNodeId | nodeId matches dispatch | 🟢 PASSED |
+| 835 | **EventBus** | Unsubscribe specific viewId | Count decrements, ID removed | 🟢 PASSED |
+| 836 | **EventBus** | Unsubscribe non-existent safe | No throw | 🟢 PASSED |
+| 837 | **EventBus** | UnsubscribeAll clears all | Count === 0, no IDs | 🟢 PASSED |
+| 838 | **EventBus** | Subscribe after clear works | Count === 1 after re-subscribe | 🟢 PASSED |
+| 839 | **EventBus** | getListenerCount 0 when empty | Returns 0 | 🟢 PASSED |
+| 840 | **EventBus** | Count across multiple viewIds | Correct aggregate count | 🟢 PASSED |
+| 841 | **EventBus** | 100 rapid dispatches <1ms each | All elapsed < 1.0 | 🟢 PASSED |
+| 842 | **EventBus** | Dispatch with correct step | Callback receives exact step | 🟢 PASSED |
+| 843 | **EventBus** | Dispatch returns elapsed time | Non-negative number | 🟢 PASSED |
+| 844 | **TimelineManager** | Init at step index 0 | getCurrentStepIndex() === 0 | 🟢 PASSED |
+| 845 | **TimelineManager** | Store total steps | getTotalSteps() === 10 | 🟢 PASSED |
+| 846 | **TimelineManager** | Empty steps returns null | getCurrentStep() === null | 🟢 PASSED |
+| 847 | **TimelineManager** | Seek valid index success | result.success === true, index updated | 🟢 PASSED |
+| 848 | **TimelineManager** | Dispatch correct step on seek | Callback receives steps[2] | 🟢 PASSED |
+| 849 | **TimelineManager** | Seek <1ms to 2+ panels | result.elapsedMs < 1.0 | 🟢 PASSED |
+| 850 | **TimelineManager** | Prevent negative index | success false, position unchanged | 🟢 PASSED |
+| 851 | **TimelineManager** | Prevent beyond total | success false, position unchanged | 🟢 PASSED |
+| 852 | **TimelineManager** | Prevent large out-of-bounds | success false, index stays 0 | 🟢 PASSED |
+| 853 | **TimelineManager** | Seek to index 0 | success true, index 0 | 🟢 PASSED |
+| 854 | **TimelineManager** | Seek to last valid index | success true, index N-1 | 🟢 PASSED |
+| 855 | **TimelineManager** | Position unchanged on failed seek | Index preserved after invalid seek | 🟢 PASSED |
+| 856 | **TimelineManager** | stepNext advances by 1 | Index increments | 🟢 PASSED |
+| 857 | **TimelineManager** | stepNext fails at end | success false, index stays | 🟢 PASSED |
+| 858 | **TimelineManager** | Sequential stepNext through all | All succeed until end | 🟢 PASSED |
+| 859 | **TimelineManager** | stepPrev goes back by 1 | Index decrements | 🟢 PASSED |
+| 860 | **TimelineManager** | stepPrev fails at start | success false, index stays 0 | 🟢 PASSED |
+| 861 | **TimelineManager** | getCurrentStep data correct | Returns steps[index] | 🟢 PASSED |
+| 862 | **TimelineManager** | isAtStart true at 0 | Returns true | 🟢 PASSED |
+| 863 | **TimelineManager** | isAtStart false after step | Returns false | 🟢 PASSED |
+| 864 | **TimelineManager** | isAtEnd true at last | Returns true | 🟢 PASSED |
+| 865 | **TimelineManager** | isAtEnd false at start | Returns false | 🟢 PASSED |
+| 866 | **DragCoordinator** | Clamp 50% within bounds | Returns 50 | 🟢 PASSED |
+| 867 | **DragCoordinator** | Clamp to min 15% | Values 10, 0, -5 → 15 | 🟢 PASSED |
+| 868 | **DragCoordinator** | Clamp to max 85% | Values 90, 100, 150 → 85 | 🟢 PASSED |
+| 869 | **DragCoordinator** | Exact boundary 15% | Returns 15 | 🟢 PASSED |
+| 870 | **DragCoordinator** | Exact boundary 85% | Returns 85 | 🟢 PASSED |
+| 871 | **DragCoordinator** | Fractional within range | 33.33 → 33.33 | 🟢 PASSED |
+| 872 | **DragCoordinator** | Fractional below min | 14.99 → 15 | 🟢 PASSED |
+| 873 | **DragCoordinator** | Fractional above max | 85.01 → 85 | 🟢 PASSED |
+| 874 | **DragCoordinator** | Custom bounds 20-80 | Clamp correctly | 🟢 PASSED |
+| 875 | **DragCoordinator** | Not dragging initially | isDragging false | 🟢 PASSED |
+| 876 | **DragCoordinator** | Not dragging after destroy | isDragging false | 🟢 PASSED |
+| 877 | **DragCoordinator** | Formula center 50% | 500/1000 * 100 = 50 | 🟢 PASSED |
+| 878 | **DragCoordinator** | Formula quarter 25% | 200/800 * 100 = 25 | 🟢 PASSED |
+| 879 | **DragCoordinator** | Formula clamp low 5%→15% | 50/1000 * 100 → 15 | 🟢 PASSED |
+| 880 | **DragCoordinator** | Formula clamp high 95%→85% | 950/1000 * 100 → 85 | 🟢 PASSED |
+| 881 | **MultiViewStore** | Default panels code+svg | ['code-editor', 'svg-visualizer'] | 🟢 PASSED |
+| 882 | **MultiViewStore** | Default two-panel layout | paneLayout === 'two-panel' | 🟢 PASSED |
+| 883 | **MultiViewStore** | Default 50% left pane | leftPanePercent === 50 | 🟢 PASSED |
+| 884 | **MultiViewStore** | Default speed 1x | playbackSpeed === 1 | 🟢 PASSED |
+| 885 | **MultiViewStore** | Not playing initially | isPlaying === false | 🟢 PASSED |
+| 886 | **MultiViewStore** | Zero steps initially | totalStepsCount === 0 | 🟢 PASSED |
+| 887 | **MultiViewStore** | 0% progress initially | progressPercent === 0 | 🟢 PASSED |
+| 888 | **MultiViewStore** | Null currentStep initially | currentStep === null | 🟢 PASSED |
+| 889 | **MultiViewStore** | Not dragging initially | isDraggingSplitter === false | 🟢 PASSED |
+| 890 | **MultiViewStore** | initializeTimeline loads steps | totalStepsCount updated | 🟢 PASSED |
+| 891 | **MultiViewStore** | initializeTimeline resets index | currentStepIndex === 0 | 🟢 PASSED |
+| 892 | **MultiViewStore** | initializeTimeline sets currentStep | currentStep matches step[0] | 🟢 PASSED |
+| 893 | **MultiViewStore** | initializeDemoTimeline loads | totalStepsCount > 0 | 🟢 PASSED |
+| 894 | **MultiViewStore** | Demo starts at step 0 | currentStepIndex === 0 | 🟢 PASSED |
+| 895 | **MultiViewStore** | seekToStep valid index | currentStepIndex updated | 🟢 PASSED |
+| 896 | **MultiViewStore** | seekToStep negative blocked | Index unchanged | 🟢 PASSED |
+| 897 | **MultiViewStore** | seekToStep beyond total blocked | Index unchanged | 🟢 PASSED |
+| 898 | **MultiViewStore** | seekToStep updates currentStep | currentStep matches step[index] | 🟢 PASSED |
+| 899 | **MultiViewStore** | seekToStep no-op without init | Index stays 0 | 🟢 PASSED |
+| 900 | **MultiViewStore** | stepNext advances | Index increments by 1 | 🟢 PASSED |
+| 901 | **MultiViewStore** | stepPrev decrements | Index decrements by 1 | 🟢 PASSED |
+| 902 | **MultiViewStore** | stepPrev blocked at 0 | Index stays 0 | 🟢 PASSED |
+| 903 | **MultiViewStore** | stepNext blocked at end | Index stays at last | 🟢 PASSED |
+| 904 | **MultiViewStore** | progressPercent 0% at start | 0 | 🟢 PASSED |
+| 905 | **MultiViewStore** | progressPercent 100% at end | 100 | 🟢 PASSED |
+| 906 | **MultiViewStore** | progressPercent 50% at middle | 50 | 🟢 PASSED |
+| 907 | **MultiViewStore** | isAtStart true at 0 | true | 🟢 PASSED |
+| 908 | **MultiViewStore** | isAtStart false after step | false | 🟢 PASSED |
+| 909 | **MultiViewStore** | isAtEnd true at last | true | 🟢 PASSED |
+| 910 | **MultiViewStore** | isAtEnd false at start | false | 🟢 PASSED |
+| 911 | **MultiViewStore** | togglePlayback toggles | false → true → false | 🟢 PASSED |
+| 912 | **MultiViewStore** | Playback 1x advances at 1000ms | Index increments per interval | 🟢 PASSED |
+| 913 | **MultiViewStore** | Auto-stop at last step | isPlaying → false at end | 🟢 PASSED |
+| 914 | **MultiViewStore** | Playback 2x at 500ms intervals | Faster advancement | 🟢 PASSED |
+| 915 | **MultiViewStore** | Playback 0.5x at 2000ms | Slower advancement | 🟢 PASSED |
+| 916 | **MultiViewStore** | setPlaybackSpeed updates | playbackSpeed === 4 | 🟢 PASSED |
+| 917 | **MultiViewStore** | Speed change restarts loop | Continues at new rate | 🟢 PASSED |
+| 918 | **MultiViewStore** | setLeftPanePercent + right | left 30, right 70 | 🟢 PASSED |
+| 919 | **MultiViewStore** | rightPanePercent computed | 100 - left | 🟢 PASSED |
+| 920 | **MultiViewStore** | toggleLayout 2↔3 panel | Switches + updates panels | 🟢 PASSED |
+| 921 | **MultiViewStore** | toggleLayout resets pane to 50% | leftPanePercent → 50 | 🟢 PASSED |
+| 922 | **MultiViewStore** | setDraggingSplitter | true ↔ false | 🟢 PASSED |
+| 923 | **MultiViewStore** | resetToDefaults all values | All state → initial | 🟢 PASSED |
+| 924 | **MultiViewStore** | resetToDefaults stops playback | isPlaying → false | 🟢 PASSED |
+| 925 | **MultiViewStore** | destroyStore clears bus | Listeners cleared, stopped | 🟢 PASSED |
