@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 970+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Unit tests**                  | 1020+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
 
@@ -303,6 +303,23 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | MultiViewWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/MultiViewWorkspace.vue` — 2/3-panel layout, header, splitter, VCR bar, sync status |
 | **Integration** | App.vue "Multi-View" tab + barrel export | ✅ CODE DONE | New "Multi-View" tab in App.vue, index.ts barrel |
 | **Tests** | 102 Unit Tests | ✅ CODE DONE | `MultiViewEventBus.spec.ts` (20), `SynchronizedTimelineManager.spec.ts` (22), `ThrottledDragCoordinator.spec.ts` (15), `useMultiViewStore.spec.ts` (45) — ALL 102 PASS |
+
+### Phase 2 OOP Concepts Visualizer — Reflection Engine, VTable Dispatch, Glassmorphic UML Cards
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | ClassMember, ClassDefinition, HeapObjectInstance, ExecutionPointer, CoordinatePoint, LaserSegment, EncapsulationViolation | ✅ CODE DONE | `oop-visualization/types/oop-visualization.types.ts` — AccessModifier, DispatchStatus, MAX_HEAP_OBJECTS=10, MAX_INHERITANCE_DEPTH=5, HEAP_BASE_ADDRESS |
+| **Engine** | OOPReflectionEngine (class registry, VTable, heap, encapsulation) | ✅ CODE DONE | `engine/OOPReflectionEngine.ts` — registerClass depth-check, instantiateObject hex address, dispatchMethod VTable lookup, validateEncapsulationAccess PUBLIC/PROTECTED/PRIVATE |
+| **Engine** | SVGLaserBatchRenderer (cubic bezier paths, rAF batching) | ✅ CODE DONE | `engine/SVGLaserBatchRenderer.ts` — calculateLaserPath, calculateDispatchLaserPath, getDOMElementCenter, scheduleBatchRender rAF 60FPS, GC-safe destroy |
+| **Store** | useOOPVisualizerStore Pinia Setup Store | ✅ CODE DONE | `store/useOOPVisualizerStore.ts` — demo classes (Shape/Circle/Rectangle), heap allocation, triggerPolymorphicCall 800ms delay, tryAccessProperty 2s violation auto-clear, VTable computed |
+| **Component** | UMLClassCard.vue (Glassmorphism class card) | ✅ CODE DONE | `components/UMLClassCard.vue` — encapsulation-breach-wiggle CSS animation, field/method sections, AccessModifierPadlock integration |
+| **Component** | AccessModifierPadlock.vue (3-color Neon badges) | ✅ CODE DONE | `components/AccessModifierPadlock.vue` — RED private, YELLOW protected, GREEN public, Neon drop-shadow glow |
+| **Component** | DynamicDispatchLaser.vue (SVG laser animation) | ✅ CODE DONE | `components/DynamicDispatchLaser.vue` — seeking/resolved phases, cubic bezier path, pivot dot, target dot, laser-flow keyframes |
+| **Component** | HeapObjectAllocator.vue (Heap memory UI) | ✅ CODE DONE | `components/HeapObjectAllocator.vue` — hex address display, field names, VTable summary badges, free() button |
+| **Component** | PolymorphismSandbox.vue (Interactive sandbox) | ✅ CODE DONE | `components/PolymorphismSandbox.vue` — class selector, instantiate, VTable dispatch map, dispatch status indicator, violation alert |
+| **Component** | OOPConceptsVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/OOPConceptsVisualizerWorkspace.vue` — UML cards grid, sandbox + heap split, laser overlay, demo initialization |
+| **Integration** | App.vue "OOP Viz" tab + barrel export | ✅ CODE DONE | New "OOP Viz" tab in App.vue, index.ts barrel |
+| **Tests** | 54 Unit Tests | ✅ CODE DONE | `OOPReflectionEngine.spec.ts` (27), `SVGLaserBatchRenderer.spec.ts` (7), `useOOPVisualizerStore.spec.ts` (20) — ALL 54 PASS |
 
 ---
 

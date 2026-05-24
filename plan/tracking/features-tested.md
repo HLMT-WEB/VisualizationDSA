@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (970/971 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1022/1025 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -1015,3 +1015,62 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 923 | **MultiViewStore** | resetToDefaults all values | All state → initial | 🟢 PASSED |
 | 924 | **MultiViewStore** | resetToDefaults stops playback | isPlaying → false | 🟢 PASSED |
 | 925 | **MultiViewStore** | destroyStore clears bus | Listeners cleared, stopped | 🟢 PASSED |
+
+### Phase 2 OOP Concepts Visualizer — OOPReflectionEngine, SVGLaserBatchRenderer, useOOPVisualizerStore (54 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Phương thức kiểm tra (Test Spec) | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 926 | **ReflectionEngine** | Register class and retrieve | getClass('Shape') equals classDef | 🟢 PASSED |
+| 927 | **ReflectionEngine** | Register multiple classes | getAllClasses().length === 2 | 🟢 PASSED |
+| 928 | **ReflectionEngine** | Reject inheritance depth > 5 | Throws KẾ THỪA QUÁ SÂU | 🟢 PASSED |
+| 929 | **ReflectionEngine** | Throw for unregistered class | Throws chưa được đăng ký | 🟢 PASSED |
+| 930 | **ReflectionEngine** | Heap object has hex address | address matches /^0x[0-9A-F]{6}$/ | 🟢 PASSED |
+| 931 | **ReflectionEngine** | Address increment by 16 | addr2 - addr1 === 16 | 🟢 PASSED |
+| 932 | **ReflectionEngine** | MAX_HEAP_OBJECTS (10) limit | Throws HEAP OVERFLOW | 🟢 PASSED |
+| 933 | **ReflectionEngine** | Fields from inheritance chain | fieldsData has baseField + childField | 🟢 PASSED |
+| 934 | **ReflectionEngine** | VTable override Circle.draw | vTable.get('draw') === 'Circle' | 🟢 PASSED |
+| 935 | **ReflectionEngine** | Inherited method resolves parent | vTable.get('toString') === 'Shape' | 🟢 PASSED |
+| 936 | **ReflectionEngine** | Dispatch returns dispatch path | resolvedClass 'Circle', isOverridden true | 🟢 PASSED |
+| 937 | **ReflectionEngine** | Dispatch non-existent returns null | null | 🟢 PASSED |
+| 938 | **ReflectionEngine** | 3-level VTable (Puppy) | speak → Puppy, move → Animal | 🟢 PASSED |
+| 939 | **ReflectionEngine** | PUBLIC access from any class | hasAccess true, modifier PUBLIC | 🟢 PASSED |
+| 940 | **ReflectionEngine** | PRIVATE rejected externally | hasAccess false, ENCAPSULATION_ERROR | 🟢 PASSED |
+| 941 | **ReflectionEngine** | PRIVATE allowed same class | hasAccess true | 🟢 PASSED |
+| 942 | **ReflectionEngine** | PROTECTED allowed subclass | hasAccess true | 🟢 PASSED |
+| 943 | **ReflectionEngine** | PROTECTED rejected unrelated | hasAccess false, ENCAPSULATION_ERROR | 🟢 PASSED |
+| 944 | **ReflectionEngine** | Reject non-existent class access | hasAccess false | 🟢 PASSED |
+| 945 | **ReflectionEngine** | Reject non-existent member access | hasAccess false | 🟢 PASSED |
+| 946 | **ReflectionEngine** | 3-level inheritance chain | ['A', 'B', 'C'] | 🟢 PASSED |
+| 947 | **ReflectionEngine** | Single class chain | ['Root'] | 🟢 PASSED |
+| 948 | **ReflectionEngine** | Unknown class empty chain | [] | 🟢 PASSED |
+| 949 | **ReflectionEngine** | Remove instance by address | heapInstanceCount 1 → 0 | 🟢 PASSED |
+| 950 | **ReflectionEngine** | Remove non-existent returns false | false | 🟢 PASSED |
+| 951 | **ReflectionEngine** | Clear registry resets all | 0 classes, 0 instances | 🟢 PASSED |
+| 952 | **ReflectionEngine** | Clear resets address offset | addr === 0x310000 | 🟢 PASSED |
+| 953 | **LaserRenderer** | Valid SVG cubic bezier path | Contains M, C, coords | 🟢 PASSED |
+| 954 | **LaserRenderer** | Control point at midpoint X | Contains C 100 0 | 🟢 PASSED |
+| 955 | **LaserRenderer** | Dispatch path source→pivot→target | Contains all 3 coords | 🟢 PASSED |
+| 956 | **LaserRenderer** | Linear path straight line | 'M 5 10 L 50 60' | 🟢 PASSED |
+| 957 | **LaserRenderer** | SSR-safe getDOMElementCenter | {x:0, y:0} | 🟢 PASSED |
+| 958 | **LaserRenderer** | Batch render on rAF | fn1, fn2 called once each | 🟢 PASSED |
+| 959 | **LaserRenderer** | Destroy cleans pending rAF | fn not called | 🟢 PASSED |
+| 960 | **OOPStore** | Init 3 demo classes | registeredClasses.length === 3 | 🟢 PASSED |
+| 961 | **OOPStore** | Allocate heap object address | matches /^0x[0-9A-F]+$/ | 🟢 PASSED |
+| 962 | **OOPStore** | Unregistered class returns '' | '' | 🟢 PASSED |
+| 963 | **OOPStore** | Address increment 16 | diff === 16 | 🟢 PASSED |
+| 964 | **OOPStore** | canAllocate false at max | false | 🟢 PASSED |
+| 965 | **OOPStore** | Remove heap object | heapObjectCount 1 → 0 | 🟢 PASSED |
+| 966 | **OOPStore** | Dispatch SEEKING_VTABLE immediately | dispatchStatus === 'SEEKING_VTABLE' | 🟢 PASSED |
+| 967 | **OOPStore** | Dispatch DISPATCHED after 800ms | resolvedClass === 'Circle' | 🟢 PASSED |
+| 968 | **OOPStore** | Updates selectedMethodCall | 'Circle.area' | 🟢 PASSED |
+| 969 | **OOPStore** | Inherited method resolves parent | resolvedClass === 'Shape' | 🟢 PASSED |
+| 970 | **OOPStore** | PRIVATE violation sets error | lastEncapsulationViolation not null | 🟢 PASSED |
+| 971 | **OOPStore** | Violation auto-clears 2000ms | lastEncapsulationViolation null | 🟢 PASSED |
+| 972 | **OOPStore** | PUBLIC access returns true | true, no violation | 🟢 PASSED |
+| 973 | **OOPStore** | PROTECTED from subclass true | true | 🟢 PASSED |
+| 974 | **OOPStore** | PROTECTED from unrelated false | false, isViolated true | 🟢 PASSED |
+| 975 | **OOPStore** | selectClass updates name | 'Rectangle' | 🟢 PASSED |
+| 976 | **OOPStore** | VTable entries for selected class | draw → Circle, isOverridden true | 🟢 PASSED |
+| 977 | **OOPStore** | VTable empty no matching heap | [] | 🟢 PASSED |
+| 978 | **OOPStore** | resetAll clears everything | 0 classes, 0 objects, null violation | 🟢 PASSED |
+| 979 | **OOPStore** | resetDispatchState keeps data | IDLE, classes=3, heap=1 | 🟢 PASSED |
