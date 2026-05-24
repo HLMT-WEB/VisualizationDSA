@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 1283+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
+| **Unit tests**                  | 1373+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
 
@@ -355,6 +355,23 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | SOLIDVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/SOLIDVisualizerWorkspace.vue` — 5-tab lesson selector, SRP/LSP/DIP panels, footer status, Reset All |
 | **Integration** | App.vue "SOLID Viz" tab + barrel export | ✅ CODE DONE | New "SOLID Viz" tab in App.vue, index.ts barrel export |
 | **Tests** | 105 Unit Tests | ✅ CODE DONE | `LCOMCalculator.spec.ts` (12), `SOLIDEvaluatorEngine.spec.ts` (11), `ThermalSparkParticleEngine.spec.ts` (15), `LaserFractureCalculator.spec.ts` (20), `useSOLIDVisualizerStore.spec.ts` (47) — ALL 105 PASS |
+
+### Phase 2 — State Inspector & Stack Frames (`src/features/state-inspector/`)
+
+| Loại | Tên | Trạng thái | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | state-inspector.types.ts | ✅ CODE DONE | `types/state-inspector.types.ts` — StackFrame, StackVariable, RecursionNode, RecursionNodeCoordinate, HeapObject, PointerLink, BezierPathData, MAX_STACK_FRAMES=10, TREE_DEPTH_SPACING_PX=80, BEZIER constants |
+| **Engine** | StateInspectorEngine.ts (Call Stack Manager) | ✅ CODE DONE | `engine/StateInspectorEngine.ts` — pushFrame (deactivate all + activate top), popFrame (reactivate previous), switchActiveFrame, getStack shallow copy, MAX_STACK_FRAMES ceiling clamping, clear |
+| **Engine** | RecursionTreeGenerator.ts (Layered Coordinate Calculator) | ✅ CODE DONE | `engine/RecursionTreeGenerator.ts` — calculateCoordinates (binary subdivision, depth * 80 + 40 Y-axis), countNodes, getMaxDepth |
+| **Engine** | PointerArrowBatchRenderer.ts (Dynamic Bezier SVG) | ✅ CODE DONE | `engine/PointerArrowBatchRenderer.ts` — registerLink, removeLink, clearLinks, start/stop rAF loop, resize listener, calculateBezierPath (Cubic Bezier, BEZIER_MIN_DX=40, 0.4 control factor), GC-safe destroy |
+| **Store** | useStateInspectorStore Pinia Setup Store | ✅ CODE DONE | `store/useStateInspectorStore.ts` — stackFrames, recursionTreeRoot, heapObjects, pointerLinks, hoveredHeapAddress, treeCoordinates computed, Fibonacci demo (4 frames + 2 heap + tree), demoStepForward, demoPushCall, MONACO_REVEAL_LINE_EVENT CustomEvent dispatch |
+| **Component** | CallStackPanel.vue (3D Glassmorphic Stack) | ✅ CODE DONE | `components/CallStackPanel.vue` — column-reverse stacking, Cyan active border glow, 3D depth scale(0.96), variable list with heapAddress hover |
+| **Component** | HeapObjectNode.vue (Heap Memory Cells) | ✅ CODE DONE | `components/HeapObjectNode.vue` — hex address badge, Amber pulse animation on hover, field list |
+| **Component** | PointerNeonArrow.vue (SVG Bezier Arrows) | ✅ CODE DONE | `components/PointerNeonArrow.vue` — Cyan neon dashed stroke, arrowhead marker, pointer-flow-dash animation 1.2s |
+| **Component** | RecursionTreeSVG.vue (Tree Visualization) | ✅ CODE DONE | `components/RecursionTreeSVG.vue` — SVG nodes (Emerald ACTIVE, Cyan RESOLVED, Slate PENDING), parent→child edges, return value badges |
+| **Component** | StateInspectorWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/StateInspectorWorkspace.vue` — Call Stack + Heap left panel, Recursion Tree + active frame details right panel, Demo Fibonacci/Step Pop/Push Call/Reset All buttons |
+| **Integration** | App.vue "State Inspector" tab + barrel export | ✅ CODE DONE | New "State Inspector" tab in App.vue, index.ts barrel export |
+| **Tests** | 90 Unit Tests | ✅ CODE DONE | `StateInspectorEngine.spec.ts` (18), `RecursionTreeGenerator.spec.ts` (17), `PointerArrowBatchRenderer.spec.ts` (18), `useStateInspectorStore.spec.ts` (37) — ALL 90 PASS |
 
 ---
 

@@ -157,6 +157,13 @@
         </section>
       </template>
 
+      <!-- State Inspector Tab -->
+      <template v-else-if="activeTab === 'state-inspector'">
+        <section class="flex-1 min-h-0">
+          <StateInspectorWorkspace />
+        </section>
+      </template>
+
       <!-- System Design Viz Tab -->
       <template v-else-if="activeTab === 'system-design-viz'">
         <section class="flex-1 min-h-0">
@@ -316,6 +323,7 @@ import { MultiViewWorkspace } from "./features/multi-view";
 import { OOPConceptsVisualizerWorkspace } from "./features/oop-visualization";
 import { SmartQuizWorkspace } from "./features/smart-quiz";
 import { SOLIDVisualizerWorkspace } from "./features/solid-visualization";
+import { StateInspectorWorkspace } from "./features/state-inspector";
 import { SystemDesignWorkspace } from "./features/system-design-viz";
 
 const activeTab = ref("sorting");
@@ -346,6 +354,7 @@ const tabs = [
   { id: "oop-visualization", name: "OOP Viz" },
   { id: "smart-quiz", name: "Smart Quiz" },
   { id: "solid-visualization", name: "SOLID Viz" },
+  { id: "state-inspector", name: "State Inspector" },
   { id: "system-design-viz", name: "System Design" },
 ];
 
