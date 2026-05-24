@@ -170,6 +170,13 @@
           <SystemDesignWorkspace />
         </section>
       </template>
+
+      <!-- Timeline Playback Tab -->
+      <template v-else-if="activeTab === 'timeline-playback'">
+        <section class="flex-1 min-h-0">
+          <TimelinePlaybackWorkspace />
+        </section>
+      </template>
       <!-- Default Sorting Layout -->
       <template v-else>
       <!-- Visualizer Area -->
@@ -325,6 +332,7 @@ import { SmartQuizWorkspace } from "./features/smart-quiz";
 import { SOLIDVisualizerWorkspace } from "./features/solid-visualization";
 import { StateInspectorWorkspace } from "./features/state-inspector";
 import { SystemDesignWorkspace } from "./features/system-design-viz";
+import { TimelinePlaybackWorkspace } from "./features/timeline-playback";
 
 const activeTab = ref("sorting");
 
@@ -356,6 +364,7 @@ const tabs = [
   { id: "solid-visualization", name: "SOLID Viz" },
   { id: "state-inspector", name: "State Inspector" },
   { id: "system-design-viz", name: "System Design" },
+  { id: "timeline-playback", name: "Timeline" },
 ];
 
 const currentTabLabel = computed(

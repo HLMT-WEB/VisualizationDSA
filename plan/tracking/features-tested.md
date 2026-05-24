@@ -1465,3 +1465,120 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1237 | **Store** | Reset all state on clearTopology | all zeroed/empty | 🟢 PASSED |
 | 1238 | **Store** | Destroy also clears GC | no leaks | 🟢 PASSED |
 | 1239 | **Store** | Re-init after clear works | nodes=6 after init | 🟢 PASSED |
+
+---
+
+## Phase 2 VCR Timeline Playback (94 tests)
+
+### VCRPlaybackEngine.spec.ts (27 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1240 | **Engine** | Set frames and reset step to 0 | frameCount=4, step=0 | 🟢 PASSED |
+| 1241 | **Engine** | Reset step index on new frames | step=0 after re-set | 🟢 PASSED |
+| 1242 | **Engine** | Seek to valid step triggers callback | step=2, line=4 | 🟢 PASSED |
+| 1243 | **Engine** | Return null for negative seek index | null, step unchanged | 🟢 PASSED |
+| 1244 | **Engine** | Return null for out-of-range seek | null | 🟢 PASSED |
+| 1245 | **Engine** | Return null seeking empty frames | null | 🟢 PASSED |
+| 1246 | **Engine** | Step forward triggers callback | step=1 | 🟢 PASSED |
+| 1247 | **Engine** | Step forward multiple times | step=3 | 🟢 PASSED |
+| 1248 | **Engine** | Return null at last frame forward | null, step=3 | 🟢 PASSED |
+| 1249 | **Engine** | Step back triggers callback | step=1 from 2 | 🟢 PASSED |
+| 1250 | **Engine** | Return null at first frame back | null, step=0 | 🟢 PASSED |
+| 1251 | **Engine** | Rewind to first frame | step=0 | 🟢 PASSED |
+| 1252 | **Engine** | Fast forward to last frame | step=3 | 🟢 PASSED |
+| 1253 | **Engine** | Fast forward empty frames null | null | 🟢 PASSED |
+| 1254 | **Engine** | Set playback speed | speed=2.0 | 🟢 PASSED |
+| 1255 | **Engine** | Clamp speed to min 0.1 | speed=0.1 | 🟢 PASSED |
+| 1256 | **Engine** | Clamp speed to max 5.0 | speed=5.0 | 🟢 PASSED |
+| 1257 | **Engine** | Play sets PLAYING status | PLAYING | 🟢 PASSED |
+| 1258 | **Engine** | No double-play | PLAYING once | 🟢 PASSED |
+| 1259 | **Engine** | No play with empty frames | PAUSED | 🟢 PASSED |
+| 1260 | **Engine** | Pause sets PAUSED status | PAUSED | 🟢 PASSED |
+| 1261 | **Engine** | Cancel rAF on pause | cancelAnimationFrame called | 🟢 PASSED |
+| 1262 | **Engine** | Start with PAUSED status | PAUSED | 🟢 PASSED |
+| 1263 | **Engine** | Advance step on elapsed >= interval | step=1, callback fired | 🟢 PASSED |
+| 1264 | **Engine** | Auto-pause at last frame | step=3, PAUSED | 🟢 PASSED |
+| 1265 | **Engine** | Destroy clears all state | step=0, frames=0 | 🟢 PASSED |
+| 1266 | **Engine** | Forward-backward boundary transitions | full cycle 0→3→0 | 🟢 PASSED |
+
+### MonacoLineSyncerCoordinator.spec.ts (14 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1267 | **Monaco** | Call revealLineInCenter | line=10, scrollType=0 | 🟢 PASSED |
+| 1268 | **Monaco** | DeltaDecorations correct config | className, marginClassName | 🟢 PASSED |
+| 1269 | **Monaco** | Update decoration IDs after sync | count=1 | 🟢 PASSED |
+| 1270 | **Monaco** | Pass previous IDs on second call | oldIds=['decoration-1'] | 🟢 PASSED |
+| 1271 | **Monaco** | No call when editor null | not called | 🟢 PASSED |
+| 1272 | **Monaco** | No call for line < 1 | not called | 🟢 PASSED |
+| 1273 | **Monaco** | No call for negative line | not called | 🟢 PASSED |
+| 1274 | **Monaco** | Clear decorations with active | deltaDecorations([old],[]) | 🟢 PASSED |
+| 1275 | **Monaco** | No clear when no decorations | not called | 🟢 PASSED |
+| 1276 | **Monaco** | No clear when editor null | not called | 🟢 PASSED |
+| 1277 | **Monaco** | Start with 0 decorations | count=0 | 🟢 PASSED |
+| 1278 | **Monaco** | Track multi-decoration count | count=2 | 🟢 PASSED |
+| 1279 | **Monaco** | Replace old decorations sequentially | new replaces old | 🟢 PASSED |
+
+### ScrubberMathCalculator.spec.ts (19 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1280 | **Scrubber** | Step 0 at left edge | step=0, percent=0 | 🟢 PASSED |
+| 1281 | **Scrubber** | Last step at right edge | step=9, percent=1 | 🟢 PASSED |
+| 1282 | **Scrubber** | Middle step at center | step=5, percent=0.5 | 🟢 PASSED |
+| 1283 | **Scrubber** | Clamp left of track | step=0, percent=0 | 🟢 PASSED |
+| 1284 | **Scrubber** | Clamp right of track | step=9, percent=1 | 🟢 PASSED |
+| 1285 | **Scrubber** | Return 0 for totalSteps<=0 | step=0, percent=0 | 🟢 PASSED |
+| 1286 | **Scrubber** | Single step totalSteps=1 | step=0 | 🟢 PASSED |
+| 1287 | **Scrubber** | Correct step for 3 frames | step=1 at 25% | 🟢 PASSED |
+| 1288 | **Scrubber** | Correct step at 75% for 5 frames | step=3 | 🟢 PASSED |
+| 1289 | **Scrubber** | Percent 0 for step 0 | 0 | 🟢 PASSED |
+| 1290 | **Scrubber** | Percent 1 for last step | 1 | 🟢 PASSED |
+| 1291 | **Scrubber** | Percent 0.5 for middle | ~0.5 | 🟢 PASSED |
+| 1292 | **Scrubber** | Percent 0 for totalSteps<=1 | 0 | 🟢 PASSED |
+| 1293 | **Scrubber** | Clamp percent to [0,1] | 0 and 1 | 🟢 PASSED |
+| 1294 | **Clamp** | Value within range | 5 | 🟢 PASSED |
+| 1295 | **Clamp** | Clamp to min | 0 | 🟢 PASSED |
+| 1296 | **Clamp** | Clamp to max | 10 | 🟢 PASSED |
+| 1297 | **Clamp** | Equal min and max | 3 | 🟢 PASSED |
+| 1298 | **Clamp** | Floating point values | correct clamping | 🟢 PASSED |
+
+### useVCRTimelineStore.spec.ts (34 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1299 | **Store** | Correct initial state | step=0, total=0, PAUSED | 🟢 PASSED |
+| 1300 | **Store** | isAtEnd when not initialized | true | 🟢 PASSED |
+| 1301 | **Store** | isAtStart initially | true | 🟢 PASSED |
+| 1302 | **Store** | 0/0 step label initially | "0 / 0" | 🟢 PASSED |
+| 1303 | **Store** | Initialize frames correctly | total=4, step=0 | 🟢 PASSED |
+| 1304 | **Store** | Description after initialize | "Khởi tạo mảng" | 🟢 PASSED |
+| 1305 | **Store** | LineNumber after initialize | 1 | 🟢 PASSED |
+| 1306 | **Store** | Snapshot after initialize | array=[64,34,25] | 🟢 PASSED |
+| 1307 | **Store** | Dispatch CustomEvent on init | called | 🟢 PASSED |
+| 1308 | **Store** | Step label after initialize | "1 / 4" | 🟢 PASSED |
+| 1309 | **Store** | Re-initialize destroys previous | total=1 | 🟢 PASSED |
+| 1310 | **Store** | Play sets PLAYING | PLAYING, isPlaying=true | 🟢 PASSED |
+| 1311 | **Store** | Pause sets PAUSED | PAUSED, isPlaying=false | 🟢 PASSED |
+| 1312 | **Store** | Toggle PAUSED to PLAYING | PLAYING | 🟢 PASSED |
+| 1313 | **Store** | Toggle PLAYING to PAUSED | PAUSED | 🟢 PASSED |
+| 1314 | **Store** | Step forward updates step | step=1 | 🟢 PASSED |
+| 1315 | **Store** | Update lineNumber on forward | lineNumber=3 | 🟢 PASSED |
+| 1316 | **Store** | Update snapshot on forward | array=[34,64,25] | 🟢 PASSED |
+| 1317 | **Store** | Step back updates step | step=1 from 2 | 🟢 PASSED |
+| 1318 | **Store** | Rewind to step 0 | step=0, isAtStart=true | 🟢 PASSED |
+| 1319 | **Store** | Fast forward to last step | step=3, isAtEnd=true | 🟢 PASSED |
+| 1320 | **Store** | Seek to specific step | step=2 | 🟢 PASSED |
+| 1321 | **Store** | Change playback speed | speed=2.0 | 🟢 PASSED |
+| 1322 | **Store** | Change speed without engine | speed=0.5 | 🟢 PASSED |
+| 1323 | **Store** | Progress 0% at step 0 | 0 | 🟢 PASSED |
+| 1324 | **Store** | Progress 100% at last step | 100 | 🟢 PASSED |
+| 1325 | **Store** | Progress ~33% at step 1/4 | ~33.33 | 🟢 PASSED |
+| 1326 | **Store** | Clear all state | step=0, total=0, PAUSED | 🟢 PASSED |
+| 1327 | **Store** | Load demo Bubble Sort 12 frames | total=12, initialized | 🟢 PASSED |
+| 1328 | **Store** | Valid demo data after load | description, array | 🟢 PASSED |
+| 1329 | **Store** | Step through demo frames | step=1, "So sánh" | 🟢 PASSED |
+| 1330 | **Store** | isAtStart/isAtEnd at boundaries | correct | 🟢 PASSED |
+| 1331 | **Store** | Dispatch MONACO event on step | event found | 🟢 PASSED |
+| 1332 | **Store** | Dispatch CANVAS event on step | event found | 🟢 PASSED |
