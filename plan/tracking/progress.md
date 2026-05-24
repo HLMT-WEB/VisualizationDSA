@@ -15,8 +15,8 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đã hoàn thành CODE**   | 12 / 12                                                            |
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
-| **Tổng file thực tế**           | ~55 files (35 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 509+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
+| **Tổng file thực tế**           | ~67 files (47 frontend + 20 backend `.cs`)                         |
+| **Unit tests**                  | 585+ tests — ✅ 100% PASS (1 pre-existing failure)                  |
 
 ---
 
@@ -36,6 +36,23 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint 10** | Giám sát Call Stack 3D Stack-to-Heap Bezier         | ✅ CODE DONE    | `CallStackEngine` + `DSLEngine` + `StateInspector.vue` mounted, 3D stack-heap visualization, DSL compiler                                                                             |
 | **Sprint 11** | Cân bằng tải Server bốc khói & DB Replication lag   | ✅ CODE DONE    | `LoadBalancerEngine` + `SystemSandbox.vue` mounted, Round-robin LB, smoke particles, DB replication lag                                                                               |
 | **Sprint 12** | Tích lũy XP & Trình sinh mã nhúng Iframe nhúng      | ✅ CODE DONE    | `XPEngine` + `GamificationPanel.vue` mounted, Level progression, badges, embed widget generator                                                                                       |
+
+### Phase 2 Interactive Embed Widget — Tiện ích Nhúng Sơ đồ Trực quan
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | EmbedMessage, EmbedTheme, EmbedConfig interfaces | ✅ CODE DONE | `embed-widget/types/embed-widget.types.ts` — EmbedMessage, EmbedMessageAction, EmbedTheme, EMBED_ALGORITHM_OPTIONS |
+| **Engine** | EmbedCommunicationBridge — postMessage 2-way bridge | ✅ CODE DONE | `EmbedCommunicationBridge.ts` — origin whitelist filtering, XSS prevention, listener lifecycle |
+| **Engine** | SecureOriginChecker — Domain whitelist validator | ✅ CODE DONE | `SecureOriginChecker.ts` — configurable whitelist, wildcard mode, add/remove/clear |
+| **Engine** | AutoHeightResizer — ResizeObserver dynamic height | ✅ CODE DONE | `AutoHeightResizer.ts` — debounce 100ms, height clamping 300-1200px, GC-safe destroy |
+| **Store** | useEmbedConfiguratorStore — Pinia Setup Store | ✅ CODE DONE | `useEmbedConfiguratorStore.ts` — theme/algo/dimensions, live iframe code generation, Clipboard API |
+| **UI** | EmbedConfiguratorSidebar — Glassmorphism settings | ✅ CODE DONE | `EmbedConfiguratorSidebar.vue` — theme buttons, algo select, range sliders, toggle switches |
+| **UI** | LiveWidgetPreview — Scaled live preview | ✅ CODE DONE | `LiveWidgetPreview.vue` — scaled rendering, 3 theme variants, simulated bars/VCR/watch |
+| **UI** | EmbedCodeSnippet — Neon code box + Copy | ✅ CODE DONE | `EmbedCodeSnippet.vue` — Neon Cyan border, Copy→Copied Emerald transition, host integration script |
+| **UI** | EmbedWidgetWorkspace — Orchestrator | ✅ CODE DONE | `EmbedWidgetWorkspace.vue` — sidebar + preview + code snippet composition |
+| **Infra** | Vite manualChunks Monaco isolation | ✅ CODE DONE | `vite.config.ts` — monaco-vendor chunk separation |
+| **Integration** | App.vue "Embed" tab | ✅ CODE DONE | `App.vue` — new "Embed" tab routing to EmbedWidgetWorkspace |
+| **Tests** | 76 Unit Tests | ✅ CODE DONE | `EmbedCommunicationBridge.spec.ts` (17), `SecureOriginChecker.spec.ts` (14), `AutoHeightResizer.spec.ts` (10), `useEmbedConfiguratorStore.spec.ts` (35) — ALL PASS |
 
 ### Phase 1 Animation Engine — Backend-Driven State Capture
 
