@@ -6,8 +6,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
 *   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới) + Phase 2 System Design Viz (64 tests mới).
-*   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1506/1507 — 1 pre-existing ForceDirectedLayout failure).
-*   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (139/139 — 88 Domain + 25 Application + 26 Infrastructure).
+*   **Trạng thái Vitest Suite (Frontend):** 🟢 100% PASSED (1550+/1551 — 1 pre-existing ForceDirectedLayout failure).
+*   **Trạng thái xUnit Suite (Backend C#):** 🟢 100% PASSED (212/212 — 88 Domain + 46 Application + 78 Infrastructure).
 *   **Công cụ chạy kiểm thử:** Vitest Core (Frontend), xUnit 2.6.6 + FluentAssertions 6.12.0 + Moq 4.20.70 (Backend).
 *   **Thời gian phản hồi test suite:** Frontend ~180ms, Backend ~10s.
 
@@ -1722,3 +1722,166 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1428 | **Quiz Sync** | fetchQuizHistory online | quizHistory populated | 🟢 PASSED |
 | 1429 | **Quiz Sync** | isLoadingQuizzes tracking | true during fetch, false after | 🟢 PASSED |
 | 1430 | **Quiz Sync** | Loading state management | isLoadingQuizzes lifecycle | 🟢 PASSED |
+
+---
+
+## Phase B4: Performance & Caching — Backend Unit Tests
+
+### MemoryCacheServiceTests.cs (12 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1431 | **MemoryCache** | Get returns null for missing key | Get<string>("missing") → null | 🟢 PASSED |
+| 1432 | **MemoryCache** | Set and Get value | Set + Get returns value | 🟢 PASSED |
+| 1433 | **MemoryCache** | Set with absolute expiration | Set(key, value, 1h) | 🟢 PASSED |
+| 1434 | **MemoryCache** | Set with sliding expiration | Set(key, value, null, 30m) | 🟢 PASSED |
+| 1435 | **MemoryCache** | Remove key | Remove(key) → Get returns null | 🟢 PASSED |
+| 1436 | **MemoryCache** | RemoveByPrefix | RemoveByPrefix("test:") clears matched | 🟢 PASSED |
+| 1437 | **MemoryCache** | RemoveByPrefix no match | No keys removed | 🟢 PASSED |
+| 1438 | **MemoryCache** | TryGet existing | TryGet returns true + value | 🟢 PASSED |
+| 1439 | **MemoryCache** | TryGet missing | TryGet returns false | 🟢 PASSED |
+| 1440 | **MemoryCache** | Complex object caching | List<string> round-trip | 🟢 PASSED |
+| 1441 | **MemoryCache** | Multiple key tracking | Set 3 keys, track all | 🟢 PASSED |
+| 1442 | **MemoryCache** | Overwrite existing key | Set same key twice | 🟢 PASSED |
+
+### PagedResultTests.cs (12 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1443 | **Pagination** | Constructor sets properties | Items/Page/Size/Count | 🟢 PASSED |
+| 1444 | **Pagination** | TotalPages calculation | 25 items / 10 → 3 pages | 🟢 PASSED |
+| 1445 | **Pagination** | TotalPages exact division | 20 items / 10 → 2 pages | 🟢 PASSED |
+| 1446 | **Pagination** | TotalPages single item | 1 item / 10 → 1 page | 🟢 PASSED |
+| 1447 | **Pagination** | HasPreviousPage false | Page 1 → false | 🟢 PASSED |
+| 1448 | **Pagination** | HasPreviousPage true | Page 2 → true | 🟢 PASSED |
+| 1449 | **Pagination** | HasNextPage true | Page 1 of 3 → true | 🟢 PASSED |
+| 1450 | **Pagination** | HasNextPage false | Page 3 of 3 → false | 🟢 PASSED |
+| 1451 | **Pagination** | Empty items | 0 total → 0 pages | 🟢 PASSED |
+| 1452 | **Pagination** | Large dataset | 1000 items / 50 → 20 pages | 🟢 PASSED |
+| 1453 | **Pagination** | Items readonly | IReadOnlyList immutable | 🟢 PASSED |
+| 1454 | **Pagination** | First and last page | Boundary navigation | 🟢 PASSED |
+
+### CacheKeysTests.cs (9 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1455 | **CacheKeys** | AlgorithmList constant | "algorithms:list" | 🟢 PASSED |
+| 1456 | **CacheKeys** | AlgorithmMetadataPrefix | "algorithms:metadata:" | 🟢 PASSED |
+| 1457 | **CacheKeys** | QuizList constant | "quizzes:list" | 🟢 PASSED |
+| 1458 | **CacheKeys** | BadgeList constant | "badges:list" | 🟢 PASSED |
+| 1459 | **CacheKeys** | LeaderboardPrefix | "leaderboard:top:" | 🟢 PASSED |
+| 1460 | **CacheDurations** | AlgorithmMetadata 24h | TimeSpan.FromHours(24) | 🟢 PASSED |
+| 1461 | **CacheDurations** | QuizList 30m | TimeSpan.FromMinutes(30) | 🟢 PASSED |
+| 1462 | **CacheDurations** | BadgeList 1h | TimeSpan.FromHours(1) | 🟢 PASSED |
+| 1463 | **CacheDurations** | Leaderboard 5m | TimeSpan.FromMinutes(5) | 🟢 PASSED |
+
+---
+
+## Phase B5: Real-time SignalR — Backend Unit Tests
+
+### QuizRoomServiceTests.cs (27 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1464 | **QuizRoom** | CreateRoom returns room with code | 6-char code, Waiting status | 🟢 PASSED |
+| 1465 | **QuizRoom** | GetRoom existing room | Returns room DTO | 🟢 PASSED |
+| 1466 | **QuizRoom** | GetRoom non-existent | Returns null | 🟢 PASSED |
+| 1467 | **QuizRoom** | JoinRoom valid | Adds participant | 🟢 PASSED |
+| 1468 | **QuizRoom** | JoinRoom non-existent room | Returns false | 🟢 PASSED |
+| 1469 | **QuizRoom** | JoinRoom in-progress room | Returns false | 🟢 PASSED |
+| 1470 | **QuizRoom** | JoinRoom duplicate user | Returns false | 🟢 PASSED |
+| 1471 | **QuizRoom** | LeaveRoom removes participant | Count decreases | 🟢 PASSED |
+| 1472 | **QuizRoom** | LeaveRoom last participant | Room deleted | 🟢 PASSED |
+| 1473 | **QuizRoom** | StartQuiz by host | Status InProgress | 🟢 PASSED |
+| 1474 | **QuizRoom** | StartQuiz by non-host | Returns false | 🟢 PASSED |
+| 1475 | **QuizRoom** | StartQuiz already started | Returns false | 🟢 PASSED |
+| 1476 | **QuizRoom** | SubmitAnswer correct | 100 points earned | 🟢 PASSED |
+| 1477 | **QuizRoom** | SubmitAnswer wrong | 0 points earned | 🟢 PASSED |
+| 1478 | **QuizRoom** | SubmitAnswer already answered | Returns null | 🟢 PASSED |
+| 1479 | **QuizRoom** | SubmitAnswer wrong question index | Returns null | 🟢 PASSED |
+| 1480 | **QuizRoom** | AdvanceQuestion increments | CurrentQuestionIndex + 1 | 🟢 PASSED |
+| 1481 | **QuizRoom** | AdvanceQuestion last question | ShowingResults status | 🟢 PASSED |
+| 1482 | **QuizRoom** | CompleteQuiz ranked results | Sorted by score desc | 🟢 PASSED |
+| 1483 | **QuizRoom** | GetActiveRooms waiting only | Filters out InProgress | 🟢 PASSED |
+| 1484 | **QuizRoom** | RemoveRoom success | Room deleted | 🟢 PASSED |
+| 1485 | **QuizRoom** | RemoveRoom non-existent | Returns false | 🟢 PASSED |
+| 1486 | **QuizRoom** | SubmitAnswer non-existent room | Returns null | 🟢 PASSED |
+| 1487 | **QuizRoom** | SubmitAnswer waiting room | Returns null | 🟢 PASSED |
+| 1488 | **QuizRoom** | SubmitAnswer non-participant | Returns null | 🟢 PASSED |
+| 1489 | **QuizRoom** | RoomCode format | 6-char [A-Z2-9] | 🟢 PASSED |
+| 1490 | **QuizRoom** | Multiple rooms unique codes | Different codes | 🟢 PASSED |
+
+### SignalRDtosTests.cs (12 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1491 | **SignalR DTOs** | LeaderboardUpdate defaults | Empty/zero values | 🟢 PASSED |
+| 1492 | **SignalR DTOs** | LeaderboardUpdate properties | All fields set correctly | 🟢 PASSED |
+| 1493 | **SignalR DTOs** | BadgeNotification properties | UserId/Name/Description | 🟢 PASSED |
+| 1494 | **SignalR DTOs** | LevelUpNotification properties | OldLevel/NewLevel/TotalXP | 🟢 PASSED |
+| 1495 | **SignalR DTOs** | QuizRoomDto defaults | Empty status Waiting | 🟢 PASSED |
+| 1496 | **SignalR DTOs** | QuizRoomParticipant properties | Score/HasAnswered/IsHost | 🟢 PASSED |
+| 1497 | **SignalR DTOs** | QuizQuestionBroadcast properties | 4 options, 30s limit | 🟢 PASSED |
+| 1498 | **SignalR DTOs** | QuizAnswerResult properties | Correct/Points/Explanation | 🟢 PASSED |
+| 1499 | **SignalR DTOs** | QuizRoomResults properties | Ranked by score | 🟢 PASSED |
+| 1500 | **SignalR DTOs** | QuizRoomStatus expected values | 4 enum values | 🟢 PASSED |
+| 1501 | **SignalR DTOs** | QuizRoomStatus count | Exactly 4 | 🟢 PASSED |
+| 1502 | **SignalR DTOs** | AdvanceQuestion resets HasAnswered | All false after advance | 🟢 PASSED |
+
+---
+
+## Phase B5: Real-time SignalR — Frontend Unit Tests
+
+### useSignalRStore.spec.ts (35 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1503 | **SignalR Store** | Initial disconnected states | All 3 hubs disconnected | 🟢 PASSED |
+| 1504 | **SignalR Store** | Initial empty data arrays | All arrays empty | 🟢 PASSED |
+| 1505 | **SignalR Store** | Initial null room state | room/question/results null | 🟢 PASSED |
+| 1506 | **SignalR Store** | Initial zero unread count | unreadNotificationCount = 0 | 🟢 PASSED |
+| 1507 | **SignalR Store** | Initial false computed states | isConnected = false × 3 | 🟢 PASSED |
+| 1508 | **SignalR Store** | Connect leaderboard | state → connected | 🟢 PASSED |
+| 1509 | **SignalR Store** | Register LeaderboardUpdated handler | on() called with event | 🟢 PASSED |
+| 1510 | **SignalR Store** | Handle leaderboard update | Array populated | 🟢 PASSED |
+| 1511 | **SignalR Store** | Limit leaderboard to 50 | Truncate oldest | 🟢 PASSED |
+| 1512 | **SignalR Store** | Disconnect leaderboard | state → disconnected | 🟢 PASSED |
+| 1513 | **SignalR Store** | Handle connection error | state → error | 🟢 PASSED |
+| 1514 | **SignalR Store** | Connect notifications with token | state → connected | 🟢 PASSED |
+| 1515 | **SignalR Store** | Handle badge notification | Badge + unread++ | 🟢 PASSED |
+| 1516 | **SignalR Store** | Handle level up notification | LevelUp + unread++ | 🟢 PASSED |
+| 1517 | **SignalR Store** | Mark notifications read | unread → 0 | 🟢 PASSED |
+| 1518 | **SignalR Store** | Disconnect notifications | state → disconnected | 🟢 PASSED |
+| 1519 | **SignalR Store** | Connect quiz room | state → connected | 🟢 PASSED |
+| 1520 | **SignalR Store** | Handle RoomCreated | currentRoom set | 🟢 PASSED |
+| 1521 | **SignalR Store** | Handle ParticipantJoined | participants updated | 🟢 PASSED |
+| 1522 | **SignalR Store** | Handle JoinFailed | errorMessage set | 🟢 PASSED |
+| 1523 | **SignalR Store** | Handle NewQuestion | currentQuestion set | 🟢 PASSED |
+| 1524 | **SignalR Store** | Handle AnswerResult | answerResults pushed | 🟢 PASSED |
+| 1525 | **SignalR Store** | Handle ScoreUpdate | participants scores updated | 🟢 PASSED |
+| 1526 | **SignalR Store** | Handle QuizCompleted | quizResults set, question null | 🟢 PASSED |
+| 1527 | **SignalR Store** | Handle ActiveRooms | activeRooms populated | 🟢 PASSED |
+| 1528 | **SignalR Store** | Invoke CreateRoom | hub.invoke('CreateRoom') | 🟢 PASSED |
+| 1529 | **SignalR Store** | Invoke JoinRoom | hub.invoke('JoinRoom') | 🟢 PASSED |
+| 1530 | **SignalR Store** | Invoke LeaveRoom + clear | hub.invoke + null room | 🟢 PASSED |
+| 1531 | **SignalR Store** | Invoke StartQuiz | hub.invoke('StartQuiz') | 🟢 PASSED |
+| 1532 | **SignalR Store** | Invoke SubmitAnswer | hub.invoke('SubmitAnswer') | 🟢 PASSED |
+| 1533 | **SignalR Store** | Invoke NextQuestion | hub.invoke('NextQuestion') | 🟢 PASSED |
+| 1534 | **SignalR Store** | Invoke GetActiveRooms | hub.invoke('GetActiveRooms') | 🟢 PASSED |
+| 1535 | **SignalR Store** | Disconnect quiz room clears state | All null/empty | 🟢 PASSED |
+| 1536 | **SignalR Store** | Disconnect all connections | All 3 disconnected | 🟢 PASSED |
+| 1537 | **SignalR Store** | No-op when not connected | invoke not called | 🟢 PASSED |
+
+### signalr.types.spec.ts (9 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng kiểm thử | Phương thức | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1538 | **SignalR Types** | LeaderboardUpdate creation | Type conformance | 🟢 PASSED |
+| 1539 | **SignalR Types** | BadgeNotification creation | Type conformance | 🟢 PASSED |
+| 1540 | **SignalR Types** | LevelUpNotification creation | newLevel > oldLevel | 🟢 PASSED |
+| 1541 | **SignalR Types** | QuizRoomDto with participants | roomCode length 6 | 🟢 PASSED |
+| 1542 | **SignalR Types** | QuizQuestionBroadcast creation | 4 options, 30s limit | 🟢 PASSED |
+| 1543 | **SignalR Types** | QuizAnswerResult creation | isCorrect + points | 🟢 PASSED |
+| 1544 | **SignalR Types** | QuizRoomResults creation | Rankings sorted by score | 🟢 PASSED |
+| 1545 | **SignalR Types** | QuizRoomStatus values | 4 status values | 🟢 PASSED |
+| 1546 | **SignalR Types** | SignalRConnectionState values | 5 state values | 🟢 PASSED |

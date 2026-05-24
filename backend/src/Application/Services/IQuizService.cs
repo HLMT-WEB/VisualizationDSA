@@ -12,6 +12,24 @@ namespace VisualizationDSA.Application.Services
         Task<IEnumerable<QuizDto>> GetQuizzesByTopicAsync(string topic);
         Task<QuizAttemptResult> SubmitQuizAttemptAsync(Guid userId, QuizAttemptRequest request);
         Task<IEnumerable<QuizAttempt>> GetUserQuizHistoryAsync(Guid userId);
+        Task<QuizWithAnswersDto> GetQuizWithAnswersAsync(Guid id);
+    }
+
+    public class QuizWithAnswersDto
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public int XPReward { get; set; }
+        public List<QuizQuestionWithAnswerDto> Questions { get; set; } = new();
+    }
+
+    public class QuizQuestionWithAnswerDto
+    {
+        public Guid Id { get; set; }
+        public string Question { get; set; } = string.Empty;
+        public string[] Options { get; set; } = Array.Empty<string>();
+        public int CorrectIndex { get; set; }
+        public string Explanation { get; set; } = string.Empty;
     }
 
     public class QuizAttempt

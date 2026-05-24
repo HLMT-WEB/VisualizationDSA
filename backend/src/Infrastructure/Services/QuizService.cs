@@ -122,6 +122,27 @@ namespace VisualizationDSA.Infrastructure.Services
             return result.OrderByDescending(a => a.AttemptedAt);
         }
 
+        public async Task<QuizWithAnswersDto> GetQuizWithAnswersAsync(Guid id)
+        {
+            var quiz = await _unitOfWork.Quizzes.GetByIdAsync(id)
+                ?? throw new NotFoundException("Quiz", id);
+
+            return new QuizWithAnswersDto
+            {
+                Id = quiz.Id,
+                Title = quiz.Title,
+                XPReward = quiz.XPReward,
+                Questions = quiz.Questions.Select(q => new QuizQuestionWithAnswerDto
+                {
+                    Id = q.Id,
+                    Question = q.Question,
+                    Options = q.Options,
+                    CorrectIndex = q.CorrectIndex,
+                    Explanation = q.Explanation
+                }).ToList()
+            };
+        }
+
         private static QuizDto MapToQuizDto(Quiz quiz)
         {
             return new QuizDto

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VisualizationDSA.Application.DTOs;
 using VisualizationDSA.Application.Services;
 using VisualizationDSA.Domain.Entities;
 using VisualizationDSA.Domain.Exceptions;
@@ -12,10 +13,12 @@ namespace VisualizationDSA.Infrastructure.Services
     public class GamificationService : IGamificationService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEventBroadcaster _eventBroadcaster;
 
-        public GamificationService(IUnitOfWork unitOfWork)
+        public GamificationService(IUnitOfWork unitOfWork, IEventBroadcaster eventBroadcaster)
         {
             _unitOfWork = unitOfWork;
+            _eventBroadcaster = eventBroadcaster;
         }
 
         public async Task AwardXPAsync(Guid userId, int amount, string reason)
@@ -23,8 +26,30 @@ namespace VisualizationDSA.Infrastructure.Services
             var user = await _unitOfWork.Users.GetByIdAsync(userId)
                 ?? throw new NotFoundException("User", userId);
 
+            var oldLevel = user.CurrentLevel;
             user.AwardXP(amount);
             await _unitOfWork.CommitAsync();
+
+            await _eventBroadcaster.BroadcastLeaderboardUpdate(new LeaderboardUpdate
+            {
+                Username = user.Username,
+                TotalXP = user.TotalXP,
+                CurrentLevel = user.CurrentLevel,
+                Rank = 0,
+                XPGained = amount
+            });
+
+            if (user.CurrentLevel > oldLevel)
+            {
+                await _eventBroadcaster.BroadcastLevelUp(userId, new LevelUpNotification
+                {
+                    UserId = userId,
+                    Username = user.Username,
+                    OldLevel = oldLevel,
+                    NewLevel = user.CurrentLevel,
+                    TotalXP = user.TotalXP
+                });
+            }
         }
 
         public async Task CompleteModuleAsync(Guid userId, string moduleId)
@@ -61,6 +86,18 @@ namespace VisualizationDSA.Infrastructure.Services
             if (newBadges.Any())
             {
                 await _unitOfWork.CommitAsync();
+
+                foreach (var badge in newBadges)
+                {
+                    await _eventBroadcaster.BroadcastBadgeNotification(userId, new BadgeNotification
+                    {
+                        UserId = userId,
+                        Username = user.Username,
+                        BadgeName = badge.Name,
+                        BadgeDescription = badge.Description,
+                        AwardedAt = DateTime.UtcNow
+                    });
+                }
             }
 
             return newBadges;
