@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1309/1310 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới) + Phase 2 System Design Viz (64 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1373/1374 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -1377,3 +1377,91 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1173 | **InspectorStore** | demoPushCall adds frame | depth+1 | 🟢 PASSED |
 | 1174 | **InspectorStore** | clearInspector after demo | all reset | 🟢 PASSED |
 | 1175 | **InspectorStore** | Re-initialize demo cleanly | depth=4, heap=2, tree=5 | 🟢 PASSED |
+
+---
+
+## 🌐 Phase 2 System Design Visualizer (64 tests mới)
+
+### SystemDesignEngine.spec.ts (20 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1176 | **Engine** | Register and retrieve nodes | getNode returns registered node | 🟢 PASSED |
+| 1177 | **Engine** | Overwrite existing node on re-register | status updated, length=1 | 🟢 PASSED |
+| 1178 | **Engine** | Return undefined for non-existent node | undefined | 🟢 PASSED |
+| 1179 | **Engine** | Set node status | status=FAILED | 🟢 PASSED |
+| 1180 | **Engine** | Ignore setNodeStatus for non-existent | no error, undefined | 🟢 PASSED |
+| 1181 | **Engine** | Register links | length=1 | 🟢 PASSED |
+| 1182 | **Engine** | Not register duplicate links | length=1 | 🟢 PASSED |
+| 1183 | **Engine** | Distribute packets 50/50 Round-Robin | toA=2, toB=2 | 🟢 PASSED |
+| 1184 | **Engine** | Increment requestCount on target | srvA=1, srvB=1 | 🟢 PASSED |
+| 1185 | **Engine** | Return null for non-existent LB | null | 🟢 PASSED |
+| 1186 | **Engine** | Create packet with correct initial state | progress=0, IN_TRANSIT | 🟢 PASSED |
+| 1187 | **Engine** | Redirect 100% to B when A FAILED | toA=0, toB=2 | 🟢 PASSED |
+| 1188 | **Engine** | Return null when ALL servers FAILED | null, packets=0 | 🟢 PASSED |
+| 1189 | **Engine** | Advance packet progress | progress=0.5 | 🟢 PASSED |
+| 1190 | **Engine** | Remove arrived packets GC | packets=0 | 🟢 PASSED |
+| 1191 | **Engine** | Drop packets targeting FAILED nodes | packets=0 | 🟢 PASSED |
+| 1192 | **Engine** | Create direct packet between nodes | sourceId, targetId correct | 🟢 PASSED |
+| 1193 | **Engine** | Return null if source/target missing | null | 🟢 PASSED |
+| 1194 | **Engine** | MAX_ACTIVE_PACKETS cap (200) | packetCount=200 | 🟢 PASSED |
+| 1195 | **Engine** | Clear all state | nodes=0, links=0, packets=0 | 🟢 PASSED |
+
+### FailureSmokeEmitterEngine.spec.ts (10 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1196 | **Smoke** | Start with zero particles | count=0, active=false | 🟢 PASSED |
+| 1197 | **Smoke** | Generate default 20 particles | count=20 | 🟢 PASSED |
+| 1198 | **Smoke** | Generate custom count | count=5 | 🟢 PASSED |
+| 1199 | **Smoke** | Create particles at canvas center | x=100, y=100 | 🟢 PASSED |
+| 1200 | **Smoke** | Valid initial particle properties | alpha=0.9, life=0, size 4-12 | 🟢 PASSED |
+| 1201 | **Smoke** | Accumulate particles on bursts | count=15 | 🟢 PASSED |
+| 1202 | **Smoke** | Start emission loop | isActive=true | 🟢 PASSED |
+| 1203 | **Smoke** | Not double-start emission | isActive=true, no error | 🟢 PASSED |
+| 1204 | **Smoke** | Stop emission loop | isActive=false | 🟢 PASSED |
+| 1205 | **Smoke** | Draw callback invoked | cb called | 🟢 PASSED |
+
+### ReplicationLagScheduler.spec.ts (10 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1206 | **Repl** | Schedule a replication job | primaryId, replicaId, lag correct | 🟢 PASSED |
+| 1207 | **Repl** | Add job to pending queue | pendingCount=1 | 🟢 PASSED |
+| 1208 | **Repl** | Complete job after lag duration | cb called, pending=0, completed=1 | 🟢 PASSED |
+| 1209 | **Repl** | Pass job object to callback | cb(job) | 🟢 PASSED |
+| 1210 | **Repl** | Clamp lag below minimum (100ms) | lagDuration=100 | 🟢 PASSED |
+| 1211 | **Repl** | Clamp lag above maximum (5000ms) | lagDuration=5000 | 🟢 PASSED |
+| 1212 | **Repl** | Accept lag within valid range | lagDuration=2500 | 🟢 PASSED |
+| 1213 | **Repl** | Multiple concurrent jobs | staggered completion | 🟢 PASSED |
+| 1214 | **Repl** | Check if job is pending | true→false after timer | 🟢 PASSED |
+| 1215 | **Repl** | Cancel all pending timers on clear | cb not called, counts=0 | 🟢 PASSED |
+
+### useSystemDesignStore.spec.ts (24 tests)
+
+| STT | Phân hệ | Kịch bản kiểm thử | Assertion | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1216 | **Store** | Initialize demo with 6 nodes | nodes length=6, all types | 🟢 PASSED |
+| 1217 | **Store** | Initialize demo with 6 links | links length=6 | 🟢 PASSED |
+| 1218 | **Store** | Start with zero active packets | packets=0, totalInFlight=0 | 🟢 PASSED |
+| 1219 | **Store** | Default replication lag 1000ms | replicationLagMs=1000 | 🟢 PASSED |
+| 1220 | **Store** | Report 6 healthy nodes initially | healthyCount=6, failedCount=0 | 🟢 PASSED |
+| 1221 | **Store** | Create packet on injectHttpRequest | packets=1, color=#10B981 | 🟢 PASSED |
+| 1222 | **Store** | Distribute Round-Robin A and B | targets contain both | 🟢 PASSED |
+| 1223 | **Store** | Inject traffic burst N packets | packets=10, spikeActive=true | 🟢 PASSED |
+| 1224 | **Store** | Toggle server HEALTHY→FAILED | status=FAILED, failedCount=1 | 🟢 PASSED |
+| 1225 | **Store** | Toggle server FAILED→HEALTHY | status=HEALTHY, failedIds empty | 🟢 PASSED |
+| 1226 | **Store** | NOT toggle non-WEB_SERVER nodes | all remain HEALTHY | 🟢 PASSED |
+| 1227 | **Store** | Redirect all to B after A fails | toA=0, toB=2 | 🟢 PASSED |
+| 1228 | **Store** | Dispatch SMOKE_BURST event on fail | event dispatched with nodeId | 🟢 PASSED |
+| 1229 | **Store** | Add pending replication on dbWrite | pendingCount >= 1 | 🟢 PASSED |
+| 1230 | **Store** | Complete replication after lag | completedReplications=1 | 🟢 PASSED |
+| 1231 | **Store** | Respect configured replication lag | delay matches setReplicationLag | 🟢 PASSED |
+| 1232 | **Store** | Set replication lag valid range | lagMs=2500 | 🟢 PASSED |
+| 1233 | **Store** | Clamp lag below minimum | lagMs=100 | 🟢 PASSED |
+| 1234 | **Store** | Clamp lag above maximum | lagMs=5000 | 🟢 PASSED |
+| 1235 | **Store** | Advance packets on tickEngine | progress > 0 | 🟢 PASSED |
+| 1236 | **Store** | Remove arrived packets GC | packets=0 | 🟢 PASSED |
+| 1237 | **Store** | Reset all state on clearTopology | all zeroed/empty | 🟢 PASSED |
+| 1238 | **Store** | Destroy also clears GC | no leaks | 🟢 PASSED |
+| 1239 | **Store** | Re-init after clear works | nodes=6 after init | 🟢 PASSED |
