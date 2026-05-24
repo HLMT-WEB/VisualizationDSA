@@ -16,7 +16,7 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Sprint đang triển khai CODE** | Hoàn tất! 🎉                                                       |
 | **Backend .NET C#**             | 100% — Full Clean Architecture, JWT Auth, 5 Controllers, Seed Data |
 | **Tổng file thực tế**           | ~90 files (70 frontend + 20 backend `.cs`)                         |
-| **Unit tests**                  | 1219+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
+| **Unit tests**                  | 1283+ tests — ✅ 100% PASS (1 pre-existing failure)                 |
 
 ---
 
@@ -355,6 +355,25 @@ Tài liệu này theo dõi chi tiết tiến độ hoàn thành **code thực t�
 | **Component** | SOLIDVisualizerWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/SOLIDVisualizerWorkspace.vue` — 5-tab lesson selector, SRP/LSP/DIP panels, footer status, Reset All |
 | **Integration** | App.vue "SOLID Viz" tab + barrel export | ✅ CODE DONE | New "SOLID Viz" tab in App.vue, index.ts barrel export |
 | **Tests** | 105 Unit Tests | ✅ CODE DONE | `LCOMCalculator.spec.ts` (12), `SOLIDEvaluatorEngine.spec.ts` (11), `ThermalSparkParticleEngine.spec.ts` (15), `LaserFractureCalculator.spec.ts` (20), `useSOLIDVisualizerStore.spec.ts` (47) — ALL 105 PASS |
+
+---
+
+### Phase 2 System Design Visualizer — Round-Robin LB, Failover Smoke, DB Replication Lag
+
+| Bước | Nội dung | Trạng thái CODE | Chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Types** | SystemNode, NetworkLink, NetworkPacket, SmokeParticle, ReplicationJob, constants | ✅ CODE DONE | `system-design-viz/types/system-design-viz.types.ts` — SystemNodeType, NodeStatus, PacketStatus, PACKET_SPEED=0.05, MAX_ACTIVE_PACKETS=200, REPLICATION_LAG_MIN/MAX/DEFAULT |
+| **Engine** | SystemDesignEngine (Round-Robin LB + Failover + Packet GC) | ✅ CODE DONE | `engine/SystemDesignEngine.ts` — registerNode/Link, routeRequestFromLB Round-Robin, createDirectPacket, updatePacketsProgress GC, setNodeStatus, MAX_ACTIVE_PACKETS cap |
+| **Engine** | FailureSmokeEmitterEngine (Canvas 2D 60FPS smoke) | ✅ CODE DONE | `engine/FailureSmokeEmitterEngine.ts` — rAF loop, triggerBurst 20 particles, continuous emission, radial angle spread, fade-out alpha, GC-safe destroy |
+| **Engine** | ReplicationLagScheduler (DB sync delay queue) | ✅ CODE DONE | `engine/ReplicationLagScheduler.ts` — scheduleReplication with clamped lag 100-5000ms, pending/completed tracking, timer GC on clear |
+| **Store** | useSystemDesignStore Pinia Setup Store | ✅ CODE DONE | `store/useSystemDesignStore.ts` — 6-node demo topology, injectHttpRequest, injectTrafficBurst, toggleServerStatus failover, triggerDbWrite replication, tickEngine, setReplicationLag, clearTopology |
+| **Component** | SystemNodeCard.vue (Glassmorphic + failed/overloaded) | ✅ CODE DONE | `components/SystemNodeCard.vue` — status dot, type badge, request count, toggle button, is-failed red glow CSS |
+| **Component** | NeonPacketDot.vue (Emerald/Amber data particle) | ✅ CODE DONE | `components/NeonPacketDot.vue` — interpolated position, neon drop-shadow, packet color variable |
+| **Component** | NetworkLinkSVG.vue (SVG connection lines) | ✅ CODE DONE | `components/NetworkLinkSVG.vue` — Cyan/Red stroke, dashed if failed, opacity change |
+| **Component** | ReplicationLagPanel.vue (DB sync controls) | ✅ CODE DONE | `components/ReplicationLagPanel.vue` — lag slider 100-5000ms, pending/completed badges, DB Write button |
+| **Component** | SystemDesignWorkspace.vue (Orchestrator) | ✅ CODE DONE | `components/SystemDesignWorkspace.vue` — architecture canvas, SVG links layer, node cards, neon packets, traffic controls, replication panel, reset/clear |
+| **Integration** | App.vue "System Design" tab + barrel export | ✅ CODE DONE | New "System Design" tab in App.vue, index.ts barrel export |
+| **Tests** | 64 Unit Tests | ✅ CODE DONE | `SystemDesignEngine.spec.ts` (20), `FailureSmokeEmitterEngine.spec.ts` (10), `ReplicationLagScheduler.spec.ts` (10), `useSystemDesignStore.spec.ts` (24) — ALL 64 PASS |
 
 ---
 
