@@ -5,8 +5,8 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 ---
 
 ## 📌 Trạng Thái Bao Phủ Kiểm Thử (Test Coverage Status)
-*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới).
-*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1219/1220 — 1 pre-existing ForceDirectedLayout failure).
+*   **Tổng số tính năng hạt nhân:** 23/23 Tính năng + Phase 1 Animation Engine (23 tests) + Phase 1 Custom Input (38 tests) + Phase 1 DSA Modules (40 tests mới) + Phase 1 E-Lecture Mode (28 tests mới) + Phase 1 Execution Control (23 tests mới) + Phase 1 Interactive Playground (31 tests mới) + Phase 1 Pseudocode Sync (37 tests mới) + Phase 1 Quiz System (54 tests mới) + Phase 2 Code-to-Visualization (32 tests mới) + Phase 2 Compare Algorithms (33 tests mới) + Phase 2 Concurrency Visualizer (35 tests mới) + Phase 2 Debug Mode (49 tests mới) + Phase 2 Design Patterns (50 tests mới) + Phase 2 Embed Widget (76 tests mới) + Phase 2 Export & Share (85 tests mới) + Phase 2 Gamification Engine (88 tests mới) + Phase 2 Learning Path (98 tests mới) + Phase 2 Multi-View Sync (102 tests mới) + Phase 2 OOP Visualization (54 tests mới) + Phase 2 Smart Quiz (90 tests mới) + Phase 2 SOLID Visualization (105 tests mới) + Phase 2 State Inspector (90 tests mới).
+*   **Trạng thái Vitest Suite:** 🟢 100% PASSED (1309/1310 — 1 pre-existing ForceDirectedLayout failure).
 *   **Công cụ chạy kiểm thử:** Vitest Core.
 *   **Thời gian phản hồi test suite:** ~180ms (độ nhạy cực cao dưới máy khách).
 
@@ -1280,3 +1280,100 @@ Tài liệu này ghi nhận trạng thái kiểm thử đơn vị tự động (
 | 1082 | **SOLIDStore** | resetState clears LSP timer | No shatter after 800ms | 🟢 PASSED |
 | 1083 | **SOLIDStore** | resetAll re-initializes SRP | activeLesson='SRP', UserManager | 🟢 PASSED |
 | 1084 | **SOLIDStore** | destroyStore cleans up | classNodes=[], diagnostic=null | 🟢 PASSED |
+
+
+### Phase 2 State Inspector & Stack Frames — StateInspectorEngine, RecursionTreeGenerator, PointerArrowBatchRenderer, useStateInspectorStore (90 tests)
+
+| STT | Phân hệ kiểm thử | Tính năng hạt nhân được xác thực | Kết quả kỳ vọng | Trạng thái |
+| :--- | :--- | :--- | :--- | :--- |
+| 1085 | **StackEngine** | Start with empty stack | stack=[], activeFrameIndex=-1 | 🟢 PASSED |
+| 1086 | **StackEngine** | Push frame sets active | depth=1, isActive=true | 🟢 PASSED |
+| 1087 | **StackEngine** | Deactivate previous on push | frame[0].isActive=false, frame[1].isActive=true | 🟢 PASSED |
+| 1088 | **StackEngine** | Pop frame reactivates previous | popped=f2, frame[0].isActive=true | 🟢 PASSED |
+| 1089 | **StackEngine** | Pop empty returns null | null, activeFrameIndex=-1 | 🟢 PASSED |
+| 1090 | **StackEngine** | Pop last sets index -1 | depth=0, activeFrameIndex=-1 | 🟢 PASSED |
+| 1091 | **StackEngine** | Switch active frame by index | frame[0].isActive=true, others false | 🟢 PASSED |
+| 1092 | **StackEngine** | Switch negative index returns null | null | 🟢 PASSED |
+| 1093 | **StackEngine** | Switch out of bounds returns null | null | 🟢 PASSED |
+| 1094 | **StackEngine** | Switch to middle frame | activeFrameIndex=1 | 🟢 PASSED |
+| 1095 | **StackEngine** | Clear all frames | stack=[], depth=0 | 🟢 PASSED |
+| 1096 | **StackEngine** | MAX_STACK_FRAMES limit | depth=MAX_STACK_FRAMES | 🟢 PASSED |
+| 1097 | **StackEngine** | Push-pop-push sequence | depth=2, f3 active | 🟢 PASSED |
+| 1098 | **StackEngine** | Shallow copy from getStack | stack1 !== stack2, equal values | 🟢 PASSED |
+| 1099 | **StackEngine** | Multiple pops until empty | 3→2→1→0→0 | 🟢 PASSED |
+| 1100 | **StackEngine** | Preserve heapAddress variables | head.heapAddress='0x7ffd00' | 🟢 PASSED |
+| 1101 | **StackEngine** | Switch on single-element stack | isActive=true | 🟢 PASSED |
+| 1102 | **StackEngine** | getDepth and getActiveFrameIndex | depth matches length | 🟢 PASSED |
+| 1103 | **TreeGenerator** | Single root coordinates | x=center, y=40, parentId=null | 🟢 PASSED |
+| 1104 | **TreeGenerator** | Binary tree Y = depth*80+40 | children y=120, left<400, right>400 | 🟢 PASSED |
+| 1105 | **TreeGenerator** | ParentId set correctly | c1→r, c1a→c1, c2→r | 🟢 PASSED |
+| 1106 | **TreeGenerator** | Preserve status | ACTIVE, RESOLVED, PENDING | 🟢 PASSED |
+| 1107 | **TreeGenerator** | Preserve returnValue | 1, 1, 0 | 🟢 PASSED |
+| 1108 | **TreeGenerator** | Single-child node | 3 coords, correct parentIds | 🟢 PASSED |
+| 1109 | **TreeGenerator** | Ternary tree 3 children | 4 coords, x ordered left→right | 🟢 PASSED |
+| 1110 | **TreeGenerator** | CanvasWidth 0 | x=0 | 🟢 PASSED |
+| 1111 | **TreeGenerator** | Deep tree depth 4 | y = 4*80+40 | 🟢 PASSED |
+| 1112 | **TreeGenerator** | Preserve label text | 'fibonacci(10)' | 🟢 PASSED |
+| 1113 | **TreeGenerator** | countNodes leaf = 1 | 1 | 🟢 PASSED |
+| 1114 | **TreeGenerator** | countNodes binary tree | 3 | 🟢 PASSED |
+| 1115 | **TreeGenerator** | countNodes deeper tree | 5 | 🟢 PASSED |
+| 1116 | **TreeGenerator** | getMaxDepth single = 0 | 0 | 🟢 PASSED |
+| 1117 | **TreeGenerator** | getMaxDepth binary = 1 | 1 | 🟢 PASSED |
+| 1118 | **TreeGenerator** | getMaxDepth unbalanced = 2 | 2 | 🟢 PASSED |
+| 1119 | **BezierRenderer** | Start with no links, not running | links=[], isRunning=false | 🟢 PASSED |
+| 1120 | **BezierRenderer** | Register a link | links.length=1 | 🟢 PASSED |
+| 1121 | **BezierRenderer** | No duplicate link | links.length=1 | 🟢 PASSED |
+| 1122 | **BezierRenderer** | Multiple distinct links | links.length=2 | 🟢 PASSED |
+| 1123 | **BezierRenderer** | Remove link by sourceId | links.length=1, src-2 remains | 🟢 PASSED |
+| 1124 | **BezierRenderer** | Remove non-existent link | links.length=1 unchanged | 🟢 PASSED |
+| 1125 | **BezierRenderer** | Clear all links | links=[] | 🟢 PASSED |
+| 1126 | **BezierRenderer** | Shallow copy from getLinks | links1 !== links2 | 🟢 PASSED |
+| 1127 | **BezierRenderer** | Start render loop | isRunning=true | 🟢 PASSED |
+| 1128 | **BezierRenderer** | No double-start | isRunning=true once | 🟢 PASSED |
+| 1129 | **BezierRenderer** | Stop render loop | isRunning=false | 🟢 PASSED |
+| 1130 | **BezierRenderer** | CancelAnimationFrame on stop | called | 🟢 PASSED |
+| 1131 | **BezierRenderer** | Stop when not running | isRunning=false | 🟢 PASSED |
+| 1132 | **BezierRenderer** | Destroy stops + clears | isRunning=false, links=[] | 🟢 PASSED |
+| 1133 | **BezierRenderer** | Calculate Bezier standard rects | p0x=100, p0y=65, p3x=400, p3y=95 | 🟢 PASSED |
+| 1134 | **BezierRenderer** | BEZIER_MIN_DX when close | dx=40, control points clamped | 🟢 PASSED |
+| 1135 | **BezierRenderer** | Include scroll offsets | +scrollX, +scrollY | 🟢 PASSED |
+| 1136 | **BezierRenderer** | Valid SVG path string | M...C... format | 🟢 PASSED |
+| 1137 | **BezierRenderer** | Negative scroll values | p0x=190 | 🟢 PASSED |
+| 1138 | **BezierRenderer** | Zero-height rects | p0y=50, p3y=50 | 🟢 PASSED |
+| 1139 | **InspectorStore** | Empty initial state | all empty/null/-1 | 🟢 PASSED |
+| 1140 | **InspectorStore** | Zero initial computed | depth=0, full=false | 🟢 PASSED |
+| 1141 | **InspectorStore** | Push frame updates state | depth=1, active | 🟢 PASSED |
+| 1142 | **InspectorStore** | MONACO event on push | lineNumber=5 | 🟢 PASSED |
+| 1143 | **InspectorStore** | Multiple push, only top active | frame[1].isActive=true | 🟢 PASSED |
+| 1144 | **InspectorStore** | Pop frame reactivates | depth=1, popped=f2 | 🟢 PASSED |
+| 1145 | **InspectorStore** | MONACO event on pop | lineNumber=5 (previous) | 🟢 PASSED |
+| 1146 | **InspectorStore** | Pop empty returns null | null | 🟢 PASSED |
+| 1147 | **InspectorStore** | Select frame updates index | activeFrameIndex=0 | 🟢 PASSED |
+| 1148 | **InspectorStore** | MONACO event on select | lineNumber=5 | 🟢 PASSED |
+| 1149 | **InspectorStore** | Ignore invalid select | unchanged | 🟢 PASSED |
+| 1150 | **InspectorStore** | Compute activeFrame | frameId=f1, variables.x=42 | 🟢 PASSED |
+| 1151 | **InspectorStore** | Null activeFrame empty | null, {} | 🟢 PASSED |
+| 1152 | **InspectorStore** | Set hoveredHeapAddress | '0x7ffd00' | 🟢 PASSED |
+| 1153 | **InspectorStore** | Clear hoveredHeapAddress | null | 🟢 PASSED |
+| 1154 | **InspectorStore** | Update recursion tree | nodeCount=3, depth=1 | 🟢 PASSED |
+| 1155 | **InspectorStore** | Clear recursion tree | null, coords=[] | 🟢 PASSED |
+| 1156 | **InspectorStore** | Add heap object | length=1, address=0x7ffd00 | 🟢 PASSED |
+| 1157 | **InspectorStore** | No duplicate heap object | length=1 | 🟢 PASSED |
+| 1158 | **InspectorStore** | Remove heap object | length=0 | 🟢 PASSED |
+| 1159 | **InspectorStore** | Add pointer link | length=1 | 🟢 PASSED |
+| 1160 | **InspectorStore** | No duplicate pointer link | length=1 | 🟢 PASSED |
+| 1161 | **InspectorStore** | Clear pointer links | [] | 🟢 PASSED |
+| 1162 | **InspectorStore** | Clear all state | all reset | 🟢 PASSED |
+| 1163 | **InspectorStore** | isStackFull at capacity | true | 🟢 PASSED |
+| 1164 | **InspectorStore** | Fibonacci demo 4 frames | main, fib(3), fib(2), fib(1) | 🟢 PASSED |
+| 1165 | **InspectorStore** | Fibonacci demo heap objects | 2 objects, 0x7ffd00, 0x7ffd10 | 🟢 PASSED |
+| 1166 | **InspectorStore** | Fibonacci demo pointer links | 2 links | 🟢 PASSED |
+| 1167 | **InspectorStore** | Fibonacci demo recursion tree | 5 nodes | 🟢 PASSED |
+| 1168 | **InspectorStore** | Fibonacci demo tree coordinates | 5 coords, maxDepth=2 | 🟢 PASSED |
+| 1169 | **InspectorStore** | demoStepForward pops frame | depth-1 | 🟢 PASSED |
+| 1170 | **InspectorStore** | demoStepForward resolves tree | tree not null | 🟢 PASSED |
+| 1171 | **InspectorStore** | demoStepForward empty no crash | depth=0 | 🟢 PASSED |
+| 1172 | **InspectorStore** | demoStepForward single no pop | depth=1 | 🟢 PASSED |
+| 1173 | **InspectorStore** | demoPushCall adds frame | depth+1 | 🟢 PASSED |
+| 1174 | **InspectorStore** | clearInspector after demo | all reset | 🟢 PASSED |
+| 1175 | **InspectorStore** | Re-initialize demo cleanly | depth=4, heap=2, tree=5 | 🟢 PASSED |
